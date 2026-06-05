@@ -3,7 +3,7 @@
  * Handles loading and updating business settings (favicon, title, logo)
  */
 
-import apiClient from "@food/api/axios";
+// import apiClient from "@food/api/axios";
 import { API_ENDPOINTS } from "@food/api/config";
 import { publicGetOnce } from "@food/api";
 
