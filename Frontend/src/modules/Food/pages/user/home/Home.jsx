@@ -455,11 +455,7 @@ export default function Home() {
 
         {/* Order Details Flow (Confirmation Bar) */}
         {locationConfirmed && activeService === "delivery" && (
-<<<<<<< HEAD
-          <OrderDetailsFlow
-=======
           <OrderDetailsFlow 
->>>>>>> 26ff8904957990f29b6ca2f8768321d709ee786d
             confirmedAddress={deliveryAddress}
             onOpenMap={() => setShowMapModal(true)}
             onClearCart={() => setCart({})}
@@ -689,11 +685,7 @@ export default function Home() {
 
       {/* Floating Action Button */}
       {totalCartCount > 0 && locationConfirmed && (
-<<<<<<< HEAD
         <div className="fixed bottom-24 left-1/2 -translate-x-1/2 w-full max-w-md pointer-events-none z-45">
-=======
-        <div className="fixed bottom-24 right-4 z-45">
->>>>>>> 26ff8904957990f29b6ca2f8768321d709ee786d
           <button
             onClick={() => {
               navigate("/user/cart")
