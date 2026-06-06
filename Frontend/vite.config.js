@@ -1,23 +1,45 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { VitePWA } from 'vite-plugin-pwa';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+const foodSrc = path.resolve(__dirname, './src/modules/Food')
+const servicesApi = path.resolve(__dirname, './src/services/api')
 
 export default defineConfig({
-  plugins: [
-    react(),
-    VitePWA({ registerType: 'autoUpdate' })
-  ],
+  plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@food/api': path.resolve(__dirname, './src/services/api'),
-      '@food': path.resolve(__dirname, './src/modules/Food'),
+      // More specific first so @food/api/* resolves to services (no backend)
+      '@food/api/axios': path.resolve(servicesApi, 'axios.js'),
+      '@food/api/config': path.resolve(servicesApi, 'config.js'),
+      '@food/api': servicesApi,
+      '@food': foodSrc,
       '@delivery': path.resolve(__dirname, './src/modules/DeliveryV2'),
+      '@': path.resolve(__dirname, './src'),
+    },
+    dedupe: ['react', 'react-dom', 'react-router-dom'],
+  },
+  optimizeDeps: {
+    include: [
+      '@emotion/react',
+      '@emotion/styled',
+      '@mui/material',
+      '@mui/x-date-pickers',
+    ],
+  },
+  server: {
+    host: '0.0.0.0',
+    port: 5173,
+    proxy: {
+      // Backend API (default 5000)
+      '/api/v1': {
+        target: process.env.VITE_BACKEND_PROXY_TARGET || 'http://localhost:5000',
+        changeOrigin: true,
+      },
     },
   },
-});
+})

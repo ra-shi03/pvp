@@ -3,9 +3,9 @@
  * Handles loading and updating business settings (favicon, title, logo)
  */
 
-import apiClient from "@/services/api/axios";
-import { API_ENDPOINTS } from "@/services/api/config";
-import { publicGetOnce } from "@/services/api";
+import apiClient from "@food/api/axios";
+import { API_ENDPOINTS } from "@food/api/config";
+import { publicGetOnce } from "@food/api";
 
 const SETTINGS_KEY = 'food_business_settings';
 
