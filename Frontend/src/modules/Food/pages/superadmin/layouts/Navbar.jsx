@@ -16,21 +16,21 @@ export default function Navbar({ onToggleSidebar }) {
   ]
 
   return (
-    <header className="fixed top-0 left-0 w-full flex justify-between items-center px-4 md:px-8 h-16 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl border-b border-zinc-100 dark:border-zinc-800 z-40 shadow-sm transition-all duration-300">
+    <header className="fixed top-0 left-0 w-full flex justify-between items-center px-4 md:px-6 h-13 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl border-b border-zinc-100 dark:border-zinc-800 z-40 shadow-sm transition-all duration-300">
       
       {/* Left side: Brand + Toggle */}
       <div className="flex items-center gap-3">
         <button
           onClick={onToggleSidebar}
-          className="p-2 -ml-2 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-all duration-200"
+          className="p-1.5 -ml-1.5 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-all duration-200"
           aria-label="Toggle Sidebar"
         >
           <Menu size={20} className="stroke-[2.2]" />
         </button>
         
-        <h1 className="text-lg md:text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
+        <h1 className="text-base md:text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
           Papa Veg Pizza
-          <span className="hidden xs:inline-block text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] tracking-wide">
+          <span className="hidden xs:inline-block text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] tracking-wide">
             SuperAdmin
           </span>
         </h1>
@@ -47,7 +47,7 @@ export default function Navbar({ onToggleSidebar }) {
               setShowProfileMenu(false)
               setShowNotifications(false)
             }}
-            className="hidden md:flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:border-zinc-200 text-xs font-semibold shadow-sm transition-all"
+            className="hidden md:flex items-center gap-2 px-2.5 py-1 rounded-full border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 hover:border-zinc-200 text-[11px] font-semibold shadow-sm transition-all"
           >
             <Store size={13} className="text-zinc-400" />
             <span>{selectedStore}</span>
@@ -84,21 +84,21 @@ export default function Navbar({ onToggleSidebar }) {
               setShowProfileMenu(false)
               setShowStoreDropdown(false)
             }}
-            className="relative p-2.5 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-all shadow-sm bg-white dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800"
+            className="relative p-1.5 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-all shadow-sm bg-white dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800"
           >
             <Bell size={18} className="stroke-[2.2]" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white dark:ring-zinc-950"></span>
+            <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-rose-500 rounded-full ring-2 ring-white dark:ring-zinc-950"></span>
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-80 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 shadow-xl p-4 z-50 animate-fade-down">
+            <div className="absolute right-0 mt-2 w-80 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 shadow-xl p-3 z-50 animate-fade-down">
               <div className="flex items-center justify-between pb-3 border-b border-zinc-50 dark:border-zinc-800 mb-3">
                 <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200">Alerts & Notifications</span>
-                <span className="text-[10px] font-bold text-rose-500 bg-rose-50 dark:bg-rose-950/30 px-2 py-0.5 rounded-full">3 NEW</span>
+                <span className="text-[9px] font-bold text-rose-500 bg-rose-50 dark:bg-rose-950/30 px-1.5 py-0.5 rounded-full">3 NEW</span>
               </div>
               <div className="space-y-2.5 max-h-64 overflow-y-auto">
                 {notifications.map((n) => (
-                  <div key={n.id} className="flex gap-2.5 items-start p-2 rounded-xl bg-zinc-50/50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-800/50 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
+                  <div key={n.id} className="flex gap-2.5 items-start p-1.5 rounded-xl bg-zinc-50/50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-800/50 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
                     <AlertCircle size={14} className={`flex-shrink-0 mt-0.5 ${
                       n.type === "error" ? "text-rose-500" : n.type === "warning" ? "text-amber-500" : "text-emerald-500"
                     }`} />
@@ -123,7 +123,7 @@ export default function Navbar({ onToggleSidebar }) {
             }}
             className="flex items-center gap-1.5 focus:outline-none"
           >
-            <div className="w-9 h-9 rounded-full border-2 border-[var(--primary)] overflow-hidden shadow-md cursor-pointer hover:opacity-90 transition-all duration-300">
+            <div className="w-7 h-7 rounded-full border-2 border-[var(--primary)] overflow-hidden shadow-md cursor-pointer hover:opacity-90 transition-all duration-300">
               <img
                 alt="Admin Avatar"
                 className="w-full h-full object-cover"
@@ -134,20 +134,20 @@ export default function Navbar({ onToggleSidebar }) {
 
           {showProfileMenu && (
             <div className="absolute right-0 mt-2 w-48 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 shadow-xl py-2 z-50 animate-fade-down">
-              <div className="px-4 py-2.5 border-b border-zinc-50 dark:border-zinc-800 mb-1.5">
+              <div className="px-3.5 py-2 border-b border-zinc-50 dark:border-zinc-800 mb-1.5">
                 <p className="text-xs font-bold text-zinc-800 dark:text-zinc-100">Global Manager</p>
                 <p className="text-[10px] text-zinc-400 truncate">manager@papaveg.com</p>
               </div>
-              <button className="w-full flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors">
+              <button className="w-full flex items-center gap-2.5 px-3.5 py-1.5 text-xs font-semibold text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors">
                 <User size={14} className="text-zinc-400" />
                 <span>My Profile</span>
               </button>
-              <button className="w-full flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors">
+              <button className="w-full flex items-center gap-2.5 px-3.5 py-1.5 text-xs font-semibold text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors">
                 <SettingsIcon size={14} className="text-zinc-400" />
                 <span>Settings</span>
               </button>
               <div className="border-t border-zinc-50 dark:border-zinc-800 my-1.5"></div>
-              <button className="w-full flex items-center gap-2.5 px-4 py-2 text-xs font-bold text-rose-500 hover:bg-rose-50/50 dark:hover:bg-rose-950/20 transition-colors">
+              <button className="w-full flex items-center gap-2.5 px-3.5 py-1.5 text-xs font-bold text-rose-500 hover:bg-rose-50/50 dark:hover:bg-rose-950/20 transition-colors">
                 <LogOut size={14} />
                 <span>Sign Out</span>
               </button>

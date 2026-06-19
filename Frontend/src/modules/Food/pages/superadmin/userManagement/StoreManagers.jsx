@@ -14,7 +14,9 @@ import {
   Ban,
   ArrowUpRight,
   TrendingDown,
-  ClipboardList
+  ClipboardList,
+  Eye,
+  Edit
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import StoreManagerDetailsDrawer from "./StoreManagerDetailsDrawer"
@@ -23,61 +25,61 @@ import StoreManagerDetailsDrawer from "./StoreManagerDetailsDrawer"
 const INITIAL_MANAGERS = [
   {
     id: "PV-882",
-    name: "Marco Santoro",
-    email: "marco.s@papaveg.com",
-    phone: "+1 312-555-0192",
-    store: "Chicago - Downtown",
-    group: "Urban Slice Group",
+    name: "Ravi Sharma",
+    email: "r.sharma@papaveg.com",
+    phone: "+91 98765 43210",
+    store: "Mumbai - Andheri West",
+    group: "Papa Veg Mumbai",
     status: "Active",
     avatar: ""
   },
   {
     id: "PV-714",
-    name: "Sarah Jenkins",
-    email: "s.jenkins@papaveg.com",
-    phone: "+1 630-555-0104",
-    store: "Naperville East - Mall",
-    group: "Midwest Pizza Co.",
+    name: "Rahul Verma",
+    email: "r.verma@papaveg.com",
+    phone: "+91 98765 43211",
+    store: "Delhi - Connaught Place",
+    group: "Papa Veg Delhi",
     status: "On Leave",
     avatar: ""
   },
   {
     id: "PV-630",
-    name: "David Miller",
-    email: "d.miller@papaveg.com",
-    phone: "+1 630-555-0188",
-    store: "Aurora West Station",
-    group: "Midwest Pizza Co.",
+    name: "Suresh Kumar",
+    email: "s.kumar@papaveg.com",
+    phone: "+91 98765 43212",
+    store: "Pune - Koregaon Park",
+    group: "Papa Veg Pune",
     status: "Suspended",
     avatar: ""
   },
   {
     id: "PV-904",
-    name: "Elena Vance",
-    email: "e.vance@example.com",
-    phone: "+1 312-555-0904",
-    store: "Evanston North",
-    group: "Coastal Veggie Grills",
+    name: "Sanjay Gupta",
+    email: "s.gupta@papaveg.com",
+    phone: "+91 98765 43213",
+    store: "Bangalore - Indiranagar",
+    group: "Papa Veg Bangalore",
     status: "Active",
     avatar: ""
   },
   {
     id: "PV-512",
-    name: "Marcus Rossi",
-    email: "m.rossi@example.com",
-    phone: "+1 815-555-0212",
-    store: "Naperville West",
-    group: "Midwest Pizza Co.",
+    name: "Vikram Singh",
+    email: "v.singh@papaveg.com",
+    phone: "+91 98765 43214",
+    store: "Chennai - T Nagar",
+    group: "Papa Veg Chennai",
     status: "Active",
     avatar: ""
   },
   {
     id: "PV-384",
-    name: "Chloe Bennett",
-    email: "c.bennett@example.com",
-    phone: "+1 312-555-0384",
-    store: "Chicago Loop",
-    group: "Urban Slice Group",
+    name: "Pooja Reddy",
+    email: "p.reddy@papaveg.com",
+    phone: "+91 98765 43215",
+    store: "Hyderabad - Banjara Hills",
+    group: "Papa Veg Hyderabad",
     status: "Active",
     avatar: ""
   }
@@ -210,120 +212,121 @@ export default function StoreManagers() {
   }
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-8 min-h-screen">
+    <div className="p-3 md:p-4 pb-12 max-w-7xl mx-auto space-y-4 min-h-screen w-full">
       {/* Page Header section */}
-      <section className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-6">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-black text-zinc-900 dark:text-zinc-50 tracking-tight">
+      <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-200 dark:border-zinc-800 pb-3">
+        <div className="space-y-0.5">
+          <h1 className="text-xl font-semibold text-black dark:text-white tracking-tight">
             Store Managers
           </h1>
-          <p className="text-xs font-semibold text-zinc-400">
+          <p className="text-xs font-medium text-black dark:text-white mt-0.5">
             Administrate localized store manager profiles, analytics, and active punchcard logs.
           </p>
         </div>
-        <div className="flex flex-wrap gap-3">
-          <button
-            onClick={() => navigate("/food/superadmin/managers/list")}
-            className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-350 px-5 py-3 rounded-xl flex items-center justify-center gap-2 shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all cursor-pointer font-bold text-xs"
-          >
-            <ClipboardList size={15} />
-            <span>Show All List</span>
-          </button>
+        {/* <div className="flex flex-wrap gap-2">
           <button
             onClick={() => openAddEditModal()}
-            className="bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white px-5 py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] active:scale-95 transition-all cursor-pointer font-bold text-xs"
+            className="bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white px-3.5 py-1.5 rounded-lg flex items-center justify-center gap-1.5 shadow-md hover:scale-[1.02] active:scale-95 transition-all cursor-pointer font-bold text-xs"
           >
-            <Plus size={15} className="stroke-[3]" />
+            <Plus size={13} className="stroke-[3]" />
             <span>Add Store Manager</span>
           </button>
-        </div>
+        </div> */}
       </section>
 
       {/* High-Fidelity Bento KPI Grid with SVG Sparkline Charts */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 select-none">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 select-none">
         {/* KPI: Total Managers */}
-        <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex justify-between items-start mb-4">
-            <div className="p-2.5 rounded-xl bg-[var(--primary)]/10 text-[var(--primary)]">
-              <Users size={20} />
+        <div className="bg-white dark:bg-zinc-900 p-3 rounded-lg border border-zinc-150 dark:border-zinc-855 shadow-sm hover:shadow-md transition-shadow flex items-center justify-between">
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <span className="text-[10px] font-bold text-black dark:text-white uppercase tracking-wider truncate">Total Managers</span>
+            <div className="flex items-baseline gap-1.5 flex-wrap">
+              <h3 className="text-lg font-black text-black dark:text-white mt-0.5">{kpis.total}</h3>
+              <span className="text-emerald-500 font-bold text-[8px] flex items-center gap-0.5">
+                <ArrowUpRight size={10} /> +12%
+              </span>
             </div>
-            <span className="text-emerald-500 font-bold text-xs flex items-center gap-0.5">
-              <ArrowUpRight size={14} /> +12%
-            </span>
+            <div className="mt-1.5 h-4 w-16 bg-zinc-50 dark:bg-zinc-950 rounded overflow-hidden relative">
+              <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 20">
+                <path className="text-[var(--primary)] stroke-[2] fill-none" d="M0 15 Q 10 5, 20 12 T 40 8 T 60 14 T 80 4 T 100 10" />
+              </svg>
+            </div>
           </div>
-          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Total Managers</p>
-          <h3 className="text-2xl font-black text-zinc-800 dark:text-zinc-50 mt-1">{kpis.total}</h3>
-          <div className="mt-4 h-8 w-full bg-zinc-50 dark:bg-zinc-955 rounded-lg overflow-hidden relative">
-            <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 20">
-              <path className="text-[var(--primary)] stroke-[2] fill-none" d="M0 15 Q 10 5, 20 12 T 40 8 T 60 14 T 80 4 T 100 10" />
-            </svg>
+          <div className="p-1.5 rounded-md bg-[var(--primary)]/10 text-[var(--primary)] shrink-0 border border-[var(--primary)]/20">
+            <Users size={14} />
           </div>
         </div>
 
         {/* KPI: Active Managers */}
-        <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex justify-between items-start mb-4">
-            <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-600">
-              <UserCheck size={20} />
+        <div className="bg-white dark:bg-zinc-900 p-3 rounded-lg border border-zinc-150 dark:border-zinc-855 shadow-sm hover:shadow-md transition-shadow flex items-center justify-between">
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <span className="text-[10px] font-bold text-black dark:text-white uppercase tracking-wider truncate">Active Managers</span>
+            <div className="flex items-baseline gap-1.5 flex-wrap">
+              <h3 className="text-lg font-black text-black dark:text-white mt-0.5">{kpis.active}</h3>
+              <span className="text-emerald-500 font-bold text-[8px] flex items-center gap-0.5">
+                <ArrowUpRight size={10} /> +3%
+              </span>
             </div>
-            <span className="text-emerald-500 font-bold text-xs flex items-center gap-0.5">
-              <ArrowUpRight size={14} /> +3%
-            </span>
+            <div className="mt-1.5 h-4 w-16 bg-zinc-50 dark:bg-zinc-950 rounded overflow-hidden relative">
+              <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 20">
+                <path className="text-emerald-500 stroke-[2] fill-none" d="M0 10 Q 25 18, 50 10 T 100 12" />
+              </svg>
+            </div>
           </div>
-          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Active Managers</p>
-          <h3 className="text-2xl font-black text-zinc-800 dark:text-zinc-50 mt-1">{kpis.active}</h3>
-          <div className="mt-4 h-8 w-full bg-zinc-50 dark:bg-zinc-955 rounded-lg overflow-hidden relative">
-            <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 20">
-              <path className="text-emerald-500 stroke-[2] fill-none" d="M0 10 Q 25 18, 50 10 T 100 12" />
-            </svg>
+          <div className="p-1.5 rounded-md bg-emerald-500/10 text-emerald-600 shrink-0 border border-emerald-100 dark:border-emerald-900/30">
+            <UserCheck size={14} />
           </div>
         </div>
 
         {/* KPI: On Leave */}
-        <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex justify-between items-start mb-4">
-            <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-600">
-              <Store size={20} />
+        <div className="bg-white dark:bg-zinc-900 p-3 rounded-lg border border-zinc-150 dark:border-zinc-855 shadow-sm hover:shadow-md transition-shadow flex items-center justify-between">
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <span className="text-[10px] font-bold text-black dark:text-white uppercase tracking-wider truncate">Managers On Leave</span>
+            <div className="flex items-baseline gap-1.5 flex-wrap">
+              <h3 className="text-lg font-black text-black dark:text-white mt-0.5">{kpis.onLeave}</h3>
+              <span className="text-black dark:text-white opacity-60 text-[8px] font-bold">Standard</span>
             </div>
-            <span className="text-zinc-450 text-[10px] font-bold">Standard Capacity</span>
+            <div className="mt-1.5 h-4 w-16 bg-zinc-50 dark:bg-zinc-950 rounded overflow-hidden relative">
+              <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 20">
+                <path className="text-amber-500 stroke-[2] fill-none" d="M0 15 L 20 15 L 40 5 L 60 10 L 80 5 L 100 15" />
+              </svg>
+            </div>
           </div>
-          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Managers On Leave</p>
-          <h3 className="text-2xl font-black text-zinc-800 dark:text-zinc-50 mt-1">{kpis.onLeave}</h3>
-          <div className="mt-4 h-8 w-full bg-zinc-50 dark:bg-zinc-955 rounded-lg overflow-hidden relative">
-            <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 20">
-              <path className="text-amber-500 stroke-[2] fill-none" d="M0 15 L 20 15 L 40 5 L 60 10 L 80 5 L 100 15" />
-            </svg>
+          <div className="p-1.5 rounded-md bg-amber-500/10 text-amber-600 shrink-0 border border-amber-100 dark:border-amber-900/30">
+            <Store size={14} />
           </div>
         </div>
 
         {/* KPI: Suspended */}
-        <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex justify-between items-start mb-4">
-            <div className="p-2.5 rounded-xl bg-rose-500/10 text-rose-600">
-              <UserMinus size={20} />
+        <div className="bg-white dark:bg-zinc-900 p-3 rounded-lg border border-zinc-150 dark:border-zinc-855 shadow-sm hover:shadow-md transition-shadow flex items-center justify-between">
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <span className="text-[10px] font-bold text-black dark:text-white uppercase tracking-wider truncate">Suspended Managers</span>
+            <div className="flex items-baseline gap-1.5 flex-wrap">
+              <h3 className="text-lg font-black text-black dark:text-white mt-0.5">{kpis.suspended}</h3>
+              <span className="text-rose-500 font-bold text-[8px] flex items-center gap-0.5">
+                <TrendingDown size={10} /> -2%
+              </span>
             </div>
-            <span className="text-rose-500 font-bold text-xs flex items-center gap-0.5">
-              <TrendingDown size={14} /> -2%
-            </span>
+            <div className="mt-1.5 h-4 w-16 bg-zinc-50 dark:bg-zinc-950 rounded overflow-hidden relative">
+              <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 20">
+                <path className="text-rose-500 stroke-[2] fill-none" d="M0 10 C 20 10, 40 10, 50 10 C 60 10, 80 10, 100 10" />
+              </svg>
+            </div>
           </div>
-          <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Suspended Managers</p>
-          <h3 className="text-2xl font-black text-zinc-800 dark:text-zinc-50 mt-1">{kpis.suspended}</h3>
-          <div className="mt-4 h-8 w-full bg-zinc-50 dark:bg-zinc-955 rounded-lg overflow-hidden relative">
-            <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 20">
-              <path className="text-rose-500 stroke-[2] fill-none" d="M0 10 C 20 10, 40 10, 50 10 C 60 10, 80 10, 100 10" />
-            </svg>
+          <div className="p-1.5 rounded-md bg-rose-500/10 text-rose-600 shrink-0 border border-rose-100 dark:border-rose-900/30">
+            <UserMinus size={14} />
           </div>
         </div>
       </section>
 
       {/* Grid view of Managers directory cards */}
-      <section className="space-y-4">
+      <section className="space-y-3">
         <div className="flex items-center justify-between select-none">
-          <p className="text-xs font-bold text-zinc-400">
+          <p className="text-[10px] font-bold text-black dark:text-white opacity-60">
             Showing {filteredManagers.length} of {managers.length} Managers
           </p>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-zinc-455 dark:text-zinc-500 font-bold">Sort by:</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs text-black dark:text-white opacity-70 font-bold">Sort by:</span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
@@ -335,8 +338,8 @@ export default function StoreManagers() {
           </div>
         </div>
 
-        {/* Bento Grid cards list - Kept as is as requested */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Bento Grid cards list */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredManagers.map((mgr) => {
             const isActive = mgr.status === "Active"
             const isOnLeave = mgr.status === "On Leave"
@@ -348,29 +351,29 @@ export default function StoreManagers() {
                   setSelectedManager(mgr)
                   setIsDrawerOpen(true)
                 }}
-                className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-850 hover:border-[var(--primary)]/35 rounded-3xl p-5 shadow-sm hover:shadow-md hover:scale-[1.01] transition-all cursor-pointer group flex flex-col justify-between"
+                className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-850 hover:border-[var(--primary)]/35 rounded-xl p-3 shadow-sm hover:shadow-md hover:scale-[1.01] transition-all cursor-pointer group flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-start justify-between">
-                    <div className="flex gap-3.5">
-                      <div className="relative">
-                        <div className="w-12 h-12 rounded-full bg-zinc-100 dark:bg-zinc-800 font-bold text-zinc-650 dark:text-zinc-350 flex items-center justify-center shadow-inner">
+                    <div className="flex gap-2.5 min-w-0">
+                      <div className="relative shrink-0">
+                        <div className="w-9 h-9 rounded-full bg-zinc-100 dark:bg-zinc-800 font-bold text-black dark:text-white opacity-80 flex items-center justify-center shadow-inner text-xs">
                           {mgr.name.split(" ").map(n => n[0]).join("")}
                         </div>
-                        <span className={`absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-white dark:border-zinc-900 ${isActive ? "bg-emerald-500" : isOnLeave ? "bg-amber-500" : "bg-rose-500"
+                        <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-zinc-900 ${isActive ? "bg-emerald-500" : isOnLeave ? "bg-amber-500" : "bg-rose-500"
                           }`} />
                       </div>
                       <div className="space-y-0.5 min-w-0">
-                        <h4 className="font-extrabold text-sm text-zinc-850 dark:text-zinc-100 group-hover:text-[var(--primary)] transition-colors truncate">
+                        <h4 className="font-extrabold text-xs text-black dark:text-white group-hover:text-[var(--primary)] transition-colors truncate">
                           {mgr.name}
                         </h4>
-                        <p className="text-[10px] font-bold text-zinc-450 dark:text-zinc-500 truncate">{mgr.store}</p>
-                        <p className="text-[8px] font-black text-zinc-400 uppercase tracking-widest">{mgr.group}</p>
+                        <p className="text-[10px] font-bold text-black dark:text-white opacity-60 truncate">{mgr.store}</p>
+                        <p className="text-[8px] font-black text-black dark:text-white opacity-55 uppercase tracking-widest">{mgr.group}</p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-1.5">
-                      <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider ${isActive
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <span className={`text-[8px] font-black px-1.5 py-0.2 rounded-full uppercase tracking-wider ${isActive
                         ? "bg-green-50 dark:bg-green-950/20 text-green-600"
                         : isOnLeave
                           ? "bg-amber-50 dark:bg-amber-950/20 text-amber-600"
@@ -381,33 +384,45 @@ export default function StoreManagers() {
                     </div>
                   </div>
 
-                  <div className="mt-5 pt-4 border-t border-zinc-100 dark:border-zinc-850/60 grid grid-cols-1 gap-2.5 text-zinc-500 dark:text-zinc-400">
+                  <div className="mt-3 pt-2.5 border-t border-zinc-100 dark:border-zinc-850/60 grid grid-cols-1 gap-1.5 text-black dark:text-white opacity-70">
                     <div className="flex items-center gap-2 min-w-0">
-                      <Mail size={13} className="text-zinc-400 flex-shrink-0" />
-                      <span className="text-[10.5px] truncate font-medium">{mgr.email}</span>
+                      <Mail size={12} className="text-black dark:text-white opacity-60 flex-shrink-0" />
+                      <span className="text-[10px] truncate font-medium">{mgr.email}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Phone size={13} className="text-zinc-400 flex-shrink-0" />
-                      <span className="text-[10.5px] font-semibold">{mgr.phone}</span>
+                      <Phone size={12} className="text-black dark:text-white opacity-60 flex-shrink-0" />
+                      <span className="text-[10px] font-semibold">{mgr.phone}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-5 pt-4 border-t border-zinc-100 dark:border-zinc-850/50 flex justify-end gap-2" onClick={(e) => e.stopPropagation()}>
+                <div className="mt-3 pt-2.5 border-t border-zinc-100 dark:border-zinc-850/50 flex justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
                   <button
-                    onClick={() => openAddEditModal(mgr)}
-                    className="px-3.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-850 font-bold text-[10px] text-zinc-500 dark:text-zinc-400 hover:text-[var(--primary)] transition-all cursor-pointer"
+                    onClick={() => {
+                      setSelectedManager(mgr)
+                      setIsDrawerOpen(true)
+                    }}
+                    className="p-1 rounded-md border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-850 text-black dark:text-white opacity-70 hover:opacity-100 hover:text-[var(--primary)] transition-all cursor-pointer"
+                    title="View Profile"
                   >
-                    Edit
+                    <Eye size={13} />
                   </button>
+                  {/* <button
+                    onClick={() => openAddEditModal(mgr)}
+                    className="p-1 rounded-md border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-855 text-black dark:text-white opacity-70 hover:opacity-100 hover:text-[var(--primary)] transition-all cursor-pointer"
+                    title="Edit Profile"
+                  >
+                    <Edit size={13} />
+                  </button> */}
                   <button
                     onClick={() => {
                       setManagerToDelete(mgr)
                       setShowDeleteModal(true)
                     }}
-                    className="px-3.5 py-1.5 rounded-lg border border-rose-200/40 dark:border-rose-950 hover:bg-rose-50 dark:hover:bg-rose-950/30 font-bold text-[10px] text-rose-550 dark:text-rose-455 transition-all cursor-pointer"
+                    className="p-1 rounded-md border border-rose-200/40 dark:border-rose-955 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-rose-550 dark:text-rose-455 transition-all cursor-pointer"
+                    title="Remove Manager"
                   >
-                    Remove
+                    <Trash2 size={13} />
                   </button>
                 </div>
               </div>
@@ -417,14 +432,24 @@ export default function StoreManagers() {
 
         {/* Empty filtered managers fallback */}
         {filteredManagers.length === 0 && (
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-12 text-center select-none shadow-sm flex flex-col items-center justify-center">
-            <UserMinus size={36} className="text-zinc-400 mb-3" />
-            <h4 className="font-extrabold text-sm text-zinc-900 dark:text-zinc-50">No Store Managers Found</h4>
-            <p className="text-[10px] text-zinc-400 font-semibold max-w-xs mt-1">
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-8 text-center select-none shadow-sm flex flex-col items-center justify-center">
+            <UserMinus size={30} className="text-black dark:text-white opacity-55 mb-2.5" />
+            <h4 className="font-extrabold text-xs text-black dark:text-white">No Store Managers Found</h4>
+            <p className="text-[10px] text-black dark:text-white opacity-55 max-w-xs mt-1">
               Add a new store manager to begin managing localized store profiles.
             </p>
           </div>
         )}
+
+        <div className="flex items-center justify-end pt-1">
+          <button
+            onClick={() => navigate("/food/superadmin/managers/list")}
+            className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-black dark:text-white opacity-80 px-4 py-2 rounded-lg flex items-center justify-center gap-2 shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all cursor-pointer font-bold text-xs"
+          >
+            <ClipboardList size={14} className="text-black dark:text-white opacity-60" />
+            <span>Show All List</span>
+          </button>
+        </div>
       </section>
 
       {/* SLIDING DETAILS DRAWER */}
@@ -497,7 +522,7 @@ export default function StoreManagers() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="marco@papaveg.com"
-                        className={`w-full p-3 text-xs border rounded-xl bg-zinc-50 dark:bg-zinc-955 text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-[var(--primary)] focus:bg-white transition-colors ${formErrors.email ? "border-rose-500" : "border-zinc-200 dark:border-zinc-805"
+                        className={`w-full p-3 text-xs border rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-[var(--primary)] focus:bg-white transition-colors ${formErrors.email ? "border-rose-500" : "border-zinc-200 dark:border-zinc-805"
                           }`}
                       />
                       {formErrors.email && <p className="text-[9px] font-black text-rose-500 mt-1">{formErrors.email}</p>}
@@ -511,7 +536,7 @@ export default function StoreManagers() {
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         placeholder="+1 312-555-xxxx"
-                        className={`w-full p-3 text-xs border rounded-xl bg-zinc-50 dark:bg-zinc-955 text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-[var(--primary)] focus:bg-white transition-colors ${formErrors.phone ? "border-rose-500" : "border-zinc-200 dark:border-zinc-805"
+                        className={`w-full p-3 text-xs border rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-[var(--primary)] focus:bg-white transition-colors ${formErrors.phone ? "border-rose-500" : "border-zinc-200 dark:border-zinc-805"
                           }`}
                       />
                       {formErrors.phone && <p className="text-[9px] font-black text-rose-500 mt-1">{formErrors.phone}</p>}
@@ -524,7 +549,7 @@ export default function StoreManagers() {
                       <select
                         value={formData.group}
                         onChange={(e) => setFormData({ ...formData, group: e.target.value })}
-                        className="w-full text-xs px-3 py-3 border border-zinc-200 dark:border-zinc-805 rounded-xl bg-zinc-50 dark:bg-zinc-955 text-zinc-850 dark:text-zinc-100 focus:outline-none cursor-pointer"
+                        className="w-full text-xs px-3 py-3 border border-zinc-200 dark:border-zinc-805 rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-850 dark:text-zinc-100 focus:outline-none cursor-pointer"
                       >
                         {franchiseOptions.slice(1).map(opt => <option key={opt} value={opt}>{opt}</option>)}
                       </select>
@@ -535,7 +560,7 @@ export default function StoreManagers() {
                       <select
                         value={formData.store}
                         onChange={(e) => setFormData({ ...formData, store: e.target.value })}
-                        className="w-full text-xs px-3 py-3 border border-zinc-205 dark:border-zinc-805 rounded-xl bg-zinc-50 dark:bg-zinc-955 text-zinc-850 dark:text-zinc-100 focus:outline-none cursor-pointer"
+                        className="w-full text-xs px-3 py-3 border border-zinc-205 dark:border-zinc-805 rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-850 dark:text-zinc-100 focus:outline-none cursor-pointer"
                       >
                         {storeOptions.slice(1).map(opt => <option key={opt} value={opt}>{opt}</option>)}
                       </select>
@@ -547,7 +572,7 @@ export default function StoreManagers() {
                     <select
                       value={formData.status}
                       onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                      className="w-full text-xs px-3 py-3 border border-zinc-205 dark:border-zinc-805 rounded-xl bg-zinc-50 dark:bg-zinc-955 text-zinc-850 dark:text-zinc-100 focus:outline-none cursor-pointer"
+                      className="w-full text-xs px-3 py-3 border border-zinc-205 dark:border-zinc-805 rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-850 dark:text-zinc-100 focus:outline-none cursor-pointer"
                     >
                       {statusOptions.slice(1).map(opt => <option key={opt} value={opt}>{opt}</option>)}
                     </select>

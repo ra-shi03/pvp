@@ -1,5 +1,5 @@
-import { Suspense, lazy } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Suspense, lazy, useEffect } from "react";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminLayout from "./AdminLayout";
 import Loader from "@food/components/Loader";
@@ -128,6 +128,24 @@ const AdminSignup = lazy(() => import("@food/pages/admin/auth/AdminSignup"));
 const AdminForgotPassword = lazy(() => import("@food/pages/admin/auth/AdminForgotPassword"));
 
 export default function AdminRouter() {
+  const location = useLocation();
+  
+  // Enforce Superadmin Theme settings
+  useEffect(() => {
+    // Apply Light/Dark mode
+    const themeMode = localStorage.getItem("sa_themeMode") || "light";
+    if (themeMode === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+
+    // Apply primary colors
+    const primaryColor = localStorage.getItem("sa_primary") || "#a43c12";
+    document.documentElement.style.setProperty("--primary", primaryColor);
+    document.documentElement.style.setProperty("--primary-hover", `${primaryColor}cc`);
+  }, [location.pathname]);
+
   return (
     <Suspense fallback={<Loader />}>
       <Routes>

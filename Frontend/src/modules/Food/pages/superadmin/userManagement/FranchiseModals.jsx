@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, User, Mail, Phone, Store, MapPin, Layers, Save, Ban } from "lucide-react"
+import { X, User, Mail, Phone, Store, MapPin, Layers, Save, Ban, Lock, Clock } from "lucide-react"
 
 // Combined ADD / EDIT Franchise Admin Modal
 export function EditFranchiseModal({ isOpen, onClose, admin, onSave }) {
@@ -10,12 +10,17 @@ export function EditFranchiseModal({ isOpen, onClose, admin, onSave }) {
     name: "",
     email: "",
     phone: "",
+    password: "",
     franchiseName: "",
     city: "",
     state: "",
     type: "Single Store",
     totalStores: 1,
-    status: "ACTIVE"
+    status: "ACTIVE",
+    franchiseDuration: 3,
+    franchiseCost: "",
+    paidAmount: "",
+    dueAmount: ""
   })
 
   const [errors, setErrors] = useState({})
@@ -26,24 +31,34 @@ export function EditFranchiseModal({ isOpen, onClose, admin, onSave }) {
         name: admin.name || "",
         email: admin.email || "",
         phone: admin.phone || "",
+        password: "",
         franchiseName: admin.franchiseName || "",
         city: admin.city || "",
         state: admin.state || "",
         type: admin.type || "Single Store",
         totalStores: admin.totalStores || 1,
-        status: admin.status || "ACTIVE"
+        status: admin.status || "ACTIVE",
+        franchiseDuration: admin.franchiseDuration || 3,
+        franchiseCost: admin.franchiseCost || "",
+        paidAmount: admin.paidAmount || "",
+        dueAmount: admin.dueAmount || ""
       })
     } else {
       setFormData({
         name: "",
         email: "",
         phone: "",
+        password: "",
         franchiseName: "",
         city: "",
         state: "",
         type: "Single Store",
         totalStores: 1,
-        status: "ACTIVE"
+        status: "ACTIVE",
+        franchiseDuration: 3,
+        franchiseCost: "",
+        paidAmount: "",
+        dueAmount: ""
       })
     }
     setErrors({})
@@ -58,10 +73,23 @@ export function EditFranchiseModal({ isOpen, onClose, admin, onSave }) {
       newErrors.email = "Invalid email format"
     }
     if (!formData.phone.trim()) newErrors.phone = "Phone is required"
+    if (!isEdit && !formData.password.trim()) newErrors.password = "Password is required"
     if (!formData.franchiseName.trim()) newErrors.franchiseName = "Franchise name is required"
     if (!formData.city.trim()) newErrors.city = "City is required"
     if (!formData.state.trim()) newErrors.state = "State is required"
     if (formData.totalStores < 1) newErrors.totalStores = "Must have at least 1 store"
+    if (!formData.franchiseDuration || Number(formData.franchiseDuration) < 1) {
+      newErrors.franchiseDuration = "Duration must be at least 1 year"
+    }
+    if (formData.franchiseCost !== "" && Number(formData.franchiseCost) < 0) {
+      newErrors.franchiseCost = "Cost cannot be negative"
+    }
+    if (formData.paidAmount !== "" && Number(formData.paidAmount) < 0) {
+      newErrors.paidAmount = "Paid amount cannot be negative"
+    }
+    if (formData.dueAmount !== "" && Number(formData.dueAmount) < 0) {
+      newErrors.dueAmount = "Due amount cannot be negative"
+    }
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -106,152 +134,170 @@ export function EditFranchiseModal({ isOpen, onClose, admin, onSave }) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: "spring", duration: 0.4 }}
-              className="w-full max-w-xl bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl p-6 pointer-events-auto flex flex-col max-h-[90vh]"
+              className="w-full max-w-md bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl p-3.5 pointer-events-auto flex flex-col max-h-[90vh]"
             >
               {/* Header */}
-              <div className="flex items-center justify-between pb-4 border-b border-zinc-100 dark:border-zinc-800">
+              <div className="flex items-center justify-between pb-2.5 border-b border-zinc-100 dark:border-zinc-800">
                 <div>
-                  <h3 className="text-lg font-extrabold text-zinc-900 dark:text-zinc-50 leading-tight">
+                  <h3 className="text-base font-extrabold text-zinc-900 dark:text-zinc-50 leading-tight">
                     {isEdit ? "Edit Franchise Admin" : "Add Franchise Admin"}
                   </h3>
-                  <p className="text-zinc-400 dark:text-zinc-500 font-semibold text-xs mt-0.5">
+                  <p className="text-zinc-400 dark:text-zinc-500 font-semibold text-[10px] mt-0.5">
                     {isEdit ? "Update profile details and administrative permissions." : "Register a new franchise operator in the system."}
                   </p>
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-1.5 rounded-xl hover:bg-zinc-55 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-400 hover:text-zinc-600 transition-colors"
+                  className="p-1 rounded-xl hover:bg-zinc-55 hover:bg-zinc-105 dark:hover:bg-zinc-800 text-zinc-400 hover:text-zinc-600 transition-colors"
                 >
-                  <X size={18} />
+                  <X size={15} />
                 </button>
               </div>
 
               {/* Form Body (Scrollable) */}
-              <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto pr-1 py-4 space-y-4 scrollbar-thin">
+              <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto pr-1 py-2.5 space-y-3 scrollbar-thin">
                 {/* Personal Section */}
                 <div className="space-y-3">
-                  <span className="text-[10px] font-extrabold text-[var(--primary)] uppercase tracking-wider">
+                  <span className="text-[9px] font-extrabold text-[var(--primary)] uppercase tracking-wider">
                     Personal Details
                   </span>
                   
                   {/* Name Input */}
                   <div>
-                    <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">Full Name</label>
+                    <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">Full Name</label>
                     <div className="relative">
-                      <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-450 text-zinc-400" />
+                      <User size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-450 text-zinc-400" />
                       <input
                         type="text"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="e.g. John Doe"
-                        className={`w-full text-xs pl-11 pr-4 py-3.5 border rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
+                        className={`w-full text-xs pl-8.5 pr-3 py-1.5 border rounded-lg bg-zinc-55 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
                           errors.name ? "border-rose-500" : "border-zinc-200 dark:border-zinc-800"
                         }`}
                       />
                     </div>
-                    {errors.name && <p className="text-[10px] text-rose-500 font-bold mt-1">{errors.name}</p>}
+                    {errors.name && <p className="text-[9px] text-rose-500 font-bold mt-1">{errors.name}</p>}
                   </div>
 
                   {/* Email & Phone grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">Email Address</label>
+                      <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">Email Address</label>
                       <div className="relative">
-                        <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-450 text-zinc-400" />
+                        <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-450 text-zinc-400" />
                         <input
                           type="email"
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           placeholder="e.g. john@example.com"
-                          className={`w-full text-xs pl-11 pr-4 py-3.5 border rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
+                          className={`w-full text-xs pl-8.5 pr-3 py-1.5 border rounded-lg bg-zinc-55 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
                             errors.email ? "border-rose-500" : "border-zinc-200 dark:border-zinc-800"
                           }`}
                         />
                       </div>
-                      {errors.email && <p className="text-[10px] text-rose-500 font-bold mt-1">{errors.email}</p>}
+                      {errors.email && <p className="text-[9px] text-rose-500 font-bold mt-1">{errors.email}</p>}
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">Phone Number</label>
+                      <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">Phone Number</label>
                       <div className="relative">
-                        <Phone size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-450 text-zinc-400" />
+                        <Phone size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-450 text-zinc-400" />
                         <input
                           type="text"
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           placeholder="e.g. +1 234 567 890"
-                          className={`w-full text-xs pl-11 pr-4 py-3.5 border rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
+                          className={`w-full text-xs pl-8.5 pr-3 py-1.5 border rounded-lg bg-zinc-55 dark:bg-zinc-955 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
                             errors.phone ? "border-rose-500" : "border-zinc-200 dark:border-zinc-800"
                           }`}
                         />
                       </div>
-                      {errors.phone && <p className="text-[10px] text-rose-500 font-bold mt-1">{errors.phone}</p>}
+                      {errors.phone && <p className="text-[9px] text-rose-500 font-bold mt-1">{errors.phone}</p>}
                     </div>
+                  </div>
+
+                  {/* Password Input */}
+                  <div>
+                    <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">Password</label>
+                    <div className="relative">
+                      <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-450 text-zinc-400" />
+                      <input
+                        type="password"
+                        value={formData.password}
+                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        placeholder={isEdit ? "Leave blank to keep unchanged" : "Enter a strong password"}
+                        className={`w-full text-xs pl-8.5 pr-3 py-1.5 border rounded-lg bg-zinc-55 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
+                          errors.password ? "border-rose-500" : "border-zinc-200 dark:border-zinc-800"
+                        }`}
+                      />
+                    </div>
+                    {errors.password && <p className="text-[9px] text-rose-500 font-bold mt-1">{errors.password}</p>}
                   </div>
                 </div>
 
                 {/* Franchise Details Section */}
-                <div className="space-y-3 pt-2">
-                  <span className="text-[10px] font-extrabold text-[var(--primary)] uppercase tracking-wider">
+                <div className="space-y-3 pt-2.5">
+                  <span className="text-[9px] font-extrabold text-[var(--primary)] uppercase tracking-wider">
                     Franchise Configuration
                   </span>
 
                   {/* Franchise Brand Name */}
                   <div>
-                    <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">Franchise / Brand Name</label>
+                    <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">Franchise / Brand Name</label>
                     <div className="relative">
-                      <Store size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-450 text-zinc-400" />
+                      <Store size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-455 text-zinc-400" />
                       <input
                         type="text"
                         value={formData.franchiseName}
                         onChange={(e) => setFormData({ ...formData, franchiseName: e.target.value })}
                         placeholder="e.g. Papa Veg Centro"
-                        className={`w-full text-xs pl-11 pr-4 py-3.5 border rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
+                        className={`w-full text-xs pl-8.5 pr-3 py-1.5 border rounded-lg bg-zinc-55 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
                           errors.franchiseName ? "border-rose-500" : "border-zinc-200 dark:border-zinc-800"
                         }`}
                       />
                     </div>
-                    {errors.franchiseName && <p className="text-[10px] text-rose-500 font-bold mt-1">{errors.franchiseName}</p>}
+                    {errors.franchiseName && <p className="text-[9px] text-rose-500 font-bold mt-1">{errors.franchiseName}</p>}
                   </div>
 
                   {/* City & State Grid */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">City</label>
+                      <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">City</label>
                       <div className="relative">
-                        <MapPin size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-450 text-zinc-400" />
+                        <MapPin size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-455 text-zinc-400" />
                         <input
                           type="text"
                           value={formData.city}
                           onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                           placeholder="e.g. Milan"
-                          className={`w-full text-xs pl-11 pr-4 py-3.5 border rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
+                          className={`w-full text-xs pl-8.5 pr-3 py-1.5 border rounded-lg bg-zinc-55 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
                             errors.city ? "border-rose-500" : "border-zinc-200 dark:border-zinc-800"
                           }`}
                         />
                       </div>
-                      {errors.city && <p className="text-[10px] text-rose-500 font-bold mt-1">{errors.city}</p>}
+                      {errors.city && <p className="text-[9px] text-rose-500 font-bold mt-1">{errors.city}</p>}
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">State / Region</label>
+                      <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">State / Region</label>
                       <input
                         type="text"
                         value={formData.state}
                         onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                         placeholder="e.g. Lombardia"
-                        className={`w-full text-xs px-4 py-3.5 border rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
+                        className={`w-full text-xs px-3 py-1.5 border rounded-lg bg-zinc-55 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
                           errors.state ? "border-rose-500" : "border-zinc-200 dark:border-zinc-800"
                         }`}
                       />
-                      {errors.state && <p className="text-[10px] text-rose-500 font-bold mt-1">{errors.state}</p>}
+                      {errors.state && <p className="text-[9px] text-rose-500 font-bold mt-1">{errors.state}</p>}
                     </div>
                   </div>
 
                   {/* Franchise Type, Stores Count, and Status Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">Franchise Type</label>
+                      <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">Franchise Type</label>
                       <select
                         value={formData.type}
                         onChange={(e) => {
@@ -262,7 +308,7 @@ export function EditFranchiseModal({ isOpen, onClose, admin, onSave }) {
                             totalStores: val === "Single Store" ? 1 : Math.max(formData.totalStores, 2)
                           })
                         }}
-                        className="w-full text-xs px-3.5 py-3.5 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all cursor-pointer"
+                        className="w-full text-xs px-3 py-1.5 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-zinc-55 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all cursor-pointer"
                       >
                         <option>Single Store</option>
                         <option>Multi Store</option>
@@ -270,30 +316,30 @@ export function EditFranchiseModal({ isOpen, onClose, admin, onSave }) {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">Store Limit</label>
+                      <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">Store Limit</label>
                       <div className="relative">
-                        <Layers size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
+                        <Layers size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
                         <input
                           type="number"
                           min="1"
                           disabled={formData.type === "Single Store"}
                           value={formData.totalStores}
                           onChange={(e) => setFormData({ ...formData, totalStores: parseInt(e.target.value) || 1 })}
-                          className={`w-full text-xs pl-11 pr-4 py-3.5 border rounded-xl text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
+                          className={`w-full text-xs pl-8.5 pr-3 py-1.5 border rounded-lg text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
                             formData.type === "Single Store"
                               ? "bg-zinc-100 dark:bg-zinc-900 text-zinc-450 dark:text-zinc-500 border-zinc-150 dark:border-zinc-850 cursor-not-allowed"
-                              : "bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                              : "bg-zinc-55 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                           }`}
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">Account Status</label>
+                      <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">Account Status</label>
                       <select
                         value={formData.status}
                         onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                        className="w-full text-xs px-3.5 py-3.5 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all cursor-pointer"
+                        className="w-full text-xs px-3 py-1.5 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-zinc-55 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all cursor-pointer"
                       >
                         <option value="ACTIVE">ACTIVE</option>
                         <option value="INACTIVE">INACTIVE</option>
@@ -301,24 +347,120 @@ export function EditFranchiseModal({ isOpen, onClose, admin, onSave }) {
                       </select>
                     </div>
                   </div>
+
+                  {/* Duration and Cost Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">Franchise Duration (Years)</label>
+                      <div className="relative">
+                        <Clock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
+                        <input
+                          type="number"
+                          min="1"
+                          placeholder="e.g. 3"
+                          value={formData.franchiseDuration}
+                          onChange={(e) => setFormData({ ...formData, franchiseDuration: parseInt(e.target.value) || "" })}
+                          className={`w-full text-xs pl-8.5 pr-3 py-1.5 border rounded-lg bg-zinc-55 dark:bg-zinc-955 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
+                            errors.franchiseDuration ? "border-rose-500" : "border-zinc-200 dark:border-zinc-800"
+                          }`}
+                        />
+                      </div>
+                      {errors.franchiseDuration && <p className="text-[9px] text-rose-500 font-bold mt-1">{errors.franchiseDuration}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">Total Franchise Cost (₹)</label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-zinc-400">₹</span>
+                        <input
+                          type="number"
+                          min="0"
+                          placeholder="e.g. 500000"
+                          value={formData.franchiseCost}
+                          onChange={(e) => {
+                            const costVal = e.target.value
+                            const cost = parseFloat(costVal) || 0
+                            const paid = parseFloat(formData.paidAmount) || 0
+                            setFormData({
+                              ...formData,
+                              franchiseCost: costVal,
+                              dueAmount: Math.max(0, cost - paid).toString()
+                            })
+                          }}
+                          className={`w-full text-xs pl-7 pr-3 py-1.5 border rounded-lg bg-zinc-55 dark:bg-zinc-955 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
+                            errors.franchiseCost ? "border-rose-500" : "border-zinc-200 dark:border-zinc-800"
+                          }`}
+                        />
+                      </div>
+                      {errors.franchiseCost && <p className="text-[9px] text-rose-500 font-bold mt-1">{errors.franchiseCost}</p>}
+                    </div>
+                  </div>
+
+                  {/* Pay Amount and Due Amount Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">Paid Amount (₹)</label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-zinc-400">₹</span>
+                        <input
+                          type="number"
+                          min="0"
+                          placeholder="e.g. 300000"
+                          value={formData.paidAmount}
+                          onChange={(e) => {
+                            const paidVal = e.target.value
+                            const cost = parseFloat(formData.franchiseCost) || 0
+                            const paid = parseFloat(paidVal) || 0
+                            setFormData({
+                              ...formData,
+                              paidAmount: paidVal,
+                              dueAmount: Math.max(0, cost - paid).toString()
+                            })
+                          }}
+                          className={`w-full text-xs pl-7 pr-3 py-1.5 border rounded-lg bg-zinc-55 dark:bg-zinc-955 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
+                            errors.paidAmount ? "border-rose-500" : "border-zinc-200 dark:border-zinc-800"
+                          }`}
+                        />
+                      </div>
+                      {errors.paidAmount && <p className="text-[9px] text-rose-500 font-bold mt-1">{errors.paidAmount}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">Due Amount (₹)</label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-zinc-400">₹</span>
+                        <input
+                          type="number"
+                          min="0"
+                          placeholder="e.g. 200000"
+                          value={formData.dueAmount}
+                          onChange={(e) => setFormData({ ...formData, dueAmount: e.target.value })}
+                          className={`w-full text-xs pl-7 pr-3 py-1.5 border rounded-lg bg-zinc-55 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:bg-white transition-all ${
+                            errors.dueAmount ? "border-rose-500" : "border-zinc-200 dark:border-zinc-800"
+                          }`}
+                        />
+                      </div>
+                      {errors.dueAmount && <p className="text-[9px] text-rose-500 font-bold mt-1">{errors.dueAmount}</p>}
+                    </div>
+                  </div>
                 </div>
               </form>
 
               {/* Footer Actions */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 mt-2 z-10">
+              <div className="flex items-center justify-end gap-3 pt-2.5 border-t border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 mt-1.5 z-10">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-5 py-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 font-bold text-xs text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 active:scale-95 transition-all cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 font-bold text-xs text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 active:scale-95 transition-all cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
                   onClick={handleSubmit}
-                  className="flex items-center gap-2 px-5 py-3.5 bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white rounded-xl text-xs font-bold shadow-md shadow-[var(--primary)]/20 transition-all hover:scale-[1.02] cursor-pointer"
+                  className="flex items-center gap-2 px-3 py-1.5 bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white rounded-lg text-xs font-bold shadow-md shadow-[var(--primary)]/20 transition-all hover:scale-[1.02] cursor-pointer"
                 >
-                  <Save size={14} className="stroke-[2.5]" />
+                  <Save size={12} className="stroke-[2.5]" />
                   <span>{isEdit ? "Save Profile Changes" : "Create Franchise Admin"}</span>
                 </button>
               </div>
@@ -368,31 +510,31 @@ export function SuspendFranchiseModal({ isOpen, onClose, admin, onConfirm }) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: "spring", duration: 0.35 }}
-              className="w-full max-w-md bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl p-6 pointer-events-auto relative"
+              className="w-full max-w-sm bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl p-3.5 pointer-events-auto relative"
             >
               {/* Top Red Danger Icon */}
-              <div className="w-12 h-12 bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-450 rounded-full flex items-center justify-center mb-4">
-                <Ban size={20} className="stroke-[2.5]" />
+              <div className="w-9 h-9 bg-rose-50 dark:bg-rose-955/20 text-rose-600 dark:text-rose-450 rounded-full flex items-center justify-center mb-3">
+                <Ban size={16} className="stroke-[2.5]" />
               </div>
 
               {/* Content text */}
-              <div className="mb-5">
-                <h3 className="text-base font-extrabold text-zinc-900 dark:text-zinc-50 leading-tight">
+              <div className="mb-4">
+                <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-50 leading-tight">
                   Suspend Franchise Account
                 </h3>
-                <p className="text-zinc-400 dark:text-zinc-500 font-semibold text-xs mt-1.5 leading-normal">
+                <p className="text-zinc-400 dark:text-zinc-550 font-semibold text-[10px] mt-1 leading-normal">
                   Are you sure you want to suspend <strong className="text-zinc-800 dark:text-zinc-200">{admin.name}</strong> ({admin.franchiseName})? This operation will revoke administrative panel access and hide all active store listings from consumers.
                 </p>
               </div>
 
               {/* Form Input options */}
-              <div className="space-y-4 mb-6">
+              <div className="space-y-3 mb-4">
                 <div>
-                  <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">Primary Reason</label>
+                  <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">Primary Reason</label>
                   <select
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
-                    className="w-full text-xs px-3.5 py-3.5 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-rose-500 transition-all cursor-pointer"
+                    className="w-full text-xs px-3 py-1.5 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-rose-500 transition-all cursor-pointer"
                   >
                     {reasons.map((opt) => (
                       <option key={opt} value={opt}>
@@ -403,30 +545,30 @@ export function SuspendFranchiseModal({ isOpen, onClose, admin, onConfirm }) {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-zinc-500 dark:text-zinc-400 mb-1.5">Additional Notes (Internal)</label>
+                  <label className="block text-[10px] font-bold text-zinc-500 dark:text-zinc-400 mb-1">Additional Notes (Internal)</label>
                   <textarea
-                    rows="3"
+                    rows="2"
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="Provide specific notes regarding why the account is suspended..."
-                    className="w-full text-xs p-3.5 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-rose-500 transition-all resize-none"
+                    className="w-full text-xs p-2.5 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-2 focus:ring-rose-500 transition-all resize-none"
                   />
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+              <div className="flex items-center justify-end gap-3 pt-2.5 border-t border-zinc-100 dark:border-zinc-800">
                 <button
                   onClick={onClose}
-                  className="px-5 py-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 font-bold text-xs text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 active:scale-95 transition-all cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 font-bold text-xs text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-850 active:scale-95 transition-all cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleConfirm}
-                  className="flex items-center gap-2 px-5 py-3.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold shadow-md shadow-rose-600/20 transition-all hover:scale-[1.02] cursor-pointer"
+                  className="flex items-center gap-2 px-3 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-bold shadow-md shadow-rose-600/20 transition-all hover:scale-[1.02] cursor-pointer"
                 >
-                  <Ban size={14} className="stroke-[2.5]" />
+                  <Ban size={12} className="stroke-[2.5]" />
                   <span>Suspend Account</span>
                 </button>
               </div>

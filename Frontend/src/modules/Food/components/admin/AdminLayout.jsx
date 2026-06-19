@@ -49,8 +49,8 @@ export default function AdminLayout() {
       />
 
       {/* Main Content Area */}
-      <div className={`
-        flex-1 flex min-h-0 flex-col transition-all duration-300 ease-in-out min-w-0
+      <div id="admin-main-content" className={`
+        flex-1 flex min-h-0 flex-col transition-all duration-300 ease-in-out min-w-0 relative
         ${isSidebarCollapsed ? 'lg:ml-20' : 'lg:ml-80'}
       `}>
         {/* Top Navbar */}
@@ -64,7 +64,7 @@ export default function AdminLayout() {
         )}
 
         {/* Page Content */}
-        <main className="flex-1 min-h-0 w-full max-w-full overflow-x-hidden overflow-y-auto bg-neutral-100">
+        <main className="flex-1 min-h-0 w-full max-w-full overflow-x-hidden overflow-y-auto bg-neutral-100 relative">
           <Outlet />
         </main>
       </div>

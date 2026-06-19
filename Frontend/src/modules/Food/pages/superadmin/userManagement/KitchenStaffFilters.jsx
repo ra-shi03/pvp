@@ -32,9 +32,10 @@ export default function KitchenStaffFilters({
 
   const franchises = [
     { value: "", label: "All Franchises" },
-    { value: "Downtown Pizza Group", label: "Downtown Pizza Group" },
-    { value: "Northside Eats", label: "Northside Eats" },
-    { value: "Westside Express", label: "Westside Express" }
+    { value: "Papa Veg Mumbai", label: "Papa Veg Mumbai" },
+    { value: "Papa Veg Pune", label: "Papa Veg Pune" },
+    { value: "Papa Veg Delhi", label: "Papa Veg Delhi" },
+    { value: "Papa Veg Bangalore", label: "Papa Veg Bangalore" }
   ]
 
   const roles = [
@@ -60,24 +61,24 @@ export default function KitchenStaffFilters({
   ]
 
   return (
-    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 mb-6 shadow-sm">
-      <div className="flex flex-wrap items-center gap-4">
+    <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3 mb-4 shadow-sm">
+      <div className="flex flex-wrap items-center gap-2">
         {/* Search Bar */}
         <div className="flex-1 min-w-[240px] relative group">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 group-focus-within:text-[var(--primary)] transition-colors" size={18} />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-black/50 dark:text-white/50 group-focus-within:text-[var(--primary)] transition-colors" size={14} />
           <input
             type="text"
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
             placeholder="Search by name or Employee ID..."
-            className="w-full pl-10 pr-10 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent outline-none font-medium text-xs text-zinc-800 dark:text-zinc-100 transition-all"
+            className="w-full pl-9 pr-8 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg focus:ring-1 focus:ring-[var(--primary)] focus:border-transparent outline-none font-medium text-xs text-black dark:text-white transition-all"
           />
           {localSearch && (
             <button
               onClick={() => setLocalSearch("")}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-black/50 hover:text-black dark:text-white/50 dark:hover:text-white transition-colors"
             >
-              <X size={16} />
+              <X size={14} />
             </button>
           )}
         </div>
@@ -87,7 +88,7 @@ export default function KitchenStaffFilters({
           <select
             value={franchiseFilter}
             onChange={(e) => setFranchiseFilter(e.target.value)}
-            className="w-full sm:w-44 px-3 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl font-semibold text-xs text-zinc-700 dark:text-zinc-300 focus:ring-2 focus:ring-[var(--primary)] outline-none cursor-pointer"
+            className="w-full sm:w-40 px-2.5 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg font-semibold text-xs text-black dark:text-white focus:ring-1 focus:ring-[var(--primary)] outline-none cursor-pointer"
           >
             {franchises.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -102,7 +103,7 @@ export default function KitchenStaffFilters({
           <select
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
-            className="w-full sm:w-36 px-3 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl font-semibold text-xs text-zinc-700 dark:text-zinc-300 focus:ring-2 focus:ring-[var(--primary)] outline-none cursor-pointer"
+            className="w-full sm:w-32 px-2.5 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg font-semibold text-xs text-black dark:text-white focus:ring-1 focus:ring-[var(--primary)] outline-none cursor-pointer"
           >
             {roles.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -117,7 +118,7 @@ export default function KitchenStaffFilters({
           <select
             value={shiftFilter}
             onChange={(e) => setShiftFilter(e.target.value)}
-            className="w-full sm:w-36 px-3 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl font-semibold text-xs text-zinc-700 dark:text-zinc-300 focus:ring-2 focus:ring-[var(--primary)] outline-none cursor-pointer"
+            className="w-full sm:w-32 px-2.5 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg font-semibold text-xs text-black dark:text-white focus:ring-1 focus:ring-[var(--primary)] outline-none cursor-pointer"
           >
             {shifts.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -132,7 +133,7 @@ export default function KitchenStaffFilters({
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="w-full sm:w-36 px-3 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl font-semibold text-xs text-zinc-700 dark:text-zinc-300 focus:ring-2 focus:ring-[var(--primary)] outline-none cursor-pointer"
+            className="w-full sm:w-32 px-2.5 py-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg font-semibold text-xs text-black dark:text-white focus:ring-1 focus:ring-[var(--primary)] outline-none cursor-pointer"
           >
             {statuses.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -145,9 +146,9 @@ export default function KitchenStaffFilters({
         {/* Clear Button */}
         <button
           onClick={onReset}
-          className="flex items-center gap-1.5 px-4 py-2.5 text-zinc-500 hover:text-[var(--primary)] dark:text-zinc-400 dark:hover:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 rounded-xl transition-all font-bold text-xs cursor-pointer ml-auto sm:ml-0"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-black hover:text-[var(--primary)] dark:text-white dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-800/50 rounded-lg transition-all font-bold text-xs cursor-pointer ml-auto sm:ml-0"
         >
-          <FilterX size={15} />
+          <FilterX size={14} />
           <span>Clear</span>
         </button>
       </div>

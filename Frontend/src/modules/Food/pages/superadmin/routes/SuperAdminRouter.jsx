@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useState } from "react"
+import React, { Suspense, lazy, useState, useEffect } from "react"
 import { Routes, Route, Navigate, Outlet, useLocation } from "react-router-dom"
 import Sidebar from "../layouts/Sidebar"
 import Navbar from "../layouts/Navbar"
@@ -8,22 +8,79 @@ const SuperAdminDashboard = lazy(() => import("../Dashboard/SuperAdminDashboard"
 const CustomerAnalysis = lazy(() => import("../userManagement/CustomerAnalysis"))
 const CustomerList = lazy(() => import("../userManagement/CustomerList"))
 const UserProfile = lazy(() => import("../userManagement/UserProfile"))
+const FranchiseStores = lazy(() => import("../franchiseManagement/FranchiseStores"))
+const FranchiseApprovals = lazy(() => import("../franchiseManagement/FranchiseApprovals"))
+const RegionsZones = lazy(() => import("../franchiseManagement/RegionsZones"))
+const TerritoryManagement = lazy(() => import("../franchiseManagement/TerritoryManagement"))
 const FranchiseList = lazy(() => import("../userManagement/FranchiseList"))
 const StoreManagers = lazy(() => import("../userManagement/StoreManagers"))
 const StoreManagersList = lazy(() => import("../userManagement/StoreManagersList"))
 const DeliveryPartnersManagement = lazy(() => import("../userManagement/DeliveryPartnersManagement"))
 const KitchenStaffManagement = lazy(() => import("../userManagement/KitchenStaffManagement"))
 const RolesPermissionManagement = lazy(() => import("../userManagement/RolesPermissionManagement"))
+const ProductsManagement = lazy(() => import("../productsManagement/ProductsManagement"))
+const CategoriesManagement = lazy(() => import("../productsManagement/CategoriesManagement"))
+const Addons = lazy(() => import("../productsManagement/Addons"))
+const ComboDeals = lazy(() => import("../productsManagement/ComboDeals"))
+const GlobalPrice = lazy(() => import("../productsManagement/GlobalPrice"))
+const AllOrders = lazy(() => import("../orderManagement/AllOrders"))
+const OrderTracking = lazy(() => import("../orderManagement/OrderTracking"))
+const RefundRequests = lazy(() => import("../orderManagement/RefundRequests"))
+const Disputes = lazy(() => import("../orderManagement/Disputes"))
+
+const CouponsManagement = lazy(() => import("../marketing/CouponsManagement"))
+const Campaign = lazy(() => import("../marketing/Campaign"))
+const PushNotification = lazy(() => import("../marketing/PushNotification"))
+const Banners = lazy(() => import("../marketing/Banners"))
+const LoyaltyProgram = lazy(() => import("../marketing/LoyaltyProgram"))
+const TaxReports = lazy(() => import("../financial/TaxReports"))
+const TransactionManagement = lazy(() => import("../financial/TransactionManagement"))
+const FranchiseCommission = lazy(() => import("../financial/FranchiseCommission"))
+const Revenue = lazy(() => import("../financial/Revenue"))
+const Payouts = lazy(() => import("../financial/Payouts"))
+const SalesAnalytics = lazy(() => import("../analytics/SalesAnalytics"))
+const CustomerAnalytics = lazy(() => import("../analytics/CustomerAnalytics"))
+const OperationalAnalytics = lazy(() => import("../analytics/OperationalAnalytics"))
+const AppSettings = lazy(() => import("../settings/AppSettings"))
+const TaxSettings = lazy(() => import("../settings/TaxSettings"))
+const SeoSettings = lazy(() => import("../settings/SeoSettings"))
+const ContentManagement = lazy(() => import("../settings/ContentManagement"))
+const SupportTicket = lazy(() => import("../support/SupportTicket"))
+const FeedbackAndReview = lazy(() => import("../support/FeedbackAndReview"))
 
 // Shared layout shell for user management pages to inherit Sidebar and Navbar
 function SuperAdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const location = useLocation()
+  
+  // Enforce Superadmin Theme settings
+  useEffect(() => {
+    // Apply Light/Dark mode
+    const themeMode = localStorage.getItem("sa_themeMode") || "light";
+    if (themeMode === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+
+    // Apply primary colors
+    const primaryColor = localStorage.getItem("sa_primary") || "#a43c12";
+    document.documentElement.style.setProperty("--primary", primaryColor);
+    document.documentElement.style.setProperty("--primary-hover", `${primaryColor}cc`);
+  }, [location.pathname])
 
   // Sync active sidebar state based on route path
   let activeItem = "Dashboard"
   if (location.pathname.includes("/customers")) {
     activeItem = "Customers"
+  } else if (location.pathname.includes("/franchise-stores")) {
+    activeItem = "Franchise Stores"
+  } else if (location.pathname.includes("/franchise-approvals")) {
+    activeItem = "Franchise Approvals"
+  } else if (location.pathname.includes("/regions-zones")) {
+    activeItem = "Regions & Zones"
+  } else if (location.pathname.includes("/territory-management")) {
+    activeItem = "Territory Management"
   } else if (location.pathname.includes("/franchises")) {
     activeItem = "Franchise Owners"
   } else if (location.pathname.includes("/managers")) {
@@ -34,6 +91,63 @@ function SuperAdminLayout() {
     activeItem = "Kitchen Staff"
   } else if (location.pathname.includes("/roles-permissions")) {
     activeItem = "Roles & Permissions"
+  } else if (location.pathname.includes("/products")) {
+    activeItem = "Products"
+  } else if (location.pathname.includes("/categories")) {
+    activeItem = "Categories"
+  } else if (location.pathname.includes("/addons")) {
+    activeItem = "Add-ons / Toppings"
+  } else if (location.pathname.includes("/combos-deals")) {
+    activeItem = "Combos & Deals"
+  } else if (location.pathname.includes("/global-pricing")) {
+    activeItem = "Global Pricing"
+  } else if (location.pathname.includes("/order-tracking")) {
+    activeItem = "Order Tracking"
+  } else if (location.pathname.includes("/orders")) {
+    activeItem = "All Orders"
+  } else if (location.pathname.includes("/disputes")) {
+    activeItem = "Disputes"
+  } else if (location.pathname.includes("/refund-requests")) {
+    activeItem = "Refund Requests"
+
+  } else if (location.pathname.includes("/coupons")) {
+    activeItem = "Coupons"
+  } else if (location.pathname.includes("/campaigns")) {
+    activeItem = "Campaigns"
+  } else if (location.pathname.includes("/push-notifications")) {
+    activeItem = "Push Notifications"
+  } else if (location.pathname.includes("/banners-promotions")) {
+    activeItem = "Banners / Promotions"
+  } else if (location.pathname.includes("/loyalty")) {
+    activeItem = "Loyalty Program"
+  } else if (location.pathname.includes("/tax-reports")) {
+    activeItem = "Tax Reports"
+  } else if (location.pathname.includes("/transactions")) {
+    activeItem = "Transactions"
+  } else if (location.pathname.includes("/commissions")) {
+    activeItem = "Franchise Commissions"
+  } else if (location.pathname.includes("/payouts")) {
+    activeItem = "Payouts"
+  } else if (location.pathname.includes("/revenue")) {
+    activeItem = "Revenue"
+  } else if (location.pathname.includes("/sales-analytics")) {
+    activeItem = "Sales Analytics"
+  } else if (location.pathname.includes("/customer-analytics")) {
+    activeItem = "Customer Analytics"
+  } else if (location.pathname.includes("/operational-analytics")) {
+    activeItem = "Operational Analytics"
+  } else if (location.pathname.includes("/app-settings")) {
+    activeItem = "App Settings"
+  } else if (location.pathname.includes("/tax-settings")) {
+    activeItem = "Tax Settings"
+  } else if (location.pathname.includes("/seo-settings")) {
+    activeItem = "SEO Settings"
+  } else if (location.pathname.includes("/content-management")) {
+    activeItem = "Content Management"
+  } else if (location.pathname.includes("/support-tickets")) {
+    activeItem = "Support Tickets"
+  } else if (location.pathname.includes("/feedback-reviews")) {
+    activeItem = "Feedback & Reviews"
   }
 
   return (
@@ -43,7 +157,7 @@ function SuperAdminLayout() {
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
         activeItem={activeItem}
-        setActiveItem={() => {}}
+        setActiveItem={() => { }}
       />
       {/* 280px left padding on desktop to clear fixed Sidebar */}
       <div className="lg:pl-[280px] pt-16 min-h-screen">
@@ -54,10 +168,13 @@ function SuperAdminLayout() {
 }
 
 export default function SuperAdminRouter() {
+  const location = useLocation()
+  const base = location.pathname.startsWith("/food") ? "/food/superadmin" : "/superadmin"
+
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-955">
+        <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950">
           <div className="flex flex-col items-center gap-3">
             <div className="w-10 h-10 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin"></div>
             <p className="text-xs font-bold text-zinc-500 tracking-wider uppercase animate-pulse">
@@ -77,19 +194,52 @@ export default function SuperAdminRouter() {
           <Route path="/customers/list" element={<CustomerList />} />
           <Route path="/customers/profile/:id" element={<UserProfile />} />
           <Route path="/customers/profile" element={<UserProfile />} />
+          <Route path="/franchise-stores" element={<FranchiseStores />} />
+          <Route path="/franchise-approvals" element={<FranchiseApprovals />} />
+          <Route path="/regions-zones" element={<RegionsZones />} />
+          <Route path="/territory-management" element={<TerritoryManagement />} />
           <Route path="/franchises" element={<FranchiseList />} />
           <Route path="/managers" element={<StoreManagers />} />
           <Route path="/managers/list" element={<StoreManagersList />} />
           <Route path="/delivery-partners" element={<DeliveryPartnersManagement />} />
           <Route path="/kitchen-staff" element={<KitchenStaffManagement />} />
           <Route path="/roles-permissions" element={<RolesPermissionManagement />} />
+          <Route path="/products" element={<ProductsManagement />} />
+          <Route path="/categories" element={<CategoriesManagement />} />
+          <Route path="/addons" element={<Addons />} />
+          <Route path="/combos-deals" element={<ComboDeals />} />
+          <Route path="/global-pricing" element={<GlobalPrice />} />
+          <Route path="/orders" element={<AllOrders />} />
+          <Route path="/order-tracking" element={<OrderTracking />} />
+          <Route path="/disputes" element={<Disputes />} />
+          <Route path="/refund-requests" element={<RefundRequests />} />
+
+          <Route path="/coupons" element={<CouponsManagement />} />
+          <Route path="/campaigns" element={<Campaign />} />
+          <Route path="/push-notifications" element={<PushNotification />} />
+          <Route path="/banners" element={<Banners />} />
+          <Route path="/loyalty" element={<LoyaltyProgram />} />
+          <Route path="/tax-reports" element={<TaxReports />} />
+          <Route path="/transactions" element={<TransactionManagement />} />
+          <Route path="/commissions" element={<FranchiseCommission />} />
+          <Route path="/payouts" element={<Payouts />} />
+          <Route path="/revenue" element={<Revenue />} />
+          <Route path="/sales-analytics" element={<SalesAnalytics />} />
+          <Route path="/customer-analytics" element={<CustomerAnalytics />} />
+          <Route path="/operational-analytics" element={<OperationalAnalytics />} />
+          <Route path="/app-settings" element={<AppSettings />} />
+          <Route path="/tax-settings" element={<TaxSettings />} />
+          <Route path="/seo-settings" element={<SeoSettings />} />
+          <Route path="/content-management" element={<ContentManagement />} />
+          <Route path="/support-tickets" element={<SupportTicket />} />
+          <Route path="/feedback-reviews" element={<FeedbackAndReview />} />
         </Route>
 
         {/* Redirect empty paths to dashboard */}
-        <Route path="/" element={<Navigate to="dashboard" replace />} />
-        
+        <Route path="/" element={<Navigate to={`${base}/dashboard`} replace />} />
+
         {/* Wildcard fallback to redirect unknown paths */}
-        <Route path="*" element={<Navigate to="dashboard" replace />} />
+        <Route path="*" element={<Navigate to={`${base}/dashboard`} replace />} />
       </Routes>
     </Suspense>
   )

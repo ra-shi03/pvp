@@ -15,7 +15,9 @@ import {
   Save,
   Trash2,
   Ban,
-  ClipboardList
+  ClipboardList,
+  Eye,
+  Edit
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import StoreManagerDetailsDrawer from "./StoreManagerDetailsDrawer"
@@ -24,61 +26,61 @@ import StoreManagerDetailsDrawer from "./StoreManagerDetailsDrawer"
 const INITIAL_MANAGERS = [
   {
     id: "PV-882",
-    name: "Marco Santoro",
-    email: "marco.s@papaveg.com",
-    phone: "+1 312-555-0192",
-    store: "Chicago - Downtown",
-    group: "Urban Slice Group",
+    name: "Ravi Sharma",
+    email: "r.sharma@papaveg.com",
+    phone: "+91 98765 43210",
+    store: "Mumbai - Andheri West",
+    group: "Papa Veg Mumbai",
     status: "Active",
     avatar: ""
   },
   {
     id: "PV-714",
-    name: "Sarah Jenkins",
-    email: "s.jenkins@papaveg.com",
-    phone: "+1 630-555-0104",
-    store: "Naperville East - Mall",
-    group: "Midwest Pizza Co.",
+    name: "Rahul Verma",
+    email: "r.verma@papaveg.com",
+    phone: "+91 98765 43211",
+    store: "Delhi - Connaught Place",
+    group: "Papa Veg Delhi",
     status: "On Leave",
     avatar: ""
   },
   {
     id: "PV-630",
-    name: "David Miller",
-    email: "d.miller@papaveg.com",
-    phone: "+1 630-555-0188",
-    store: "Aurora West Station",
-    group: "Midwest Pizza Co.",
+    name: "Suresh Kumar",
+    email: "s.kumar@papaveg.com",
+    phone: "+91 98765 43212",
+    store: "Pune - Koregaon Park",
+    group: "Papa Veg Pune",
     status: "Suspended",
     avatar: ""
   },
   {
     id: "PV-904",
-    name: "Elena Vance",
-    email: "e.vance@example.com",
-    phone: "+1 312-555-0904",
-    store: "Evanston North",
-    group: "Coastal Veggie Grills",
+    name: "Sanjay Gupta",
+    email: "s.gupta@papaveg.com",
+    phone: "+91 98765 43213",
+    store: "Bangalore - Indiranagar",
+    group: "Papa Veg Bangalore",
     status: "Active",
     avatar: ""
   },
   {
     id: "PV-512",
-    name: "Marcus Rossi",
-    email: "m.rossi@example.com",
-    phone: "+1 815-555-0212",
-    store: "Naperville West",
-    group: "Midwest Pizza Co.",
+    name: "Vikram Singh",
+    email: "v.singh@papaveg.com",
+    phone: "+91 98765 43214",
+    store: "Chennai - T Nagar",
+    group: "Papa Veg Chennai",
     status: "Active",
     avatar: ""
   },
   {
     id: "PV-384",
-    name: "Chloe Bennett",
-    email: "c.bennett@example.com",
-    phone: "+1 312-555-0384",
-    store: "Chicago Loop",
-    group: "Urban Slice Group",
+    name: "Pooja Reddy",
+    email: "p.reddy@papaveg.com",
+    phone: "+91 98765 43215",
+    store: "Hyderabad - Banjara Hills",
+    group: "Papa Veg Hyderabad",
     status: "Active",
     avatar: ""
   }
@@ -114,15 +116,15 @@ export default function StoreManagersList() {
     name: "",
     email: "",
     phone: "",
-    store: "Chicago - Downtown",
-    group: "Urban Slice Group",
+    store: "Mumbai - Andheri West",
+    group: "Papa Veg Mumbai",
     status: "Active"
   })
   const [formErrors, setFormErrors] = useState({})
 
   // Dropdown list options
-  const franchiseOptions = ["All Franchises", "Urban Slice Group", "Midwest Pizza Co.", "Coastal Veggie Grills"]
-  const storeOptions = ["All Stores", "Chicago - Downtown", "Naperville East - Mall", "Aurora West Station", "Evanston North", "Naperville West", "Chicago Loop"]
+  const franchiseOptions = ["All Franchises", "Papa Veg Mumbai", "Papa Veg Delhi", "Papa Veg Pune", "Papa Veg Bangalore", "Papa Veg Chennai", "Papa Veg Hyderabad"]
+  const storeOptions = ["All Stores", "Mumbai - Andheri West", "Delhi - Connaught Place", "Pune - Koregaon Park", "Bangalore - Indiranagar", "Chennai - T Nagar", "Hyderabad - Banjara Hills"]
   const statusOptions = ["Any Status", "Active", "On Leave", "Suspended"]
 
   // 1. Debounce Search Bar Input
@@ -186,8 +188,8 @@ export default function StoreManagersList() {
         name: "",
         email: "",
         phone: "",
-        store: "Chicago - Downtown",
-        group: "Urban Slice Group",
+        store: "Mumbai - Andheri West",
+        group: "Papa Veg Mumbai",
         status: "Active"
       })
     }
@@ -238,81 +240,81 @@ export default function StoreManagersList() {
   }
 
   return (
-    <div className="pb-24 max-w-7xl mx-auto px-4 md:px-8 space-y-8 min-h-screen">
+    <div className="p-3 md:p-4 pb-12 max-w-7xl mx-auto space-y-4 min-h-screen w-full">
       {/* Top Header Row with back button */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 dark:border-zinc-800 pb-6 pt-4">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-200 dark:border-zinc-800 pb-3 pt-2">
+        <div className="flex items-center gap-3">
           <button
             onClick={() => navigate("/food/superadmin/managers")}
-            className="p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-650 dark:text-zinc-350 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-black dark:text-white transition-colors cursor-pointer"
             aria-label="Back to Managers Overview"
           >
-            <ArrowLeft size={16} />
+            <ArrowLeft size={14} />
           </button>
           <div>
-            <h1 className="text-2xl font-black text-zinc-900 dark:text-zinc-50 leading-tight">
+            <h1 className="text-lg font-bold text-black dark:text-white leading-tight">
               List of Store Managers
             </h1>
-            <p className="text-xs font-semibold text-zinc-400 mt-0.5">
+            <p className="text-[10px] font-semibold text-black/70 dark:text-white/70 mt-0.5">
               Full index listing of all franchise operators and active branch store managers.
             </p>
           </div>
         </div>
         <button
           onClick={() => openAddEditModal()}
-          className="bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white px-5 py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-all cursor-pointer font-bold text-xs"
+          className="bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white px-3.5 py-1.5 rounded-lg flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition-all cursor-pointer font-bold text-[11px]"
         >
-          <Plus size={15} className="stroke-[3]" />
+          <Plus size={13} className="stroke-[3]" />
           <span>Add New Manager</span>
         </button>
       </div>
 
       {/* Advanced Filter Panel section */}
-      <section className="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+      <section className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
         <button
           onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-          className="w-full px-6 py-4 flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-850/40 transition-colors cursor-pointer select-none"
+          className="w-full px-3.5 py-2 flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-850/40 transition-colors cursor-pointer select-none"
         >
-          <div className="flex items-center gap-2">
-            <ClipboardList size={16} className="text-[var(--primary)]" />
-            <span className="font-extrabold text-sm text-zinc-850 dark:text-zinc-100">Toggle Directory Filters</span>
+          <div className="flex items-center gap-1.5">
+            <ClipboardList size={14} className="text-[var(--primary)]" />
+            <span className="font-extrabold text-xs text-black dark:text-white">Toggle Directory Filters</span>
           </div>
-          <ChevronDown size={16} className={`text-zinc-400 transition-transform duration-200 ${showAdvancedFilters ? "rotate-180" : ""}`} />
+          <ChevronDown size={14} className={`text-black dark:text-white transition-transform duration-200 ${showAdvancedFilters ? "rotate-180" : ""}`} />
         </button>
 
         {showAdvancedFilters && (
-          <div className="px-6 pb-6 pt-2 space-y-5 border-t border-zinc-50 dark:border-zinc-850/50">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="px-3.5 pb-3 pt-1 space-y-3 border-t border-zinc-50 dark:border-zinc-850/50">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
               {/* Search input with local binding (Debounced) */}
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-zinc-450 uppercase block">Search Manager</label>
+              <div className="space-y-1">
+                <label className="text-[9px] font-bold text-black/70 dark:text-white/70 uppercase block">Search Manager</label>
                 <div className="relative">
-                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
+                  <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-black/50 dark:text-white/50" />
                   <input
                     type="text"
                     value={localSearch}
                     onChange={(e) => setLocalSearch(e.target.value)}
                     placeholder="Name, Email, PV ID..."
-                    className="w-full text-xs pl-9 pr-4 py-3 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-955 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-[var(--primary)] focus:border-transparent transition-all"
+                    className="w-full text-[11px] pl-8 pr-7 py-1.5 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-zinc-50 dark:bg-zinc-950 text-black dark:text-white focus:outline-none focus:ring-1 focus:ring-[var(--primary)] focus:border-transparent transition-all"
                   />
                   {localSearch && (
                     <button
                       onClick={() => setLocalSearch("")}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-650"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-black/50 hover:text-black dark:text-white/50 dark:hover:text-white"
                     >
-                      <X size={13} />
+                      <X size={12} />
                     </button>
                   )}
                 </div>
               </div>
 
               {/* Franchise select */}
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-zinc-450 uppercase block">Franchise Group</label>
+              <div className="space-y-1">
+                <label className="text-[9px] font-bold text-black/70 dark:text-white/70 uppercase block">Franchise Group</label>
                 <select
                   value={franchiseFilter}
                   onChange={(e) => setFranchiseFilter(e.target.value)}
-                  className="w-full text-xs px-3.5 py-3 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-955 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-[var(--primary)] cursor-pointer"
+                  className="w-full text-[11px] px-2 py-1.5 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-zinc-50 dark:bg-zinc-950 text-black dark:text-white focus:outline-none focus:ring-1 focus:ring-[var(--primary)] cursor-pointer"
                 >
                   {franchiseOptions.map((opt) => (
                     <option key={opt} value={opt}>
@@ -323,12 +325,12 @@ export default function StoreManagersList() {
               </div>
 
               {/* Store select */}
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-zinc-450 uppercase block">Store assignment</label>
+              <div className="space-y-1">
+                <label className="text-[9px] font-bold text-black/70 dark:text-white/70 uppercase block">Store assignment</label>
                 <select
                   value={storeFilter}
                   onChange={(e) => setStoreFilter(e.target.value)}
-                  className="w-full text-xs px-3.5 py-3 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-955 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-[var(--primary)] cursor-pointer"
+                  className="w-full text-[11px] px-2 py-1.5 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-zinc-50 dark:bg-zinc-950 text-black dark:text-white focus:outline-none focus:ring-1 focus:ring-[var(--primary)] cursor-pointer"
                 >
                   {storeOptions.map((opt) => (
                     <option key={opt} value={opt}>
@@ -339,12 +341,12 @@ export default function StoreManagersList() {
               </div>
 
               {/* Status select */}
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-zinc-455 uppercase block">Employment Status</label>
+              <div className="space-y-1">
+                <label className="text-[9px] font-bold text-black/70 dark:text-white/70 uppercase block">Employment Status</label>
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full text-xs px-3.5 py-3 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-955 text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-[var(--primary)] cursor-pointer"
+                  className="w-full text-[11px] px-2 py-1.5 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-zinc-50 dark:bg-zinc-950 text-black dark:text-white focus:outline-none focus:ring-1 focus:ring-[var(--primary)] cursor-pointer"
                 >
                   {statusOptions.map((opt) => (
                     <option key={opt} value={opt}>
@@ -355,16 +357,16 @@ export default function StoreManagersList() {
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 pt-2">
+            <div className="flex justify-end gap-2 pt-1">
               <button
                 onClick={handleResetFilters}
-                className="px-5 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-zinc-550 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-850 font-bold text-xs transition-colors cursor-pointer"
+                className="px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 text-black dark:text-white hover:bg-zinc-55 dark:hover:bg-zinc-850 font-bold text-[11px] transition-colors cursor-pointer"
               >
                 Reset Filters
               </button>
               <button
                 onClick={() => setShowAdvancedFilters(false)}
-                className="px-6 py-2.5 rounded-xl bg-[var(--primary)] hover:bg-[var(--primary)]/95 text-white font-bold text-xs shadow transition-all cursor-pointer"
+                className="px-4 py-1.5 rounded-lg bg-[var(--primary)] hover:bg-[var(--primary)]/95 text-white font-bold text-[11px] shadow transition-all cursor-pointer"
               >
                 Apply Filters
               </button>
@@ -376,15 +378,15 @@ export default function StoreManagersList() {
       {/* Directory List View (Table Layout) */}
       <section className="space-y-4">
         <div className="flex items-center justify-between select-none">
-          <p className="text-xs font-bold text-zinc-400">
+          <p className="text-[11px] font-bold text-black/50 dark:text-white/50">
             Showing {filteredManagers.length} of {managers.length} Managers
           </p>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-zinc-450 dark:text-zinc-500 font-bold">Sort by:</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[11px] text-black/70 dark:text-white/70 font-bold">Sort by:</span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="text-xs font-bold text-[var(--primary)] bg-transparent focus:outline-none cursor-pointer"
+              className="text-[11px] font-bold text-[var(--primary)] bg-transparent focus:outline-none cursor-pointer"
             >
               <option value="Newest">Newest First</option>
               <option value="Name">Name (A-Z)</option>
@@ -393,17 +395,17 @@ export default function StoreManagersList() {
         </div>
 
         {/* Premium Tabular Table List representation */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl overflow-hidden shadow-sm">
+        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-zinc-150 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-950/20 text-[10px] font-black text-zinc-450 uppercase tracking-widest select-none">
-                  <th className="py-4 px-6">Manager</th>
-                  <th className="py-4 px-6">Franchise Group</th>
-                  <th className="py-4 px-6">Store Assignment</th>
-                  <th className="py-4 px-6">Employment Status</th>
-                  <th className="py-4 px-6">Contact Details</th>
-                  <th className="py-4 px-6 text-right">Actions</th>
+                <tr className="border-b border-zinc-150 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-950/20 text-[9px] font-black text-black/50 dark:text-white/50 uppercase tracking-widest select-none">
+                  <th className="py-2 px-3">Manager</th>
+                  <th className="py-2 px-3">Franchise Group</th>
+                  <th className="py-2 px-3">Store Assignment</th>
+                  <th className="py-2 px-3">Employment Status</th>
+                  <th className="py-2 px-3">Contact Details</th>
+                  <th className="py-2 px-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-100 dark:divide-zinc-850/60">
@@ -418,23 +420,23 @@ export default function StoreManagersList() {
                         setSelectedManager(mgr)
                         setIsDrawerOpen(true)
                       }}
-                      className="hover:bg-zinc-50/40 dark:hover:bg-zinc-800/20 transition-colors cursor-pointer group"
+                      className="hover:bg-zinc-50/40 dark:hover:bg-zinc-800/20 transition-colors cursor-pointer group text-xs text-black dark:text-white"
                     >
                       {/* Manager Profile Info */}
-                      <td className="py-4 px-6">
-                        <div className="flex items-center gap-3">
+                      <td className="py-2 px-3">
+                        <div className="flex items-center gap-2">
                           <div className="relative flex-shrink-0">
-                            <div className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800 font-bold text-zinc-650 dark:text-zinc-350 flex items-center justify-center shadow-inner">
+                            <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 font-bold text-black dark:text-white flex items-center justify-center shadow-inner text-xs">
                               {mgr.name.split(" ").map((n) => n[0]).join("")}
                             </div>
-                            <span className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white dark:border-zinc-900 ${isActive ? "bg-emerald-500" : isOnLeave ? "bg-amber-500" : "bg-rose-500"
+                            <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-zinc-900 ${isActive ? "bg-emerald-500" : isOnLeave ? "bg-amber-500" : "bg-rose-500"
                               }`} />
                           </div>
                           <div className="min-w-0 space-y-0.5">
-                            <span className="font-extrabold text-sm text-zinc-850 dark:text-zinc-100 group-hover:text-[var(--primary)] transition-colors truncate block">
+                            <span className="font-bold text-xs text-black dark:text-white group-hover:text-[var(--primary)] transition-colors truncate block">
                               {mgr.name}
                             </span>
-                            <span className="text-[10px] font-black text-zinc-400 dark:text-zinc-500 tracking-wider">
+                            <span className="text-[9px] font-black text-black/50 dark:text-white/50 tracking-wider">
                               ID: {mgr.id}
                             </span>
                           </div>
@@ -442,25 +444,25 @@ export default function StoreManagersList() {
                       </td>
 
                       {/* Franchise Group */}
-                      <td className="py-4 px-6">
-                        <span className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-400">
+                      <td className="py-2 px-3">
+                        <span className="text-[10px] font-semibold text-black dark:text-white">
                           {mgr.group}
                         </span>
                       </td>
 
                       {/* Store Assignment */}
-                      <td className="py-4 px-6">
-                        <div className="flex items-center gap-1.5 text-zinc-700 dark:text-zinc-300">
-                          <Store size={13} className="text-zinc-400 flex-shrink-0" />
-                          <span className="text-[11px] font-semibold truncate max-w-[180px]">
+                      <td className="py-2 px-3">
+                        <div className="flex items-center gap-1 text-black dark:text-white">
+                          <Store size={12} className="text-black/50 dark:text-white/50 flex-shrink-0" />
+                          <span className="text-[10px] font-semibold truncate max-w-[180px]">
                             {mgr.store}
                           </span>
                         </div>
                       </td>
 
                       {/* Status badge */}
-                      <td className="py-4 px-6">
-                        <span className={`inline-flex items-center gap-1.5 text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider ${isActive
+                      <td className="py-2 px-3">
+                        <span className={`inline-flex items-center gap-1 text-[8px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-wider ${isActive
                           ? "bg-green-50 dark:bg-green-950/20 text-green-600"
                           : isOnLeave
                             ? "bg-amber-50 dark:bg-amber-950/20 text-amber-600"
@@ -472,36 +474,48 @@ export default function StoreManagersList() {
                       </td>
 
                       {/* Contact Stack */}
-                      <td className="py-4 px-6">
-                        <div className="space-y-1 text-zinc-500 dark:text-zinc-400">
-                          <div className="flex items-center gap-1.5 min-w-0">
-                            <Mail size={12} className="text-zinc-400 flex-shrink-0" />
-                            <span className="text-[10.5px] truncate font-medium max-w-[200px]">{mgr.email}</span>
+                      <td className="py-2 px-3">
+                        <div className="space-y-0.5 text-black/75 dark:text-white/75">
+                          <div className="flex items-center gap-1 min-w-0">
+                            <Mail size={11} className="text-black/50 dark:text-white/50 flex-shrink-0" />
+                            <span className="text-[9.5px] truncate font-medium max-w-[200px]">{mgr.email}</span>
                           </div>
-                          <div className="flex items-center gap-1.5">
-                            <Phone size={12} className="text-zinc-400 flex-shrink-0" />
-                            <span className="text-[10.5px] font-semibold">{mgr.phone}</span>
+                          <div className="flex items-center gap-1">
+                            <Phone size={11} className="text-black/50 dark:text-white/50 flex-shrink-0" />
+                            <span className="text-[9.5px] font-semibold">{mgr.phone}</span>
                           </div>
                         </div>
                       </td>
 
                       {/* Actions */}
-                      <td className="py-4 px-6 text-right" onClick={(e) => e.stopPropagation()}>
-                        <div className="flex items-center justify-end gap-2">
+                      <td className="py-2 px-3 text-right" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            onClick={() => {
+                              setSelectedManager(mgr)
+                              setIsDrawerOpen(true)
+                            }}
+                            className="p-1 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-black/50 dark:text-white/50 hover:text-[var(--primary)] transition-all cursor-pointer"
+                            title="View Profile"
+                          >
+                            <Eye size={13} />
+                          </button>
                           <button
                             onClick={() => openAddEditModal(mgr)}
-                            className="px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 font-bold text-[10px] text-zinc-500 dark:text-zinc-400 hover:text-[var(--primary)] transition-all cursor-pointer"
+                            className="p-1 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-black/50 dark:text-white/50 hover:text-[var(--primary)] transition-all cursor-pointer"
+                            title="Edit Profile"
                           >
-                            Edit
+                            <Edit size={13} />
                           </button>
                           <button
                             onClick={() => {
                               setManagerToDelete(mgr)
                               setShowDeleteModal(true)
                             }}
-                            className="px-3 py-1.5 rounded-lg border border-rose-200/40 dark:border-rose-950 hover:bg-rose-50 dark:hover:bg-rose-950/30 font-bold text-[10px] text-rose-550 dark:text-rose-455 transition-all cursor-pointer"
+                            className="p-1 rounded-lg border border-rose-200/40 dark:border-rose-950 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-rose-550 dark:text-rose-455 transition-all cursor-pointer"
+                            title="Remove Manager"
                           >
-                            Remove
+                            <Trash2 size={13} />
                           </button>
                         </div>
                       </td>
@@ -514,15 +528,15 @@ export default function StoreManagersList() {
         </div>
 
         {filteredManagers.length === 0 && (
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-12 text-center select-none shadow-sm flex flex-col items-center justify-center">
-            <UserMinus size={36} className="text-zinc-400 mb-3" />
-            <h4 className="font-extrabold text-sm text-zinc-900 dark:text-zinc-50">No Store Managers Found</h4>
-            <p className="text-[10px] text-zinc-400 font-semibold max-w-xs mt-1">
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 text-center select-none shadow-sm flex flex-col items-center justify-center">
+            <UserMinus size={24} className="text-black/50 dark:text-white/50 mb-2" />
+            <h4 className="font-extrabold text-xs text-black dark:text-white">No Store Managers Found</h4>
+            <p className="text-[10px] text-black/50 dark:text-white/50 font-semibold max-w-xs mt-1">
               No results matched your search queries or active advanced filters. Click reset to clear filters.
             </p>
             <button
               onClick={handleResetFilters}
-              className="mt-4 px-5 py-2 rounded-xl bg-[var(--primary)]/10 hover:bg-[var(--primary)]/15 text-[var(--primary)] font-bold text-xs transition-colors cursor-pointer"
+              className="mt-3 px-3 py-1.5 rounded-lg bg-[var(--primary)]/10 hover:bg-[var(--primary)]/15 text-[var(--primary)] font-bold text-xs transition-colors cursor-pointer"
             >
               Reset Filters
             </button>
@@ -582,7 +596,7 @@ export default function StoreManagersList() {
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="e.g. Marco Santoro"
-                      className={`w-full p-3 text-xs border rounded-xl bg-zinc-50 dark:bg-zinc-955 text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-[var(--primary)] focus:bg-white transition-colors ${formErrors.name ? "border-rose-500" : "border-zinc-200 dark:border-zinc-800"
+                      className={`w-full p-3 text-xs border rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-[var(--primary)] focus:bg-white transition-colors ${formErrors.name ? "border-rose-500" : "border-zinc-200 dark:border-zinc-800"
                         }`}
                     />
                     {formErrors.name && <p className="text-[9px] font-black text-rose-500 mt-1">{formErrors.name}</p>}
@@ -597,7 +611,7 @@ export default function StoreManagersList() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="marco@papaveg.com"
-                        className={`w-full p-3 text-xs border rounded-xl bg-zinc-50 dark:bg-zinc-955 text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-[var(--primary)] focus:bg-white transition-colors ${formErrors.email ? "border-rose-500" : "border-zinc-200 dark:border-zinc-800"
+                        className={`w-full p-3 text-xs border rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-[var(--primary)] focus:bg-white transition-colors ${formErrors.email ? "border-rose-500" : "border-zinc-200 dark:border-zinc-800"
                           }`}
                       />
                       {formErrors.email && <p className="text-[9px] font-black text-rose-500 mt-1">{formErrors.email}</p>}
@@ -611,7 +625,7 @@ export default function StoreManagersList() {
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         placeholder="+1 312-555-xxxx"
-                        className={`w-full p-3 text-xs border rounded-xl bg-zinc-50 dark:bg-zinc-955 text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-[var(--primary)] focus:bg-white transition-colors ${formErrors.phone ? "border-rose-500" : "border-zinc-200 dark:border-zinc-800"
+                        className={`w-full p-3 text-xs border rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-[var(--primary)] focus:bg-white transition-colors ${formErrors.phone ? "border-rose-500" : "border-zinc-200 dark:border-zinc-800"
                           }`}
                       />
                       {formErrors.phone && <p className="text-[9px] font-black text-rose-500 mt-1">{formErrors.phone}</p>}
@@ -624,7 +638,7 @@ export default function StoreManagersList() {
                       <select
                         value={formData.group}
                         onChange={(e) => setFormData({ ...formData, group: e.target.value })}
-                        className="w-full text-xs px-3 py-3 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-955 text-zinc-800 dark:text-zinc-100 focus:outline-none cursor-pointer"
+                        className="w-full text-xs px-3 py-3 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-100 focus:outline-none cursor-pointer"
                       >
                         {franchiseOptions.slice(1).map((opt) => (
                           <option key={opt} value={opt}>
@@ -639,7 +653,7 @@ export default function StoreManagersList() {
                       <select
                         value={formData.store}
                         onChange={(e) => setFormData({ ...formData, store: e.target.value })}
-                        className="w-full text-xs px-3 py-3 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-955 text-zinc-800 dark:text-zinc-100 focus:outline-none cursor-pointer"
+                        className="w-full text-xs px-3 py-3 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-100 focus:outline-none cursor-pointer"
                       >
                         {storeOptions.slice(1).map((opt) => (
                           <option key={opt} value={opt}>
@@ -655,7 +669,7 @@ export default function StoreManagersList() {
                     <select
                       value={formData.status}
                       onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                      className="w-full text-xs px-3 py-3 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-955 text-zinc-800 dark:text-zinc-100 focus:outline-none cursor-pointer"
+                      className="w-full text-xs px-3 py-3 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-100 focus:outline-none cursor-pointer"
                     >
                       {statusOptions.slice(1).map((opt) => (
                         <option key={opt} value={opt}>

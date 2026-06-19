@@ -20,7 +20,8 @@ import {
   Ban,
   X,
   Award,
-  AlertCircle
+  AlertCircle,
+  Eye
 } from "lucide-react"
 
 import KitchenStaffFilters from "./KitchenStaffFilters"
@@ -29,10 +30,10 @@ import KitchenStaffDetail from "./KitchenStaffDetail"
 const INITIAL_STAFF = [
   {
     id: "KS-9842",
-    name: "Antonio Rossi",
-    email: "antonio.rossi@papaveg.com",
-    store: "Downtown #101",
-    franchise: "Downtown Pizza Group",
+    name: "Ravi Sharma",
+    email: "r.sharma@papaveg.com",
+    store: "Mumbai - Andheri West",
+    franchise: "Papa Veg Mumbai",
     role: "Pizza Maker",
     orders: 1240,
     efficiency: 94,
@@ -41,10 +42,10 @@ const INITIAL_STAFF = [
   },
   {
     id: "KS-7721",
-    name: "Sarah Miller",
-    email: "sarah.miller@papaveg.com",
-    store: "Westside #203",
-    franchise: "Westside Express",
+    name: "Neha Singh",
+    email: "n.singh@papaveg.com",
+    store: "Pune - Koregaon Park",
+    franchise: "Papa Veg Pune",
     role: "Supervisor",
     orders: 856,
     efficiency: 88,
@@ -53,10 +54,10 @@ const INITIAL_STAFF = [
   },
   {
     id: "KS-1104",
-    name: "Marco Velo",
-    email: "marco.velo@papaveg.com",
-    store: "Uptown #05",
-    franchise: "Downtown Pizza Group",
+    name: "Amit Patel",
+    email: "a.patel@papaveg.com",
+    store: "Delhi - Connaught Place",
+    franchise: "Papa Veg Delhi",
     role: "Prep Cook",
     orders: 3110,
     efficiency: 91,
@@ -65,10 +66,10 @@ const INITIAL_STAFF = [
   },
   {
     id: "KS-4452",
-    name: "Elena Costa",
-    email: "elena.costa@papaveg.com",
-    store: "Central #01",
-    franchise: "Northside Eats",
+    name: "Rahul Verma",
+    email: "r.verma@papaveg.com",
+    store: "Bangalore - Indiranagar",
+    franchise: "Papa Veg Bangalore",
     role: "Pizza Maker",
     orders: 2440,
     efficiency: 98,
@@ -101,8 +102,8 @@ export default function KitchenStaffManagement() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    store: "Downtown #101",
-    franchise: "Downtown Pizza Group",
+    store: "Mumbai - Andheri West",
+    franchise: "Papa Veg Mumbai",
     role: "Pizza Maker",
     orders: 0,
     efficiency: 95,
@@ -164,8 +165,8 @@ export default function KitchenStaffManagement() {
     setFormData({
       name: "",
       email: "",
-      store: "Downtown #101",
-      franchise: "Downtown Pizza Group",
+      store: "Mumbai - Andheri West",
+      franchise: "Papa Veg Mumbai",
       role: "Pizza Maker",
       orders: 0,
       efficiency: 95,
@@ -245,22 +246,22 @@ export default function KitchenStaffManagement() {
     switch (shift) {
       case "Morning":
         return (
-          <span className="px-3 py-1 bg-blue-50 text-blue-700 border border-blue-100 dark:bg-blue-950/20 dark:text-blue-400 dark:border-blue-900/30 rounded-full font-semibold text-xs flex items-center w-fit gap-1">
-            <Sun size={12} />
+          <span className="px-2 py-0.5 bg-blue-50 text-blue-700 border border-blue-100 dark:bg-blue-950/20 dark:text-blue-400 dark:border-blue-900/30 rounded-full font-semibold text-[9px] flex items-center w-fit gap-0.5">
+            <Sun size={10} />
             Morning
           </span>
         )
       case "Evening":
         return (
-          <span className="px-3 py-1 bg-orange-50 text-orange-700 border border-orange-100 dark:bg-orange-950/20 dark:text-orange-400 dark:border-orange-900/30 rounded-full font-semibold text-xs flex items-center w-fit gap-1">
-            <Sunset size={12} />
+          <span className="px-2 py-0.5 bg-orange-50 text-orange-700 border border-orange-100 dark:bg-orange-950/20 dark:text-orange-400 dark:border-orange-900/30 rounded-full font-semibold text-[9px] flex items-center w-fit gap-0.5">
+            <Sunset size={10} />
             Evening
           </span>
         )
       case "Night":
         return (
-          <span className="px-3 py-1 bg-purple-50 text-purple-700 border border-purple-100 dark:bg-purple-950/20 dark:text-purple-400 dark:border-purple-900/30 rounded-full font-semibold text-xs flex items-center w-fit gap-1">
-            <Moon size={12} />
+          <span className="px-2 py-0.5 bg-purple-50 text-purple-700 border border-purple-100 dark:bg-purple-950/20 dark:text-purple-400 dark:border-purple-900/30 rounded-full font-semibold text-[9px] flex items-center w-fit gap-0.5">
+            <Moon size={10} />
             Night
           </span>
         )
@@ -278,7 +279,7 @@ export default function KitchenStaffManagement() {
   }
 
   return (
-    <div className="pb-24 max-w-7xl mx-auto px-4 md:px-8 bg-zinc-50 dark:bg-zinc-950 min-h-screen">
+    <div className="p-3 md:p-4 pb-12 max-w-7xl mx-auto bg-zinc-50 dark:bg-zinc-950 min-h-screen w-full space-y-4">
       {/* Toast Alert Banner */}
       <AnimatePresence>
         {toast && (
@@ -299,100 +300,83 @@ export default function KitchenStaffManagement() {
       </AnimatePresence>
 
       {/* Header section */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pt-6">
-        <div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 leading-tight">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-200 dark:border-zinc-800 pb-3 pt-2">
+        <div className="space-y-0.5">
+          <h1 className="text-lg font-bold text-black dark:text-white leading-tight">
             Kitchen Staff
           </h1>
-          <p className="text-zinc-400 font-semibold text-xs mt-0.5">
+          <p className="text-[10px] font-semibold text-black/70 dark:text-white/70 mt-0.5">
             Manage kitchen employees across all franchises and stores.
           </p>
         </div>
 
-        <button
+        {/* <button
           onClick={handleOpenAddModal}
-          className="flex items-center gap-2 px-5 py-3 bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white rounded-xl text-xs font-bold shadow-md shadow-[var(--primary)]/20 transition-all hover:scale-[1.02] cursor-pointer"
+          className="bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white px-3.5 py-1.5 rounded-lg flex items-center justify-center gap-1.5 shadow-md hover:scale-[1.02] active:scale-95 transition-all cursor-pointer font-bold text-[11px]"
         >
-          <Plus size={16} className="stroke-[3]" />
+          <Plus size={14} className="stroke-[3]" />
           <span>Add New Staff</span>
-        </button>
+        </button> */}
       </div>
 
       {/* KPI Stats Cards */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4 select-none">
         {/* Total Staff */}
-        <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col justify-between">
-          <div>
-            <div className="flex justify-between items-start mb-4">
-              <span className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-xl text-[var(--primary)]">
-                <Users size={20} />
-              </span>
-              <span className="text-emerald-500 font-bold text-xs flex items-center gap-0.5">
-                <TrendingUp size={12} />
-                +12%
+        <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-center justify-between">
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <span className="text-[10px] font-bold text-black dark:text-white uppercase tracking-wider truncate">Total Kitchen Staff</span>
+            <div className="flex items-baseline gap-1.5 flex-wrap">
+              <h3 className="text-lg font-black text-black dark:text-white mt-0.5">{kpiStats.total}</h3>
+              <span className="text-emerald-500 font-bold text-[8px] flex items-center gap-0.5">
+                <TrendingUp size={10} /> +12%
               </span>
             </div>
-            <p className="text-zinc-400 dark:text-zinc-500 font-bold text-[10px] uppercase tracking-wider">Total Kitchen Staff</p>
-            <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-50 mt-1">{kpiStats.total}</h2>
           </div>
-          <div className="h-6 mt-4 w-full bg-zinc-100 dark:bg-zinc-850 rounded relative overflow-hidden">
-            <div className="absolute inset-0 flex items-end gap-1 px-1.5">
-              <div className="w-full bg-[var(--primary)]/20 h-1/3 rounded-t-sm" />
-              <div className="w-full bg-[var(--primary)]/20 h-2/3 rounded-t-sm" />
-              <div className="w-full bg-[var(--primary)]/30 h-1/2 rounded-t-sm" />
-              <div className="w-full bg-[var(--primary)]/50 h-3/4 rounded-t-sm" />
-              <div className="w-full bg-[var(--primary)]/40 h-2/5 rounded-t-sm" />
-              <div className="w-full bg-[var(--primary)] h-5/6 rounded-t-sm" />
-            </div>
+          <div className="p-1.5 rounded-md bg-[var(--primary)]/10 text-[var(--primary)] shrink-0 border border-[var(--primary)]/20">
+            <Users size={14} />
           </div>
         </div>
 
         {/* Active Staff */}
-        <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col justify-between">
-          <div>
-            <div className="flex justify-between items-start mb-4">
-              <span className="p-2 bg-green-500/10 rounded-xl text-green-600">
-                <CheckCircle size={20} />
-              </span>
+        <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-center justify-between">
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <span className="text-[10px] font-bold text-black dark:text-white uppercase tracking-wider truncate">Active Staff</span>
+            <div className="flex items-baseline gap-1.5 flex-wrap">
+              <h3 className="text-lg font-black text-black dark:text-white mt-0.5">{kpiStats.active}</h3>
+              <span className="text-black dark:text-white opacity-60 text-[8px] font-semibold">{kpiStats.activePct}% of total</span>
             </div>
-            <p className="text-zinc-400 dark:text-zinc-500 font-bold text-[10px] uppercase tracking-wider">Active Staff</p>
-            <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-50 mt-1">{kpiStats.active}</h2>
           </div>
-          <p className="text-zinc-400 dark:text-zinc-550 font-semibold text-[10px] mt-4">
-            {kpiStats.activePct}% of total workforce
-          </p>
+          <div className="p-1.5 rounded-md bg-green-500/10 text-green-600 shrink-0 border border-green-100 dark:border-green-900/30">
+            <CheckCircle size={14} />
+          </div>
         </div>
 
         {/* On Shift */}
-        <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col justify-between">
-          <div>
-            <div className="flex justify-between items-start mb-4">
-              <span className="p-2 bg-amber-500/10 rounded-xl text-amber-600">
-                <Clock size={20} />
-              </span>
+        <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-center justify-between">
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <span className="text-[10px] font-bold text-black dark:text-white uppercase tracking-wider truncate">On Shift</span>
+            <div className="flex items-baseline gap-1.5 flex-wrap">
+              <h3 className="text-lg font-black text-black dark:text-white mt-0.5">{kpiStats.onShift}</h3>
+              <span className="text-black dark:text-white opacity-60 text-[8px] font-semibold">{kpiStats.onShiftPct}% active</span>
             </div>
-            <p className="text-zinc-400 dark:text-zinc-500 font-bold text-[10px] uppercase tracking-wider">On Shift</p>
-            <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-50 mt-1">{kpiStats.onShift}</h2>
           </div>
-          <div className="w-full bg-zinc-150 dark:bg-zinc-800 rounded-full h-1.5 mt-4">
-            <div className="bg-amber-500 h-1.5 rounded-full transition-all duration-300" style={{ width: `${kpiStats.onShiftPct}%` }} />
+          <div className="p-1.5 rounded-md bg-amber-500/10 text-amber-600 shrink-0 border border-amber-100 dark:border-amber-900/30">
+            <Clock size={14} />
           </div>
         </div>
 
         {/* Off Shift */}
-        <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col justify-between">
-          <div>
-            <div className="flex justify-between items-start mb-4">
-              <span className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-xl text-zinc-500">
-                <UserX size={20} />
-              </span>
+        <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-center justify-between">
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <span className="text-[10px] font-bold text-black dark:text-white uppercase tracking-wider truncate">Off Shift</span>
+            <div className="flex items-baseline gap-1.5 flex-wrap">
+              <h3 className="text-lg font-black text-black dark:text-white mt-0.5">{kpiStats.offShift}</h3>
+              <span className="text-black dark:text-white opacity-60 text-[8px] font-semibold">Offline</span>
             </div>
-            <p className="text-zinc-400 dark:text-zinc-500 font-bold text-[10px] uppercase tracking-wider">Off Shift</p>
-            <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-50 mt-1">{kpiStats.offShift}</h2>
           </div>
-          <p className="text-zinc-400 dark:text-zinc-550 font-semibold text-[10px] mt-4">
-            Currently unavailable
-          </p>
+          <div className="p-1.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-black/50 dark:text-white/50 shrink-0 border border-zinc-200 dark:border-zinc-800">
+            <UserX size={14} />
+          </div>
         </div>
       </section>
 
@@ -412,36 +396,36 @@ export default function KitchenStaffManagement() {
       />
 
       {/* Main Responsive Table */}
-      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm mt-6">
+      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm mt-4">
         <div className="overflow-x-auto scrollbar-thin">
           <table className="w-full border-collapse text-left">
             <thead>
               <tr className="bg-zinc-50 dark:bg-zinc-900/50 border-b border-zinc-200 dark:border-zinc-800">
-                <th className="px-6 py-4 text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider w-16">
+                <th className="px-3 py-2 text-[9px] font-extrabold text-black/50 dark:text-white/50 uppercase tracking-wider w-12">
                   Profile
                 </th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-[9px] font-extrabold text-black/50 dark:text-white/50 uppercase tracking-wider">
                   Employee Name
                 </th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-[9px] font-extrabold text-black/50 dark:text-white/50 uppercase tracking-wider">
                   Store
                 </th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-[9px] font-extrabold text-black/50 dark:text-white/50 uppercase tracking-wider">
                   Role
                 </th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider text-center">
+                <th className="px-3 py-2 text-[9px] font-extrabold text-black/50 dark:text-white/50 uppercase tracking-wider text-center">
                   Orders
                 </th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider text-center">
+                <th className="px-3 py-2 text-[9px] font-extrabold text-black/50 dark:text-white/50 uppercase tracking-wider text-center">
                   Efficiency
                 </th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-[9px] font-extrabold text-black/50 dark:text-white/50 uppercase tracking-wider">
                   Shift
                 </th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-[9px] font-extrabold text-black/50 dark:text-white/50 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-4 text-right"></th>
+                <th className="px-3 py-2 text-right"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-150 dark:divide-zinc-800">
@@ -449,12 +433,12 @@ export default function KitchenStaffManagement() {
                 paginatedStaff.map((staff) => (
                   <tr
                     key={staff.id}
-                    className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30 transition-colors group cursor-pointer"
+                    className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30 transition-colors group cursor-pointer text-xs text-black dark:text-white"
                     onClick={() => { setSelectedStaff(staff); setIsDetailDrawerOpen(true); }}
                   >
                     {/* Profile */}
-                    <td className="px-6 py-4">
-                      <div className="w-10 h-10 rounded-full overflow-hidden border border-zinc-150 dark:border-zinc-800 bg-zinc-100">
+                    <td className="px-3 py-2">
+                      <div className="w-8 h-8 rounded-full overflow-hidden border border-zinc-150 dark:border-zinc-800 bg-zinc-100 flex-shrink-0">
                         <img
                           src={getProfileImage(staff.name)}
                           alt={staff.name}
@@ -464,50 +448,50 @@ export default function KitchenStaffManagement() {
                     </td>
 
                     {/* Employee Name */}
-                    <td className="px-6 py-4">
+                    <td className="px-3 py-2">
                       <div className="flex flex-col">
-                        <span className="text-xs font-extrabold text-zinc-900 dark:text-zinc-50 group-hover:text-[var(--primary)] transition-colors">
+                        <span className="text-xs font-bold text-black dark:text-white group-hover:text-[var(--primary)] transition-colors">
                           {staff.name}
                         </span>
-                        <span className="text-[10px] text-zinc-400 font-semibold mt-0.5">{staff.id}</span>
+                        <span className="text-[9px] text-black/50 dark:text-white/50 font-semibold mt-0.5">{staff.id}</span>
                       </div>
                     </td>
 
                     {/* Store */}
-                    <td className="px-6 py-4 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                    <td className="px-3 py-2 text-[10px] font-semibold text-black dark:text-white">
                       {staff.store}
                     </td>
 
                     {/* Role */}
-                    <td className="px-6 py-4">
-                      <span className="px-3 py-1 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-[10px] font-bold text-zinc-700 dark:text-zinc-300 rounded-full">
+                    <td className="px-3 py-2">
+                      <span className="px-2 py-0.5 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-[9px] font-bold text-black dark:text-white rounded-full">
                         {staff.role}
                       </span>
                     </td>
 
                     {/* Orders */}
-                    <td className="px-6 py-4 text-xs font-extrabold text-zinc-950 dark:text-zinc-50 text-center">
+                    <td className="px-3 py-2 text-[10px] font-extrabold text-black dark:text-white text-center">
                       {staff.orders.toLocaleString()}
                     </td>
 
                     {/* Efficiency */}
-                    <td className="px-6 py-4 text-center">
-                      <span className="text-xs font-extrabold text-emerald-600 dark:text-emerald-450">{staff.efficiency}%</span>
+                    <td className="px-3 py-2 text-center">
+                      <span className="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-450">{staff.efficiency}%</span>
                     </td>
 
                     {/* Shift */}
-                    <td className="px-6 py-4">
+                    <td className="px-3 py-2">
                       {getShiftBadge(staff.shift)}
                     </td>
 
                     {/* Status */}
-                    <td className="px-6 py-4">
+                    <td className="px-3 py-2">
                       <span
-                        className={`text-[9px] font-extrabold px-2.5 py-1 rounded-full ${staff.status === "Active"
-                            ? "bg-green-50 dark:bg-green-950/20 text-green-600 dark:text-green-400 border border-green-100 dark:border-green-900/30"
-                            : staff.status === "Inactive"
-                              ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 border border-zinc-200 dark:border-zinc-700/35"
-                              : "bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-900/30"
+                        className={`text-[8px] font-extrabold px-1.5 py-0.5 rounded-full ${staff.status === "Active"
+                          ? "bg-green-50 dark:bg-green-950/20 text-green-600 dark:text-green-400 border border-green-100 dark:border-green-900/30"
+                          : staff.status === "Inactive"
+                            ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 border border-zinc-200 dark:border-zinc-700/35"
+                            : "bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 border border-rose-100 dark:border-rose-900/30"
                           }`}
                       >
                         {staff.status}
@@ -515,81 +499,59 @@ export default function KitchenStaffManagement() {
                     </td>
 
                     {/* Actions Menu */}
-                    <td className="px-6 py-4 text-right relative" onClick={(e) => e.stopPropagation()}>
-                      <button
-                        onClick={() => setActiveMenuId(activeMenuId === staff.id ? null : staff.id)}
-                        className="p-1.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-850 text-zinc-400 hover:text-zinc-650 dark:hover:text-zinc-250 transition-colors cursor-pointer"
-                      >
-                        <MoreVertical size={16} />
-                      </button>
-
-                      {/* Dropdown Action Popover */}
-                      <AnimatePresence>
-                        {activeMenuId === staff.id && (
-                          <>
-                            <div className="fixed inset-0 z-30" onClick={() => setActiveMenuId(null)} />
-                            <motion.div
-                              initial={{ opacity: 0, scale: 0.95, y: 5 }}
-                              animate={{ opacity: 1, scale: 1, y: 0 }}
-                              exit={{ opacity: 0, scale: 0.95, y: 5 }}
-                              className="absolute right-6 top-10 w-40 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-xl z-40 p-1.5"
-                            >
-                              <button
-                                onClick={() => { setSelectedStaff(staff); setIsDetailDrawerOpen(true); setActiveMenuId(null); }}
-                                className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left text-xs font-bold text-zinc-600 hover:text-[var(--primary)] dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
-                              >
-                                <Users size={14} />
-                                <span>View Details</span>
-                              </button>
-
-                              <button
-                                onClick={() => handleOpenEditModal(staff)}
-                                className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left text-xs font-bold text-zinc-600 hover:text-[var(--primary)] dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
-                              >
-                                <Edit size={14} />
-                                <span>Edit Employee</span>
-                              </button>
-
-                              <button
-                                onClick={() => handleToggleStatus(staff)}
-                                className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left text-xs font-bold text-zinc-600 hover:text-[var(--primary)] dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
-                              >
-                                {staff.status === "Active" ? <Ban size={14} /> : <UserCheck size={14} />}
-                                <span>{staff.status === "Active" ? "Suspend" : "Activate"}</span>
-                              </button>
-
-                              <div className="h-px bg-zinc-100 dark:bg-zinc-850 my-1" />
-
-                              <button
-                                onClick={() => handleDeleteStaff(staff)}
-                                className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left text-xs font-bold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 transition-colors"
-                              >
-                                <Trash2 size={14} />
-                                <span>Delete Member</span>
-                              </button>
-                            </motion.div>
-                          </>
-                        )}
-                      </AnimatePresence>
+                    <td className="px-3 py-2 text-right" onClick={(e) => e.stopPropagation()}>
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={() => { setSelectedStaff(staff); setIsDetailDrawerOpen(true); }}
+                          className="p-1 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-black/50 dark:text-white/50 hover:text-[var(--primary)] transition-all cursor-pointer"
+                          title="View Details"
+                        >
+                          <Eye size={13} />
+                        </button>
+                        {/* <button
+                          onClick={() => handleOpenEditModal(staff)}
+                          className="p-1 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-black/50 dark:text-white/50 hover:text-[var(--primary)] transition-all cursor-pointer"
+                          title="Edit Employee"
+                        >
+                          <Edit size={13} />
+                        </button> */}
+                        <button
+                          onClick={() => handleToggleStatus(staff)}
+                          className={`p-1 rounded-lg border transition-all cursor-pointer ${staff.status === "Active"
+                            ? "border-amber-200 dark:border-amber-950 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-950/20"
+                            : "border-emerald-200 dark:border-emerald-950 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/20"
+                            }`}
+                          title={staff.status === "Active" ? "Suspend" : "Activate"}
+                        >
+                          {staff.status === "Active" ? <Ban size={13} /> : <UserCheck size={13} />}
+                        </button>
+                        <button
+                          onClick={() => handleDeleteStaff(staff)}
+                          className="p-1 rounded-lg border border-rose-200/40 dark:border-rose-950 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-rose-550 dark:text-rose-455 transition-all cursor-pointer"
+                          title="Delete Member"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="9" className="px-6 py-16 text-center">
-                    <div className="flex flex-col items-center justify-center space-y-3">
-                      <div className="w-12 h-12 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-400">
-                        <Users size={22} />
+                  <td colSpan="9" className="px-3 py-8 text-center">
+                    <div className="flex flex-col items-center justify-center space-y-2">
+                      <div className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-400">
+                        <Users size={18} />
                       </div>
                       <div>
-                        <p className="text-sm font-extrabold text-zinc-800 dark:text-zinc-200">No Kitchen Staff Found</p>
-                        <p className="text-xs text-zinc-400 font-semibold mt-0.5">
+                        <p className="text-xs font-extrabold text-black dark:text-white">No Kitchen Staff Found</p>
+                        <p className="text-[10px] text-black/50 dark:text-white/50 font-semibold mt-0.5">
                           Try adjusting your filtering choices or resetting the search term.
                         </p>
                       </div>
                       <button
                         onClick={handleResetFilters}
-                        className="px-5 py-2.5 bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-white rounded-xl text-xs font-bold transition-all shadow cursor-pointer"
+                        className="px-3 py-1.5 bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white rounded-lg text-xs font-bold transition-all shadow cursor-pointer"
                       >
                         Reset All Filters
                       </button>
@@ -603,25 +565,25 @@ export default function KitchenStaffManagement() {
 
         {/* Pagination Footer */}
         {filteredStaff.length > 0 && (
-          <div className="px-6 py-4 bg-zinc-50 dark:bg-zinc-900/50 flex justify-between items-center border-t border-zinc-200 dark:border-zinc-800">
-            <p className="text-xs font-semibold text-zinc-400 dark:text-zinc-500">
+          <div className="px-3 py-2 bg-zinc-50 dark:bg-zinc-900/50 flex justify-between items-center border-t border-zinc-200 dark:border-zinc-800">
+            <p className="text-[10px] font-semibold text-black/50 dark:text-white/50">
               Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredStaff.length)} of {filteredStaff.length} members
             </p>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <button
                 onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                 disabled={currentPage === 1}
-                className="p-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-850 disabled:opacity-40 transition-all flex items-center justify-center cursor-pointer"
+                className="p-1 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-850 disabled:opacity-40 transition-all flex items-center justify-center cursor-pointer"
               >
-                <ChevronLeft size={16} />
+                <ChevronLeft size={14} />
               </button>
               {Array.from({ length: totalPages }).map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setCurrentPage(i + 1)}
-                  className={`w-9 h-9 flex items-center justify-center rounded-xl text-xs font-bold transition-all ${currentPage === i + 1
-                      ? "bg-[var(--primary)] text-white shadow-md shadow-[var(--primary)]/10"
-                      : "bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-850"
+                  className={`w-7 h-7 flex items-center justify-center rounded-lg text-[10px] font-bold transition-all ${currentPage === i + 1
+                    ? "bg-[var(--primary)] text-white shadow-md"
+                    : "bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-black dark:text-white hover:bg-zinc-50 dark:hover:bg-zinc-850"
                     }`}
                 >
                   {i + 1}
@@ -630,9 +592,9 @@ export default function KitchenStaffManagement() {
               <button
                 onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="p-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-850 disabled:opacity-40 transition-all flex items-center justify-center cursor-pointer"
+                className="p-1 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-850 disabled:opacity-40 transition-all flex items-center justify-center cursor-pointer"
               >
-                <ChevronRight size={16} />
+                <ChevronRight size={14} />
               </button>
             </div>
           </div>

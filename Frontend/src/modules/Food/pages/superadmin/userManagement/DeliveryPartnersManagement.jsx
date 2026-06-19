@@ -19,7 +19,9 @@ import {
   Radio,
   PowerOff,
   Truck,
-  ShieldAlert
+  ShieldAlert,
+  ArrowUpRight,
+  TrendingDown
 } from "lucide-react"
 
 // Import custom subcomponents
@@ -31,21 +33,21 @@ import DeliverySuspendedModal from "./DeliverySuspendedModal"
 const INITIAL_RIDERS = [
   {
     id: "RP-88421",
-    name: "Alex Rivera",
-    email: "alex.rivera@papaveg.com",
-    phone: "+1 212-555-0192",
-    store: "NYC Downtown",
-    franchise: "NYC Metro",
+    name: "Ravi Sharma",
+    email: "r.sharma@papaveg.com",
+    phone: "+91 98765 43210",
+    store: "Mumbai - Andheri West",
+    franchise: "Papa Veg Mumbai",
     vehicle: "Electric Bike",
     vehicleModel: "NIU N-Series",
-    licenseNumber: "ABC-1234-NY",
+    licenseNumber: "MH-02-1234",
     totalOrders: 450,
     completedOrders: 450,
     cancelledOrders: 5,
     rating: 4.8,
     status: "Online",
-    address: "722 Broadway St, Manhattan, Suite 4B",
-    storeManager: "Sarah Jenkins",
+    address: "722 Link Road, Andheri West, Mumbai",
+    storeManager: "Sanjay Gupta",
     priorityRouting: true,
     recentDeliveries: [
       { id: "ORD-11498", date: "Today, 02:45 PM", status: "Delivered", earnings: 12.50 },
@@ -57,21 +59,21 @@ const INITIAL_RIDERS = [
   },
   {
     id: "RP-88422",
-    name: "Elena Gomez",
-    email: "elena.gomez@papaveg.com",
-    phone: "+1 212-555-0841",
-    store: "Jersey Heights",
-    franchise: "Jersey Shore",
+    name: "Neha Singh",
+    email: "n.singh@papaveg.com",
+    phone: "+91 98765 43211",
+    store: "Pune - Koregaon Park",
+    franchise: "Papa Veg Pune",
     vehicle: "Scooter",
-    vehicleModel: "Vespa Elettrica",
-    licenseNumber: "XYZ-5678-NJ",
+    vehicleModel: "Ather 450X",
+    licenseNumber: "MH-12-5678",
     totalOrders: 328,
     completedOrders: 328,
     cancelledOrders: 2,
     rating: 4.9,
     status: "Busy",
-    address: "415 Ocean Ave, Jersey City, NJ 07302",
-    storeManager: "Marcus Aurelius",
+    address: "415 Main Street, Koregaon Park, Pune",
+    storeManager: "Rahul Verma",
     priorityRouting: false,
     recentDeliveries: [
       { id: "ORD-11488", date: "Yesterday, 09:15 PM", status: "Delivered", earnings: 15.20 },
@@ -80,21 +82,21 @@ const INITIAL_RIDERS = [
   },
   {
     id: "RP-88423",
-    name: "Marcus Chen",
-    email: "marcus.chen@papaveg.com",
-    phone: "+1 212-555-0374",
-    store: "NYC Midtown",
-    franchise: "NYC Metro",
+    name: "Amit Patel",
+    email: "a.patel@papaveg.com",
+    phone: "+91 98765 43212",
+    store: "Delhi - Connaught Place",
+    franchise: "Papa Veg Delhi",
     vehicle: "Car",
-    vehicleModel: "Tesla Model 3",
-    licenseNumber: "MCN-9012-NY",
+    vehicleModel: "Tata Nexon EV",
+    licenseNumber: "DL-01-9012",
     totalOrders: 1102,
     completedOrders: 1102,
     cancelledOrders: 18,
     rating: 4.7,
     status: "Offline",
-    address: "789 Lex Ave, New York, NY 10021",
-    storeManager: "David Miller",
+    address: "789 CP Inner Circle, Delhi",
+    storeManager: "Suresh Kumar",
     priorityRouting: true,
     recentDeliveries: [
       { id: "ORD-11475", date: "2 days ago", status: "Delivered", earnings: 18.00 },
@@ -103,21 +105,21 @@ const INITIAL_RIDERS = [
   },
   {
     id: "RP-88424",
-    name: "James Wilson",
-    email: "james.wilson@papaveg.com",
-    phone: "+1 212-555-0629",
-    store: "Brooklyn East",
-    franchise: "NYC Metro",
+    name: "Rahul Verma",
+    email: "r.verma_rider@papaveg.com",
+    phone: "+91 98765 43213",
+    store: "Bangalore - Indiranagar",
+    franchise: "Papa Veg Bangalore",
     vehicle: "Electric Bike",
-    vehicleModel: "Rad Power RadCity",
-    licenseNumber: "JWL-3456-NY",
+    vehicleModel: "Ola S1 Pro",
+    licenseNumber: "KA-01-3456",
     totalOrders: 84,
     completedOrders: 84,
     cancelledOrders: 12,
     rating: 3.2,
     status: "Suspended",
-    address: "101 Flatbush Ave, Brooklyn, NY 11217",
-    storeManager: "Sarah Jenkins",
+    address: "101 100ft Road, Indiranagar, Bangalore",
+    storeManager: "Vikram Singh",
     priorityRouting: false,
     recentDeliveries: [
       { id: "ORD-11425", date: "3 days ago", status: "Failed", earnings: 0.00 }
@@ -134,6 +136,7 @@ export default function DeliveryPartnersManagement() {
   const [storeFilter, setStoreFilter] = useState("All Stores")
   const [statusFilter, setStatusFilter] = useState("All Statuses")
   const [vehicleFilter, setVehicleFilter] = useState("Vehicle Type")
+  const [sortOrder, setSortOrder] = useState("asc")
 
   // Pagination States
   const [currentPage, setCurrentPage] = useState(1)
@@ -187,8 +190,8 @@ export default function DeliveryPartnersManagement() {
         vehicleFilter === "Vehicle Type" || rider.vehicle === vehicleFilter
 
       return matchesSearch && matchesFranchise && matchesStore && matchesStatus && matchesVehicle
-    })
-  }, [riders, searchQuery, franchiseFilter, storeFilter, statusFilter, vehicleFilter])
+    }).sort((a, b) => sortOrder === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name))
+  }, [riders, searchQuery, franchiseFilter, storeFilter, statusFilter, vehicleFilter, sortOrder])
 
   // Paginated results
   const paginatedRiders = useMemo(() => {
@@ -256,6 +259,7 @@ export default function DeliveryPartnersManagement() {
     setStoreFilter("All Stores")
     setStatusFilter("All Statuses")
     setVehicleFilter("Vehicle Type")
+    setSortOrder("asc")
     setCurrentPage(1)
     showToast("Filters reset successful!", "success")
   }
@@ -270,14 +274,14 @@ export default function DeliveryPartnersManagement() {
   }
 
   const getProfileImage = (name) => {
-    if (name?.toLowerCase().includes("alex")) return "/rider_alex.webp"
-    if (name?.toLowerCase().includes("elena")) return "/rider_elena.webp"
-    if (name?.toLowerCase().includes("marcus")) return "/rider_marcus.webp"
+    if (name?.toLowerCase().includes("ravi")) return "/rider_alex.webp"
+    if (name?.toLowerCase().includes("neha")) return "/rider_elena.webp"
+    if (name?.toLowerCase().includes("amit")) return "/rider_marcus.webp"
     return "/rider_alex.webp" // Default fallback
   }
 
   return (
-    <div className="pb-24 max-w-7xl mx-auto px-4 md:px-8 bg-zinc-50 dark:bg-zinc-950 min-h-screen">
+    <div className="p-3 md:p-4 pb-12 max-w-7xl mx-auto bg-zinc-50 dark:bg-zinc-950 min-h-screen w-full space-y-4">
       {/* Toast Alert Banner */}
       <AnimatePresence>
         {toast && (
@@ -298,102 +302,112 @@ export default function DeliveryPartnersManagement() {
       </AnimatePresence>
 
       {/* Breadcrumbs & Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pt-6">
-        <div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 leading-tight">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-200 dark:border-zinc-800 pb-3 pt-2">
+        <div className="space-y-0.5">
+          <h1 className="text-lg font-bold text-black dark:text-white leading-tight">
             Delivery Partners
           </h1>
-          <p className="text-zinc-400 font-semibold text-xs mt-0.5">
+          <p className="text-[10px] font-semibold text-black/70 dark:text-white/70 mt-0.5">
             Manage delivery riders across all stores
           </p>
         </div>
 
-        <button
+        {/* <button
           onClick={() => {
             setSelectedRider(null)
             setIsEditModalOpen(true)
           }}
-          className="flex items-center gap-2 px-5 py-3 bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white rounded-xl text-xs font-bold shadow-md shadow-[var(--primary)]/20 transition-all hover:scale-[1.02] cursor-pointer"
+          className="bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white px-3.5 py-1.5 rounded-lg flex items-center justify-center gap-1.5 shadow-md hover:scale-[1.02] active:scale-95 transition-all cursor-pointer font-bold text-[11px]"
         >
-          <Plus size={16} className="stroke-[3]" />
+          <Plus size={14} className="stroke-[3]" />
           <span>Add Delivery Partner</span>
-        </button>
+        </button> */}
       </div>
 
       {/* KPI Cards Grid */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-4 select-none">
         {/* Total Riders */}
-        <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col gap-3">
-          <div className="flex justify-between items-start">
-            <div className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-xl text-[var(--primary)]">
-              <Users size={20} />
+        <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-center justify-between">
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <span className="text-[10px] font-bold text-black dark:text-white uppercase tracking-wider truncate">Total Riders</span>
+            <div className="flex items-baseline gap-1.5 flex-wrap">
+              <h3 className="text-lg font-black text-black dark:text-white mt-0.5">{kpiStats.total}</h3>
+              <span className="text-emerald-500 font-bold text-[8px] flex items-center gap-0.5">
+                <ArrowUpRight size={10} /> +12%
+              </span>
             </div>
-            <span className="text-emerald-500 font-bold text-xs">+12%</span>
           </div>
-          <div>
-            <p className="text-zinc-400 dark:text-zinc-500 font-bold text-[10px] uppercase tracking-wider">Total Riders</p>
-            <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-50 mt-1">{kpiStats.total}</h2>
+          <div className="p-1.5 rounded-md bg-[var(--primary)]/10 text-[var(--primary)] shrink-0 border border-[var(--primary)]/20">
+            <Users size={14} />
           </div>
         </div>
 
         {/* Online Riders */}
-        <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col gap-3">
-          <div className="flex justify-between items-start">
-            <div className="p-2 bg-green-500/10 rounded-xl text-green-600">
-              <Radio size={20} className="animate-pulse" />
+        <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-center justify-between">
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <span className="text-[10px] font-bold text-black dark:text-white uppercase tracking-wider truncate">Online</span>
+            <div className="flex items-baseline gap-1.5 flex-wrap">
+              <h3 className="text-lg font-black text-black dark:text-white mt-0.5">{kpiStats.online}</h3>
+              <span className="text-emerald-500 font-bold text-[8px] flex items-center gap-0.5">
+                <ArrowUpRight size={10} /> +5%
+              </span>
             </div>
-            <span className="text-emerald-500 font-bold text-xs">+5%</span>
           </div>
-          <div>
-            <p className="text-zinc-400 dark:text-zinc-500 font-bold text-[10px] uppercase tracking-wider">Online</p>
-            <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-50 mt-1">{kpiStats.online}</h2>
+          <div className="p-1.5 rounded-md bg-green-500/10 text-green-600 shrink-0 border border-green-100 dark:border-green-900/30">
+            <Radio size={14} className="animate-pulse" />
           </div>
         </div>
 
         {/* Offline Riders */}
-        <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col gap-3">
-          <div className="flex justify-between items-start">
-            <div className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-xl text-zinc-500">
-              <PowerOff size={20} />
+        <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-center justify-between">
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <span className="text-[10px] font-bold text-black dark:text-white uppercase tracking-wider truncate">Offline</span>
+            <div className="flex items-baseline gap-1.5 flex-wrap">
+              <h3 className="text-lg font-black text-black dark:text-white mt-0.5">{kpiStats.offline}</h3>
+              <span className="text-rose-500 font-bold text-[8px] flex items-center gap-0.5">
+                <TrendingDown size={10} /> -2%
+              </span>
             </div>
-            <span className="text-rose-500 font-bold text-xs">-2%</span>
           </div>
-          <div>
-            <p className="text-zinc-400 dark:text-zinc-500 font-bold text-[10px] uppercase tracking-wider">Offline</p>
-            <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-50 mt-1">{kpiStats.offline}</h2>
+          <div className="p-1.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-black/50 dark:text-white/50 shrink-0 border border-zinc-200 dark:border-zinc-800">
+            <PowerOff size={14} />
           </div>
         </div>
 
         {/* On Delivery Riders */}
-        <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col gap-3">
-          <div className="flex justify-between items-start">
-            <div className="p-2 bg-amber-500/10 rounded-xl text-amber-600">
-              <Truck size={20} />
+        <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-center justify-between">
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <span className="text-[10px] font-bold text-black dark:text-white uppercase tracking-wider truncate">On Delivery</span>
+            <div className="flex items-baseline gap-1.5 flex-wrap">
+              <h3 className="text-lg font-black text-black dark:text-white mt-0.5">{kpiStats.onDelivery}</h3>
+              <span className="text-emerald-500 font-bold text-[8px] flex items-center gap-0.5">
+                <ArrowUpRight size={10} /> +18%
+              </span>
             </div>
-            <span className="text-emerald-500 font-bold text-xs">+18%</span>
           </div>
-          <div>
-            <p className="text-zinc-400 dark:text-zinc-500 font-bold text-[10px] uppercase tracking-wider">On Delivery</p>
-            <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-50 mt-1">{kpiStats.onDelivery}</h2>
+          <div className="p-1.5 rounded-md bg-amber-500/10 text-amber-600 shrink-0 border border-amber-100 dark:border-amber-900/30">
+            <Truck size={14} />
           </div>
         </div>
 
         {/* Suspended Riders */}
-        <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col gap-3">
-          <div className="flex justify-between items-start">
-            <div className="p-2 bg-rose-500/10 rounded-xl text-rose-600">
-              <ShieldAlert size={20} />
+        <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-center justify-between">
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <span className="text-[10px] font-bold text-black dark:text-white uppercase tracking-wider truncate">Suspended</span>
+            <div className="flex items-baseline gap-1.5 flex-wrap">
+              <h3 className="text-lg font-black text-black dark:text-white mt-0.5">{kpiStats.suspended}</h3>
+              <span className="text-rose-500 font-bold text-[8px] flex items-center gap-0.5">
+                <ArrowUpRight size={10} /> +3%
+              </span>
             </div>
-            <span className="text-rose-500 font-bold text-xs">+3%</span>
           </div>
-          <div>
-            <p className="text-zinc-400 dark:text-zinc-500 font-bold text-[10px] uppercase tracking-wider">Suspended</p>
-            <h2 className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-50 mt-1">{kpiStats.suspended}</h2>
+          <div className="p-1.5 rounded-md bg-rose-500/10 text-rose-600 shrink-0 border border-rose-100 dark:border-rose-900/30">
+            <ShieldAlert size={14} />
           </div>
         </div>
       </section>
 
-      {/* Filter Options */}
+      {/* Delivery Partners Filters Component */}
       <DeliveryPartnersFilters
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -405,34 +419,36 @@ export default function DeliveryPartnersManagement() {
         setStatusFilter={setStatusFilter}
         vehicleFilter={vehicleFilter}
         setVehicleFilter={setVehicleFilter}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
         onReset={handleResetFilters}
       />
 
       {/* Main Responsive Table */}
-      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm mt-6">
+      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm mt-4">
         <div className="overflow-x-auto scrollbar-thin">
           <table className="w-full border-collapse text-left">
             <thead>
               <tr className="bg-zinc-50 dark:bg-zinc-900/50 border-b border-zinc-200 dark:border-zinc-800">
-                <th className="px-6 py-4 text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-[9px] font-extrabold text-black/50 dark:text-white/50 uppercase tracking-wider">
                   Partner
                 </th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-[9px] font-extrabold text-black/50 dark:text-white/50 uppercase tracking-wider">
                   Store
                 </th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-[9px] font-extrabold text-black/50 dark:text-white/50 uppercase tracking-wider">
                   Vehicle
                 </th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider text-center">
+                <th className="px-3 py-2 text-[9px] font-extrabold text-black/50 dark:text-white/50 uppercase tracking-wider text-center">
                   Orders
                 </th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider text-center">
+                <th className="px-3 py-2 text-[9px] font-extrabold text-black/50 dark:text-white/50 uppercase tracking-wider text-center">
                   Rating
                 </th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-[9px] font-extrabold text-black/50 dark:text-white/50 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-4 text-right"></th>
+                <th className="px-3 py-2 text-right"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-150 dark:divide-zinc-800">
@@ -440,16 +456,16 @@ export default function DeliveryPartnersManagement() {
                 paginatedRiders.map((rider) => (
                   <tr
                     key={rider.id}
-                    className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30 transition-colors group cursor-pointer"
+                    className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30 transition-colors group cursor-pointer text-xs text-black dark:text-white"
                     onClick={() => {
                       setSelectedRider(rider)
                       setIsDrawerOpen(true)
                     }}
                   >
                     {/* Partner Details */}
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full overflow-hidden border border-zinc-100 dark:border-zinc-800">
+                    <td className="px-3 py-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full overflow-hidden border border-zinc-100 dark:border-zinc-800 flex-shrink-0">
                           <img
                             src={getProfileImage(rider.name)}
                             alt={rider.name}
@@ -457,44 +473,44 @@ export default function DeliveryPartnersManagement() {
                           />
                         </div>
                         <div>
-                          <p className="text-xs font-extrabold text-zinc-900 dark:text-zinc-50 group-hover:text-[var(--primary)] transition-colors">
+                          <p className="text-xs font-bold text-black dark:text-white group-hover:text-[var(--primary)] transition-colors">
                             {rider.name}
                           </p>
-                          <p className="text-[10px] text-zinc-400 font-semibold mt-0.5">{rider.phone}</p>
+                          <p className="text-[9px] text-black/50 dark:text-white/50 font-semibold mt-0.5">{rider.phone}</p>
                         </div>
                       </div>
                     </td>
 
                     {/* Store */}
-                    <td className="px-6 py-4 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                    <td className="px-3 py-2 text-[10px] font-semibold text-black dark:text-white">
                       {rider.store}
                     </td>
 
                     {/* Vehicle */}
-                    <td className="px-6 py-4 text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-zinc-400">{getVehicleIcon(rider.vehicle)}</span>
+                    <td className="px-3 py-2 text-[10px] font-semibold text-black dark:text-white">
+                      <div className="flex items-center gap-1">
+                        <span className="text-black/50 dark:text-white/50">{getVehicleIcon(rider.vehicle)}</span>
                         <span>{rider.vehicle}</span>
                       </div>
                     </td>
 
                     {/* Total Orders */}
-                    <td className="px-6 py-4 text-xs font-extrabold text-zinc-950 dark:text-zinc-50 text-center">
+                    <td className="px-3 py-2 text-[10px] font-extrabold text-black dark:text-white text-center">
                       {rider.totalOrders}
                     </td>
 
                     {/* Rating */}
-                    <td className="px-6 py-4 text-center">
-                      <div className="flex items-center justify-center gap-1">
-                        <Star size={14} className="fill-amber-400 stroke-none" />
-                        <span className="text-xs font-bold text-zinc-850 dark:text-zinc-150">{rider.rating}</span>
+                    <td className="px-3 py-2 text-center">
+                      <div className="flex items-center justify-center gap-0.5">
+                        <Star size={11} className="fill-amber-400 stroke-none" />
+                        <span className="text-[10px] font-bold text-black dark:text-white">{rider.rating}</span>
                       </div>
                     </td>
 
                     {/* Status Badge */}
-                    <td className="px-6 py-4">
+                    <td className="px-3 py-2">
                       <span
-                        className={`text-[9px] font-extrabold px-2.5 py-1 rounded-full ${rider.status === "Online"
+                        className={`text-[8px] font-extrabold px-1.5 py-0.5 rounded-full ${rider.status === "Online"
                           ? "bg-green-50 dark:bg-green-950/20 text-green-600 dark:text-green-400 border border-green-100 dark:border-green-900/30"
                           : rider.status === "Busy"
                             ? "bg-amber-50 dark:bg-amber-950/20 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-900/30"
@@ -508,92 +524,65 @@ export default function DeliveryPartnersManagement() {
                     </td>
 
                     {/* Actions Menu */}
-                    <td className="px-6 py-4 text-right relative" onClick={(e) => e.stopPropagation()}>
-                      <button
-                        onClick={() => setActiveMenuId(activeMenuId === rider.id ? null : rider.id)}
-                        className="p-1.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-850 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors cursor-pointer"
-                      >
-                        <MoreVertical size={16} />
-                      </button>
-
-                      {/* Dropdown Action Popover */}
-                      <AnimatePresence>
-                        {activeMenuId === rider.id && (
-                          <>
-                            <div className="fixed inset-0 z-30" onClick={() => setActiveMenuId(null)} />
-                            <motion.div
-                              initial={{ opacity: 0, scale: 0.95, y: 5 }}
-                              animate={{ opacity: 1, scale: 1, y: 0 }}
-                              exit={{ opacity: 0, scale: 0.95, y: 5 }}
-                              className="absolute right-6 top-10 w-44 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-xl z-40 p-1.5"
-                            >
-                              <button
-                                onClick={() => {
-                                  setSelectedRider(rider)
-                                  setIsDrawerOpen(true)
-                                  setActiveMenuId(null)
-                                }}
-                                className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left text-xs font-bold text-zinc-600 hover:text-[var(--primary)] dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
-                              >
-                                <Eye size={14} />
-                                <span>View Profile Drawer</span>
-                              </button>
-
-                              <button
-                                onClick={() => {
-                                  setSelectedRider(rider)
-                                  setIsEditModalOpen(true)
-                                  setActiveMenuId(null)
-                                }}
-                                className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left text-xs font-bold text-zinc-600 hover:text-[var(--primary)] dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
-                              >
-                                <Edit size={14} />
-                                <span>Edit Profile details</span>
-                              </button>
-
-                              <div className="h-px bg-zinc-100 dark:bg-zinc-800 my-1" />
-
-                              <button
-                                onClick={() => handleSuspendToggle(rider)}
-                                className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left text-xs font-bold transition-colors ${rider.status === "Suspended"
-                                  ? "text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/20"
-                                  : "text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20"
-                                  }`}
-                              >
-                                {rider.status === "Suspended" ? <UserCheck size={14} /> : <Ban size={14} />}
-                                <span>{rider.status === "Suspended" ? "Activate Account" : "Suspend Rider"}</span>
-                              </button>
-
-                              <button
-                                onClick={() => handleDeleteRider(rider)}
-                                className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-left text-xs font-bold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 transition-colors"
-                              >
-                                <Trash2 size={14} />
-                                <span>Delete Partner</span>
-                              </button>
-                            </motion.div>
-                          </>
-                        )}
-                      </AnimatePresence>
+                    <td className="px-3 py-2 text-right" onClick={(e) => e.stopPropagation()}>
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={() => {
+                            setSelectedRider(rider)
+                            setIsDrawerOpen(true)
+                          }}
+                          className="p-1 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-black/50 dark:text-white/50 hover:text-[var(--primary)] transition-all cursor-pointer"
+                          title="View Profile"
+                        >
+                          <Eye size={13} />
+                        </button>
+                        {/* <button
+                          onClick={() => {
+                            setSelectedRider(rider)
+                            setIsEditModalOpen(true)
+                          }}
+                          className="p-1 rounded-lg border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-black/50 dark:text-white/50 hover:text-[var(--primary)] transition-all cursor-pointer"
+                          title="Edit Profile"
+                        >
+                          <Edit size={13} />
+                        </button> */}
+                        <button
+                          onClick={() => handleSuspendToggle(rider)}
+                          className={`p-1 rounded-lg border transition-all cursor-pointer ${rider.status === "Suspended"
+                            ? "border-emerald-200 dark:border-emerald-950 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/20"
+                            : "border-amber-200 dark:border-amber-950 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-950/20"
+                            }`}
+                          title={rider.status === "Suspended" ? "Activate Account" : "Suspend Rider"}
+                        >
+                          {rider.status === "Suspended" ? <UserCheck size={13} /> : <Ban size={13} />}
+                        </button>
+                        <button
+                          onClick={() => handleDeleteRider(rider)}
+                          className="p-1 rounded-lg border border-rose-200/40 dark:border-rose-950 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-rose-550 dark:text-rose-455 transition-all cursor-pointer"
+                          title="Delete Partner"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="7" className="px-6 py-16 text-center">
-                    <div className="flex flex-col items-center justify-center space-y-3">
-                      <div className="w-12 h-12 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-400">
-                        <Truck size={22} />
+                  <td colSpan="7" className="px-3 py-8 text-center">
+                    <div className="flex flex-col items-center justify-center space-y-2">
+                      <div className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-400">
+                        <Truck size={18} />
                       </div>
                       <div>
-                        <p className="text-sm font-extrabold text-zinc-800 dark:text-zinc-200">No Delivery Partners Found</p>
-                        <p className="text-xs text-zinc-400 font-semibold mt-0.5">
+                        <p className="text-xs font-extrabold text-black dark:text-white">No Delivery Partners Found</p>
+                        <p className="text-[10px] text-black/50 dark:text-white/50 font-semibold mt-0.5">
                           Try adjusting your filtering choices or resetting the search term.
                         </p>
                       </div>
                       <button
                         onClick={handleResetFilters}
-                        className="px-5 py-2.5 bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-white rounded-xl text-xs font-bold transition-all shadow cursor-pointer"
+                        className="px-3 py-1.5 bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-white rounded-lg text-xs font-bold transition-all shadow cursor-pointer"
                       >
                         Reset All Filters
                       </button>
@@ -607,25 +596,25 @@ export default function DeliveryPartnersManagement() {
 
         {/* Table Pagination Footer */}
         {filteredRiders.length > 0 && (
-          <div className="px-6 py-4 bg-zinc-50 dark:bg-zinc-900/50 flex justify-between items-center border-t border-zinc-200 dark:border-zinc-800">
-            <p className="text-xs font-semibold text-zinc-400 dark:text-zinc-500">
+          <div className="px-3 py-2 bg-zinc-50 dark:bg-zinc-900/50 flex justify-between items-center border-t border-zinc-200 dark:border-zinc-800">
+            <p className="text-[10px] font-semibold text-black/50 dark:text-white/50">
               Showing {(currentPage - 1) * itemsPerPage + 1} - {Math.min(currentPage * itemsPerPage, filteredRiders.length)} of {filteredRiders.length} partners
             </p>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <button
                 onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                 disabled={currentPage === 1}
-                className="p-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-850 disabled:opacity-40 transition-all flex items-center justify-center cursor-pointer"
+                className="p-1 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-850 disabled:opacity-40 transition-all flex items-center justify-center cursor-pointer"
               >
-                <ChevronLeft size={16} />
+                <ChevronLeft size={14} />
               </button>
               {Array.from({ length: totalPages }).map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setCurrentPage(i + 1)}
-                  className={`w-9 h-9 flex items-center justify-center rounded-xl text-xs font-bold transition-all ${currentPage === i + 1
-                    ? "bg-[var(--primary)] text-white shadow-md shadow-[var(--primary)]/10"
-                    : "bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-850"
+                  className={`w-7 h-7 flex items-center justify-center rounded-lg text-[10px] font-bold transition-all ${currentPage === i + 1
+                    ? "bg-[var(--primary)] text-white shadow-md"
+                    : "bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-black dark:text-white hover:bg-zinc-50 dark:hover:bg-zinc-850"
                     }`}
                 >
                   {i + 1}
@@ -634,9 +623,9 @@ export default function DeliveryPartnersManagement() {
               <button
                 onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="p-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-850 disabled:opacity-40 transition-all flex items-center justify-center cursor-pointer"
+                className="p-1 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-850 disabled:opacity-40 transition-all flex items-center justify-center cursor-pointer"
               >
-                <ChevronRight size={16} />
+                <ChevronRight size={14} />
               </button>
             </div>
           </div>
