@@ -40,13 +40,19 @@ const Revenue = lazy(() => import("../financial/Revenue"))
 const Payouts = lazy(() => import("../financial/Payouts"))
 const SalesAnalytics = lazy(() => import("../analytics/SalesAnalytics"))
 const CustomerAnalytics = lazy(() => import("../analytics/CustomerAnalytics"))
-const OperationalAnalytics = lazy(() => import("../analytics/OperationalAnalytics"))
-const AppSettings = lazy(() => import("../settings/AppSettings"))
-const TaxSettings = lazy(() => import("../settings/TaxSettings"))
-const SeoSettings = lazy(() => import("../settings/SeoSettings"))
+const StoreAnalytics = lazy(() => import("../analytics/StoreAnalytics"))
+const DeliveryAnalytics = lazy(() => import("../analytics/DeliveryAnalytics"))
+const GrowthReport = lazy(() => import("../analytics/GrowthReport"))
+const Settings = lazy(() => import("../settings/Settings"))
+const AppConfiguration = lazy(() => import("../settings/AppConfiguration"))
+const PaymentGateways = lazy(() => import("../settings/PaymentGateways"))
+const NotificationsSettings = lazy(() => import("../settings/NotificationsSettings"))
+const AuditLogs = lazy(() => import("../settings/AuditLogs"))
 const ContentManagement = lazy(() => import("../settings/ContentManagement"))
-const SupportTicket = lazy(() => import("../support/SupportTicket"))
+const FranchiseTicket = lazy(() => import("../support/FranchiseTicket"))
+const SupportRequests = lazy(() => import("../support/SupportRequests"))
 const FeedbackAndReview = lazy(() => import("../support/FeedbackAndReview"))
+const CustomerComplaints = lazy(() => import("../support/CustomerComplaints"))
 
 // Shared layout shell for user management pages to inherit Sidebar and Navbar
 function SuperAdminLayout() {
@@ -134,18 +140,30 @@ function SuperAdminLayout() {
     activeItem = "Sales Analytics"
   } else if (location.pathname.includes("/customer-analytics")) {
     activeItem = "Customer Analytics"
-  } else if (location.pathname.includes("/operational-analytics")) {
-    activeItem = "Operational Analytics"
-  } else if (location.pathname.includes("/app-settings")) {
-    activeItem = "App Settings"
-  } else if (location.pathname.includes("/tax-settings")) {
-    activeItem = "Tax Settings"
-  } else if (location.pathname.includes("/seo-settings")) {
-    activeItem = "SEO Settings"
+  } else if (location.pathname.includes("/store-analytics")) {
+    activeItem = "Store Analytics"
+  } else if (location.pathname.includes("/delivery-analytics")) {
+    activeItem = "Delivery Analytics"
+  } else if (location.pathname.includes("/growth-reports")) {
+    activeItem = "Growth Reports"
+  } else if (location.pathname.includes("/app-configuration")) {
+    activeItem = "App Configuration"
+  } else if (location.pathname.includes("/payment-gateways")) {
+    activeItem = "Payment Gateways"
+  } else if (location.pathname.includes("/notification-settings")) {
+    activeItem = "Notification Settings"
+  } else if (location.pathname.includes("/audit-logs")) {
+    activeItem = "Audit Logs"
+  } else if (location.pathname.includes("/settings")) {
+    activeItem = "Settings"
   } else if (location.pathname.includes("/content-management")) {
     activeItem = "Content Management"
-  } else if (location.pathname.includes("/support-tickets")) {
-    activeItem = "Support Tickets"
+  } else if (location.pathname.includes("/franchise-tickets")) {
+    activeItem = "Franchise Tickets"
+  } else if (location.pathname.includes("/support-requests")) {
+    activeItem = "Support Requests"
+  } else if (location.pathname.includes("/customer-complaints")) {
+    activeItem = "Customer Complaints"
   } else if (location.pathname.includes("/feedback-reviews")) {
     activeItem = "Feedback & Reviews"
   }
@@ -226,12 +244,18 @@ export default function SuperAdminRouter() {
           <Route path="/revenue" element={<Revenue />} />
           <Route path="/sales-analytics" element={<SalesAnalytics />} />
           <Route path="/customer-analytics" element={<CustomerAnalytics />} />
-          <Route path="/operational-analytics" element={<OperationalAnalytics />} />
-          <Route path="/app-settings" element={<AppSettings />} />
-          <Route path="/tax-settings" element={<TaxSettings />} />
-          <Route path="/seo-settings" element={<SeoSettings />} />
+          <Route path="/store-analytics" element={<StoreAnalytics />} />
+          <Route path="/delivery-analytics" element={<DeliveryAnalytics />} />
+          <Route path="/growth-reports" element={<GrowthReport />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/app-configuration" element={<AppConfiguration />} />
+          <Route path="/payment-gateways" element={<PaymentGateways />} />
+          <Route path="/notification-settings" element={<NotificationsSettings />} />
+          <Route path="/audit-logs" element={<AuditLogs />} />
           <Route path="/content-management" element={<ContentManagement />} />
-          <Route path="/support-tickets" element={<SupportTicket />} />
+          <Route path="/franchise-tickets" element={<FranchiseTicket />} />
+          <Route path="/support-requests" element={<SupportRequests />} />
+          <Route path="/customer-complaints" element={<CustomerComplaints />} />
           <Route path="/feedback-reviews" element={<FeedbackAndReview />} />
         </Route>
 

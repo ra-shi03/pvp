@@ -38,6 +38,8 @@ import {
   FileText,
   LifeBuoy,
   Star,
+  Bike,
+  ShieldAlert,
   X
 } from "lucide-react"
 
@@ -134,22 +136,28 @@ export default function Sidebar({ isOpen, onClose, activeItem, setActiveItem }) 
       items: [
         { name: "Sales Analytics", icon: BarChart3 },
         { name: "Customer Analytics", icon: LineChart },
-        { name: "Operational Analytics", icon: PieChart }
+        { name: "Store Analytics", icon: Store },
+        { name: "Delivery Analytics", icon: Bike },
+        { name: "Growth Reports", icon: TrendingUp }
       ]
     },
     {
-      title: "CMS / Settings",
+      title: "Settings",
       items: [
-        { name: "App Settings", icon: Settings },
-        { name: "Tax Settings", icon: DollarSign },
-        { name: "SEO Settings", icon: Search },
+        { name: "Settings", icon: Settings },
+        { name: "App Configuration", icon: Settings },
+        { name: "Payment Gateways", icon: CreditCard },
+        { name: "Notification Settings", icon: Bell },
+        { name: "Audit Logs", icon: ClipboardList },
         { name: "Content Management", icon: FileText }
       ]
     },
     {
       title: "Support",
       items: [
-        { name: "Support Tickets", icon: LifeBuoy },
+        { name: "Customer Complaints", icon: ShieldAlert },
+        { name: "Franchise Tickets", icon: Ticket },
+        { name: "Support Requests", icon: LifeBuoy },
         { name: "Feedback & Reviews", icon: Star }
       ]
     }
@@ -272,18 +280,30 @@ export default function Sidebar({ isOpen, onClose, activeItem, setActiveItem }) 
                               navigate("/food/superadmin/sales-analytics")
                             } else if (item.name === "Customer Analytics") {
                               navigate("/food/superadmin/customer-analytics")
-                            } else if (item.name === "Operational Analytics") {
-                              navigate("/food/superadmin/operational-analytics")
-                            } else if (item.name === "App Settings") {
-                              navigate("/food/superadmin/app-settings")
-                            } else if (item.name === "Tax Settings") {
-                              navigate("/food/superadmin/tax-settings")
-                            } else if (item.name === "SEO Settings") {
-                              navigate("/food/superadmin/seo-settings")
+                            } else if (item.name === "Store Analytics") {
+                              navigate("/food/superadmin/store-analytics")
+                            } else if (item.name === "Delivery Analytics") {
+                              navigate("/food/superadmin/delivery-analytics")
+                            } else if (item.name === "Growth Reports") {
+                              navigate("/food/superadmin/growth-reports")
+                            } else if (item.name === "Settings") {
+                              navigate("/food/superadmin/settings")
+                            } else if (item.name === "App Configuration") {
+                              navigate("/food/superadmin/app-configuration")
+                            } else if (item.name === "Payment Gateways") {
+                              navigate("/food/superadmin/payment-gateways")
+                            } else if (item.name === "Notification Settings") {
+                              navigate("/food/superadmin/notification-settings")
+                            } else if (item.name === "Audit Logs") {
+                              navigate("/food/superadmin/audit-logs")
                             } else if (item.name === "Content Management") {
                               navigate("/food/superadmin/content-management")
-                            } else if (item.name === "Support Tickets") {
-                              navigate("/food/superadmin/support-tickets")
+                            } else if (item.name === "Franchise Tickets") {
+                              navigate("/food/superadmin/franchise-tickets")
+                            } else if (item.name === "Support Requests") {
+                              navigate("/food/superadmin/support-requests")
+                            } else if (item.name === "Customer Complaints") {
+                              navigate("/food/superadmin/customer-complaints")
                             } else if (item.name === "Feedback & Reviews") {
                               navigate("/food/superadmin/feedback-reviews")
                             } else if (item.name === "Franchise Owners") {
