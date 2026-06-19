@@ -673,7 +673,7 @@ export default function PushNotification() {
                       onClick={() => handleBulkStatusChange('Scheduled')}
                       className="w-full px-4 py-2 hover:bg-zinc-800 transition-colors text-left text-zinc-300"
                     >
-                      Bulk Status -> Scheduled
+                      {"Bulk Status -> Scheduled"}
                     </button>
                     <button 
                       onClick={handleBulkDelete}
