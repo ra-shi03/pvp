@@ -6,7 +6,16 @@ import { store } from './store'
 import { UserNotificationProvider } from '../modules/Food/context/UserNotificationContext'
 import { RestaurantNotificationProvider } from '../modules/Food/context/RestaurantNotificationContext'
 import { DeliveryNotificationProvider } from '../modules/Food/context/DeliveryNotificationContext'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+})
 
 function shouldUseHashRouter() {
   if (typeof window === 'undefined') return false
@@ -28,18 +37,21 @@ export function AppProviders({ children }) {
 
   return (
     <StrictMode>
-      <ReduxProvider store={store}>
-        <Router>
-          <UserNotificationProvider>
-            <RestaurantNotificationProvider>
-              <DeliveryNotificationProvider>
-                {children}
-                <Toaster position="top-center" richColors offset="80px" />
-              </DeliveryNotificationProvider>
-            </RestaurantNotificationProvider>
-          </UserNotificationProvider>
-        </Router>
-      </ReduxProvider>
+      <QueryClientProvider client={queryClient}>
+        <ReduxProvider store={store}>
+          <Router>
+            <UserNotificationProvider>
+              <RestaurantNotificationProvider>
+                <DeliveryNotificationProvider>
+                  {children}
+                  <Toaster position="top-center" richColors offset="80px" expand={true} />
+                </DeliveryNotificationProvider>
+              </RestaurantNotificationProvider>
+            </UserNotificationProvider>
+          </Router>
+        </ReduxProvider>
+      </QueryClientProvider>
     </StrictMode>
   )
 }
+

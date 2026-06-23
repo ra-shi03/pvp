@@ -37,7 +37,7 @@ const RedirectToFood = () => {
 };
 
 // const MasterLandingPage = lazy(() => import('./MasterLandingPage'))
-const AdminRouter = lazy(() => import('../modules/Food/components/admin/AdminRouter'))
+const FranchiseAdminRouter = lazy(() => import('../modules/Food/pages/franchise-admin/routes/FranchiseAdminRouter'))
 const SuperAdminRouter = lazy(() => import('../modules/Food/pages/superadmin/routes/SuperAdminRouter'))
 
 const AppRoutes = () => {
@@ -72,11 +72,13 @@ const AppRoutes = () => {
       {/* Food Module - Handle both /food and root / for the user app */}
       <Route path="/food/*" element={<FoodAppWrapper />} />
 
-      {/* Global Admin Portal - AdminRouter handles its own protection for sub-routes */}
-      <Route path="/admin/*" element={<AdminRouter />} />
+      {/* Global Franchise Admin Portal */}
+      <Route path="/franchise-admin/*" element={<FranchiseAdminRouter />} />
+      <Route path="/admin/*" element={<Navigate to="/franchise-admin/dashboard" replace />} />
 
       {/* Super Admin Portal */}
       <Route path="/superadmin/*" element={<Suspense fallback={<PageLoader />}><SuperAdminRouter /></Suspense>} />
+
 
       {/* Handle root and other paths via FoodAppWrapper */}
       <Route path="/" element={<Navigate to="/welcome" replace />} />

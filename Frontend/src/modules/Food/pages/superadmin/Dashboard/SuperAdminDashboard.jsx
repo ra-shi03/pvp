@@ -82,8 +82,14 @@ export default function SuperAdminDashboard() {
 
   // Apply colors dynamically to document style custom properties
   useEffect(() => {
+    document.documentElement.style.setProperty("--sa-primary", primaryColor)
+    document.documentElement.style.setProperty("--sa-primary-hover", `${primaryColor}cc`)
+    document.documentElement.style.setProperty("--sa-secondary", secondaryColor)
+    document.documentElement.style.setProperty("--sa-secondary-hover", `${secondaryColor}cc`)
     document.documentElement.style.setProperty("--primary", primaryColor)
     document.documentElement.style.setProperty("--primary-hover", `${primaryColor}cc`)
+    document.documentElement.style.setProperty("--secondary", secondaryColor)
+    document.documentElement.style.setProperty("--secondary-hover", `${secondaryColor}cc`)
     localStorage.setItem("sa_primary", primaryColor)
     localStorage.setItem("sa_secondary", secondaryColor)
   }, [primaryColor, secondaryColor])
@@ -231,7 +237,7 @@ export default function SuperAdminDashboard() {
   ]
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-100 transition-all duration-300">
+    <div className="superadmin-theme min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-100 transition-all duration-300">
 
       {/* Shared Navbar Layout */}
       <Navbar onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />

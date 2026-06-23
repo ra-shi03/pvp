@@ -18,31 +18,33 @@
   --radius: 0.625rem;
   
   --background: #F9F9FB;
-  --foreground: #3c0f3d;
+  --foreground: #09090b;
   --card: #ffffff;
-  --card-foreground: #3c0f3d;
+  --card-foreground: #09090b;
   --popover: #ffffff;
-  --popover-foreground: #3c0f3d;
-  --primary: #7e3866;
-  --primary-foreground: #ffffff;
-  --secondary: #55254b;
-  --secondary-foreground: #ffffff;
+  --popover-foreground: #09090b;
+  --primary: var(--sa-primary, #a43c12);
+  --primary-foreground: var(--sa-primary-foreground, #ffffff);
+  --primary-hover: var(--sa-primary-hover, #a43c12cc);
+  --secondary: var(--sa-secondary, #ff7f50);
+  --secondary-foreground: var(--sa-secondary-foreground, #ffffff);
+  --secondary-hover: var(--sa-secondary-hover, #ff7f50cc);
   --muted: #f1f5f9;
-  --muted-foreground: #b18da5;
-  --accent: #b18da5;
-  --accent-foreground: #ffffff;
+  --muted-foreground: #71717a;
+  --accent: #f4f4f5;
+  --accent-foreground: #09090b;
   --destructive: #ef4444;
   --border: #e2e8f0;
   --input: #e2e8f0;
-  --ring: #7e3866;
+  --ring: var(--primary);
   --sidebar: #ffffff;
-  --sidebar-foreground: #3c0f3d;
-  --sidebar-primary: #7e3866;
+  --sidebar-foreground: #09090b;
+  --sidebar-primary: var(--primary);
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #55254b;
-  --sidebar-accent-foreground: #ffffff;
+  --sidebar-accent: #f4f4f5;
+  --sidebar-accent-foreground: #09090b;
   --sidebar-border: #e2e8f0;
-  --sidebar-ring: #7e3866;
+  --sidebar-ring: var(--primary);
 }
 
 @theme inline {
@@ -78,7 +80,9 @@
   --color-sidebar-ring: var(--sidebar-ring);
   
   --color-page-bg: #F9F9FB;
-  --color-primary-orange: #7e3866;
+  --color-primary-orange: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary-hover: var(--secondary-hover);
   --font-poppins: var(--font-poppins);
   --font-outfit: var(--font-outfit);
 }
@@ -90,10 +94,8 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
+  --primary-foreground: #ffffff;
+  --secondary-foreground: #ffffff;
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
   --accent: oklch(0.269 0 0);
@@ -101,15 +103,26 @@
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --ring: var(--primary);
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-ring: var(--primary);
+}
+
+/* Superadmin Theme Class */
+.superadmin-theme {
+  --primary-foreground: #ffffff;
+  --secondary-foreground: #ffffff;
+}
+
+.dark .superadmin-theme {
+  --primary-foreground: #ffffff;
+  --secondary-foreground: #ffffff;
 }
 
 @layer base {
@@ -122,11 +135,13 @@
 }
 
 @layer utilities {
-  .scrollbar-hide {
+  .scrollbar-hide,
+  .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  .scrollbar-hide::-webkit-scrollbar {
+  .scrollbar-hide::-webkit-scrollbar,
+  .scrollbar-none::-webkit-scrollbar {
     display: none;
   }
 

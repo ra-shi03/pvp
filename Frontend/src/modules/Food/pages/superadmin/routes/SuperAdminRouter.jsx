@@ -69,10 +69,17 @@ function SuperAdminLayout() {
       document.documentElement.classList.remove("dark");
     }
 
-    // Apply primary colors
+    // Apply primary & secondary colors
     const primaryColor = localStorage.getItem("sa_primary") || "#a43c12";
+    const secondaryColor = localStorage.getItem("sa_secondary") || "#ff7f50";
+    document.documentElement.style.setProperty("--sa-primary", primaryColor);
+    document.documentElement.style.setProperty("--sa-primary-hover", `${primaryColor}cc`);
+    document.documentElement.style.setProperty("--sa-secondary", secondaryColor);
+    document.documentElement.style.setProperty("--sa-secondary-hover", `${secondaryColor}cc`);
     document.documentElement.style.setProperty("--primary", primaryColor);
     document.documentElement.style.setProperty("--primary-hover", `${primaryColor}cc`);
+    document.documentElement.style.setProperty("--secondary", secondaryColor);
+    document.documentElement.style.setProperty("--secondary-hover", `${secondaryColor}cc`);
   }, [location.pathname])
 
   // Sync active sidebar state based on route path
@@ -169,7 +176,7 @@ function SuperAdminLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-955 text-zinc-800 dark:text-zinc-100 transition-all duration-300">
+    <div className="superadmin-theme min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-100 transition-all duration-300">
       <Navbar onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       <Sidebar
         isOpen={sidebarOpen}

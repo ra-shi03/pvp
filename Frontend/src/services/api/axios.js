@@ -5,12 +5,42 @@
  */
 
 import axios from "axios";
+import { handleMockRequest } from "./mockService.js";
 
 // Prefer explicit env. If not set, default to /api/v1 so the Vite proxy can forward to backend.
 const baseURL =
   typeof import.meta !== "undefined" && import.meta.env?.VITE_API_BASE_URL
     ? String(import.meta.env.VITE_API_BASE_URL).replace(/\/$/, "")
     : "/api/v1";
+
+const mockAdapter = (config) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const response = handleMockRequest(config);
+      if (response.success) {
+        resolve({
+          data: response.data,
+          status: response.status || 200,
+          statusText: "OK",
+          headers: response.headers || {},
+          config,
+        });
+      } else {
+        const error = new Error(response.data?.message || "Mock Request Failed");
+        error.response = {
+          data: response.data,
+          status: response.status || 400,
+          statusText: "Bad Request",
+          headers: response.headers || {},
+          config,
+        };
+        reject(error);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 
 /** 
  * Common Helpers 
@@ -65,6 +95,10 @@ function createModuleClient(moduleName) {
     headers: { "Content-Type": "application/json" },
   });
 
+  if (typeof import.meta !== "undefined" && import.meta.env?.VITE_STANDALONE_MOCK === "true") {
+    client.defaults.adapter = mockAdapter;
+  }
+
   let isRefreshing = false;
   let subscribers = [];
 
@@ -104,12 +138,24 @@ function createModuleClient(moduleName) {
     (err) => Promise.reject(err)
   );
 
-  // Response Interceptor
   client.interceptors.response.use(
     (response) => response,
     async (err) => {
       const original = err?.config;
       
+      // Standalone mock fallback for network/404/5xx errors in dev mode
+      const isNetworkOr404 = !err.response || err.response.status === 404 || err.response.status === 502 || err.response.status === 504;
+      const isDev = typeof import.meta !== "undefined" && (import.meta.env?.DEV || import.meta.env?.VITE_STANDALONE_MOCK === "true");
+      if (isNetworkOr404 && isDev && original && !original._isFallback) {
+        original._isFallback = true;
+        console.warn(`[Axios Client: ${moduleName}] Failed: ${err.message}. Falling back to mock data...`);
+        try {
+          return await mockAdapter(original);
+        } catch (mockErr) {
+          return Promise.reject(mockErr);
+        }
+      }
+
       if (err?.response?.status === 429) return Promise.reject(err);
       
       // 403 handling (Forbidden vs Unauthorized)
@@ -196,6 +242,10 @@ const apiClient = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
+if (typeof import.meta !== "undefined" && import.meta.env?.VITE_STANDALONE_MOCK === "true") {
+  apiClient.defaults.adapter = mockAdapter;
+}
+
 // Reuse the existing smart detection for the legacy client
 function getModuleFromUrl(url = "") {
   const u = typeof url === "string" ? url : (url?.url || "");
@@ -215,6 +265,27 @@ apiClient.interceptors.request.use(
     return config;
   },
   (err) => Promise.reject(err)
+);
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  async (err) => {
+    const original = err?.config;
+    
+    // Standalone mock fallback for network/404/5xx errors in dev mode
+    const isNetworkOr404 = !err.response || err.response.status === 404 || err.response.status === 502 || err.response.status === 504;
+    const isDev = typeof import.meta !== "undefined" && (import.meta.env?.DEV || import.meta.env?.VITE_STANDALONE_MOCK === "true");
+    if (isNetworkOr404 && isDev && original && !original._isFallback) {
+      original._isFallback = true;
+      console.warn(`[Axios Client: legacy] Failed: ${err.message}. Falling back to mock data...`);
+      try {
+        return await mockAdapter(original);
+      } catch (mockErr) {
+        return Promise.reject(mockErr);
+      }
+    }
+    return Promise.reject(err);
+  }
 );
 
 export default apiClient;

@@ -16,7 +16,7 @@ export default function Navbar({ onToggleSidebar }) {
   ]
 
   return (
-    <header className="fixed top-0 left-0 w-full flex justify-between items-center px-4 md:px-6 h-13 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl border-b border-zinc-100 dark:border-zinc-800 z-40 shadow-sm transition-all duration-300">
+    <header className="fixed top-0 left-0 w-full flex justify-between items-center px-4 md:px-6 h-13 bg-white dark:bg-zinc-900 border-b border-zinc-100 dark:border-zinc-800 z-40 shadow-sm transition-all duration-300">
       
       {/* Left side: Brand + Toggle */}
       <div className="flex items-center gap-3">

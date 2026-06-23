@@ -16,10 +16,10 @@ const UserRouter = lazy(() => import("@food/components/user/UserRouter"))
 const RestaurantRouter = lazy(() => import("@food/components/restaurant/RestaurantRouter"))
 
 // Admin Module
-const AdminRouter = lazy(() => import("@food/components/admin/AdminRouter"))
-const AdminLogin = lazy(() => import("@food/pages/admin/auth/AdminLogin"))
-const AdminSignup = lazy(() => import("@food/pages/admin/auth/AdminSignup"))
-const AdminForgotPassword = lazy(() => import("@food/pages/admin/auth/AdminForgotPassword"))
+const FranchiseAdminRouter = lazy(() => import("@food/pages/franchise-admin/routes/FranchiseAdminRouter"))
+const AdminLogin = lazy(() => import("@food/pages/franchise-admin/auth/AdminLogin"))
+const AdminSignup = lazy(() => import("@food/pages/franchise-admin/auth/AdminSignup"))
+const AdminForgotPassword = lazy(() => import("@food/pages/franchise-admin/auth/AdminForgotPassword"))
 const SuperAdminRouter = lazy(() => import("./pages/superadmin/routes/SuperAdminRouter"))
 
 // Delivery Module

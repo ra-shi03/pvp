@@ -6,8 +6,9 @@ export default function ProtectedRoute({ children }) {
   const isAuthenticated = isModuleAuthenticated("admin")
 
   if (!isAuthenticated) {
-    return <Navigate to="/admin/login" state={{ from: location.pathname }} replace />
+    return <Navigate to="/franchise-admin/login" state={{ from: location.pathname }} replace />
   }
+
 
   return children
 }
