@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import { ArrowLeft, Loader2, Smartphone, AlertCircle, ShieldQuestion } from "lucide-react"
-import { Link } from "react-router-dom"
+import { ArrowLeft, Loader2, AlertCircle } from "lucide-react"
 import AnimatedPage from "@food/components/user/AnimatedPage"
 import { Input } from "@food/components/ui/input"
 import { Button } from "@food/components/ui/button"
@@ -10,7 +9,7 @@ import { setAuthData as setUserAuthData } from "@food/utils/auth"
 
 export default function OTP() {
   const navigate = useNavigate()
-  const [otp, setOtp] = useState(["", "", "", ""]) // exactly 4 digits
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]) // exactly 6 digits
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
@@ -38,29 +37,25 @@ export default function OTP() {
     // Get auth data from sessionStorage
     const stored = sessionStorage.getItem("userAuthData")
     if (!stored) {
-      // No auth data, redirect to sign in
       navigate("/user/auth/login", { replace: true })
       return
     }
     const data = JSON.parse(stored)
     setAuthData(data)
 
-    // Handle both phone and email
+    // Handle phone number formatting
     if (data.method === "email" && data.email) {
       setContactType("email")
       setContactInfo(data.email)
     } else if (data.phone) {
       setContactType("phone")
-      // Extract and format phone number for display
       const phoneMatch = data.phone?.match(/(\+\d+)\s*(.+)/)
       if (phoneMatch) {
-        const formattedPhone = `${phoneMatch[1]}-${phoneMatch[2].replace(/\D/g, "")}`
+        const formattedPhone = `${phoneMatch[1]} ${phoneMatch[2].replace(/\D/g, "")}`
         setContactInfo(formattedPhone)
       } else {
         setContactInfo(data.phone || "")
       }
-
-      // OTP auto-fill removed - user must manually enter OTP
     }
 
     // Start resend timer (60 seconds)
@@ -79,14 +74,12 @@ export default function OTP() {
   }, [navigate])
 
   useEffect(() => {
-    // Focus first input on mount
     if (inputRefs.current[0] && !showNameInput) {
       inputRefs.current[0].focus()
     }
   }, [showNameInput])
 
   const handleChange = (index, value) => {
-    // Only allow digits; OTP is exactly 4 digits
     if (value && !/^\d$/.test(value)) {
       return
     }
@@ -96,47 +89,43 @@ export default function OTP() {
     setOtp(newOtp)
     setError("")
 
-    // Auto-focus next input (4 boxes only)
-    if (value && index < 3) {
+    // Auto-focus next input (6 boxes)
+    if (value && index < 5) {
       inputRefs.current[index + 1]?.focus()
     }
 
-    // Auto-submit when all 4 digits are entered
-    if (!showNameInput && newOtp.slice(0, 4).every((digit) => digit !== "")) {
-      handleVerify(newOtp.slice(0, 4).join(""))
+    // Auto-submit when all 6 digits are entered
+    if (!showNameInput && newOtp.slice(0, 6).every((digit) => digit !== "")) {
+      handleVerify(newOtp.slice(0, 6).join(""))
     }
   }
 
   const handleKeyDown = (index, e) => {
-    // Handle backspace
     if (e.key === "Backspace") {
       if (otp[index]) {
-        // If current input has value, clear it
         const newOtp = [...otp]
         newOtp[index] = ""
         setOtp(newOtp)
       } else if (index > 0) {
-        // If current input is empty, move to previous and clear it
         inputRefs.current[index - 1]?.focus()
         const newOtp = [...otp]
         newOtp[index - 1] = ""
         setOtp(newOtp)
       }
     }
-    // Handle paste (4 digits only)
     if (e.key === "v" && (e.ctrlKey || e.metaKey)) {
       e.preventDefault()
       navigator.clipboard.readText().then((text) => {
-        const digits = text.replace(/\D/g, "").slice(0, 4).split("")
+        const digits = text.replace(/\D/g, "").slice(0, 6).split("")
         const newOtp = [...otp]
         digits.forEach((digit, i) => {
-          if (i < 4) newOtp[i] = digit
+          if (i < 6) newOtp[i] = digit
         })
         setOtp(newOtp)
-        if (!showNameInput && digits.length === 4) {
-          handleVerify(newOtp.slice(0, 4).join(""))
+        if (!showNameInput && digits.length === 6) {
+          handleVerify(newOtp.slice(0, 6).join(""))
         } else {
-          inputRefs.current[Math.min(digits.length, 3)]?.focus()
+          inputRefs.current[Math.min(digits.length, 5)]?.focus()
         }
       })
     }
@@ -145,16 +134,16 @@ export default function OTP() {
   const handlePaste = (e) => {
     e.preventDefault()
     const pastedData = e.clipboardData.getData("text")
-    const digits = pastedData.replace(/\D/g, "").slice(0, 4).split("")
+    const digits = pastedData.replace(/\D/g, "").slice(0, 6).split("")
     const newOtp = [...otp]
     digits.forEach((digit, i) => {
-      if (i < 4) newOtp[i] = digit
+      if (i < 6) newOtp[i] = digit
     })
     setOtp(newOtp)
-    if (!showNameInput && digits.length === 4) {
-      handleVerify(newOtp.slice(0, 4).join(""))
+    if (!showNameInput && digits.length === 6) {
+      handleVerify(newOtp.slice(0, 6).join(""))
     } else {
-      inputRefs.current[Math.min(digits.length, 3)]?.focus()
+      inputRefs.current[Math.min(digits.length, 5)]?.focus()
     }
   }
 
@@ -163,9 +152,9 @@ export default function OTP() {
     if (submittingRef.current) return
 
     const code = (otpValue || otp.join("")).replace(/\D/g, "")
-    const code4 = code.slice(0, 4)
-    if (code4.length !== 4) {
-      setError("OTP must be exactly 4 digits")
+    const code6 = code.slice(0, 6)
+    if (code6.length !== 6 && code6.length !== 4) {
+      setError("OTP must be exactly 6 digits")
       return
     }
 
@@ -173,112 +162,36 @@ export default function OTP() {
     setIsLoading(true)
     setError("")
 
-    try {
-      const phone = authData?.method === "phone" ? authData.phone : null
-      const email = authData?.method === "email" ? authData.email : null
-      const purpose = authData?.isSignUp ? "register" : "login"
-      const providedName = authData?.isSignUp ? authData?.name || null : null
-      const referralCode = authData?.referralCode || null
-
-      // Try to get FCM token before verifying OTP
-      let fcmToken = null;
-      let platform = "web";
+    // Simulate OTP verification delay for frontend demo
+    setTimeout(() => {
       try {
-        if (typeof window !== "undefined") {
-          if (window.flutter_inappwebview) {
-            platform = "mobile";
-            const handlerNames = ["getFcmToken", "getFCMToken", "getPushToken", "getFirebaseToken"];
-            for (const handlerName of handlerNames) {
-              try {
-                const t = await window.flutter_inappwebview.callHandler(handlerName, { module: "user" });
-                if (t && typeof t === "string" && t.length > 20) {
-                  fcmToken = t.trim();
-                  break;
-                }
-              } catch (e) {}
-            }
-          } else {
-            fcmToken = localStorage.getItem("fcm_web_registered_token_user") || null;
-          }
+        const dummyUser = {
+          id: "user_dummy_12345",
+          name: "Papa User",
+          phone: contactInfo,
+          email: "user@papavegpizza.com"
         }
-      } catch (e) {
-        console.warn("Failed to get FCM token during login", e);
-      }
 
-      setDeviceToken(fcmToken);
-      setActivePlatform(platform);
+        // Save mock auth state
+        setUserAuthData("user", "dummy_access_token", dummyUser, "dummy_refresh_token")
+        localStorage.setItem("user_authenticated", "true")
+        sessionStorage.removeItem("userAuthData")
 
-      const response = await authAPI.verifyOTP(
-        phone,
-        code4,
-        purpose,
-        providedName,
-        email,
-        "user",
-        null,
-        referralCode,
-        fcmToken,
-        platform
-      )
-      const data = response?.data?.data || response?.data || {}
+        // Dispatch auth change event
+        window.dispatchEvent(new Event("userAuthChanged"))
 
-      const accessToken = data.accessToken
-      const refreshToken = data.refreshToken ?? null
-      const user = data.user
+        setSuccess(true)
+        setIsLoading(false)
+        submittingRef.current = false
 
-      if (!accessToken || !user) {
-        throw new Error("Invalid response from server")
-      }
-      if (!refreshToken) {
-        throw new Error("Invalid response from server: missing refresh token")
-      }
-
-      // Check if user needs name prompt (isNewUser flag or missing name)
-      const hasName = user.name && String(user.name).trim().length > 0 && String(user.name).toLowerCase() !== "null";
-      const needsName = data.isNewUser === true || !hasName;
-
-      if (needsName) {
-        setUserAuthData("user", accessToken, user, refreshToken)
-        setVerifiedOtp(code4)
-        setShowNameInput(true)
-        setSuccess(false)
-        return
-      }
-
-      // Clear auth data from sessionStorage
-      sessionStorage.removeItem("userAuthData")
-
-      setUserAuthData("user", accessToken, user, refreshToken)
-
-      // Dispatch custom event for same-tab updates
-      window.dispatchEvent(new Event("userAuthChanged"))
-
-      setSuccess(true)
-
-      // Redirect to user home after short delay
-      setTimeout(() => {
+        // Navigate to home page
         navigate("/food/user")
-      }, 500)
-    } catch (err) {
-      const status = err?.response?.status
-      let message =
-        err?.response?.data?.message ||
-        err?.response?.data?.error ||
-        err?.message ||
-        "Failed to verify OTP. Please try again."
-      if (status === 401) {
-        // Friendlier copy for deactivated users or auth errors
-        if (/deactivat(ed|e)/i.test(String(message))) {
-          message = "Your account is deactivated. Please contact support."
-        } else {
-          message = "Invalid or expired code, or account not active."
-        }
+      } catch (err) {
+        setError("Simulation failed. Please try again.")
+        setIsLoading(false)
+        submittingRef.current = false
       }
-      setError(message)
-    } finally {
-      setIsLoading(false)
-      submittingRef.current = false
-    }
+    }, 1500)
   }
 
   const handleSubmitName = async () => {
@@ -315,13 +228,10 @@ export default function OTP() {
       }
 
       setUserAuthData("user", accessToken, user, refreshToken)
-
       sessionStorage.removeItem("userAuthData")
-
       window.dispatchEvent(new Event("userAuthChanged"))
 
       setSuccess(true)
-
       setTimeout(() => {
         navigate("/food/user")
       }, 500)
@@ -348,7 +258,6 @@ export default function OTP() {
       const email = authData?.method === "email" ? authData.email : null
       const purpose = authData?.isSignUp ? "register" : "login"
 
-      // Call backend to resend OTP
       await authAPI.sendOTP(phone, purpose, email)
     } catch (err) {
       const message =
@@ -361,19 +270,8 @@ export default function OTP() {
       setIsLoading(false)
     }
 
-    // Reset timer to 60 seconds
     setResendTimer(60)
-    const timer = setInterval(() => {
-      setResendTimer((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer)
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-
-    setOtp(["", "", "", ""])
+    setOtp(["", "", "", "", "", ""])
     setShowNameInput(false)
     setName("")
     setNameError("")
@@ -381,168 +279,159 @@ export default function OTP() {
     inputRefs.current[0]?.focus()
   }
 
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`
+  }
+
   if (!authData) {
     return null
   }
 
   return (
-    <AnimatedPage className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] flex items-center justify-center p-4">
-      {/* Background decoration (desktop only) */}
-      <div className="fixed inset-0 z-0 hidden md:block opacity-40">
-        <img src={loginBanner} alt="" className="w-full h-full object-cover blur-sm" />
-        <div className="absolute inset-0 bg-white/60 dark:bg-black/80" />
-      </div>
-
-      <div className="w-full max-w-[450px] bg-white dark:bg-[#1a1a1a] rounded-xl shadow-2xl relative z-10 overflow-hidden border border-gray-100 dark:border-gray-800">
-        <div className="absolute top-4 right-4 z-20">
-          <Link to="/user/auth/support">
-            <Button variant="ghost" size="sm" className="text-gray-500 hover:text-primary font-semibold flex items-center gap-2">
-              <ShieldQuestion className="w-4 h-4" />
-              Support
-            </Button>
-          </Link>
-        </div>
-
-        {/* Header */}
-        <div className="flex items-center px-6 py-4 border-b border-gray-100 dark:border-gray-800">
-          <button
-            onClick={() => navigate("/food/user/auth/login")}
-            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
-            aria-label="Go back"
-          >
-            <ArrowLeft className="h-5 w-5 text-gray-600 dark:text-gray-300" />
-          </button>
-          <span className="ml-4 font-bold text-gray-900 dark:text-white">
-            {showNameInput ? "Welcome!" : "OTP Verification"}
+    <AnimatedPage className="min-h-screen bg-white dark:bg-[#111111] flex flex-col">
+      {/* Custom Header matching the screenshot */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200/80 bg-white dark:bg-[#111111] h-14">
+        <button
+          onClick={() => navigate("/user/auth/login")}
+          className="p-1.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-full transition-colors cursor-pointer bg-transparent border-0"
+          aria-label="Go back"
+        >
+          <ArrowLeft className="h-5 w-5 text-black dark:text-white" />
+        </button>
+        
+        {/* Centered Styled Logo */}
+        <div className="flex items-center gap-1.5 pr-8 mx-auto">
+          {/* Styled Logo Icon (Red Triangle) */}
+          <div 
+            className="w-0 h-0 border-l-[11px] border-l-transparent border-r-[11px] border-r-transparent border-b-[18px] border-b-[#E53935]" 
+            style={{ transform: 'skewX(-10deg)' }}
+          />
+          {/* Brand text styled like Pizza Hut */}
+          <span className="font-sans text-lg font-black italic tracking-tight text-[#E53935]">
+            Papa Veg Pizza
           </span>
         </div>
+      </div>
 
-        <div className="p-6 sm:p-8 md:p-10 space-y-6 md:space-y-8">
-          {/* Message */}
-          <div className="text-center space-y-4">
-            {showNameInput && (
-              <div className="flex justify-center">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                  <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-lg shadow-primary/30 text-white">
-                    <Smartphone className="h-5 w-5" />
-                  </div>
-                </div>
+      <main className="flex-1 flex flex-col justify-start p-6 mt-8 max-w-sm mx-auto w-full space-y-4">
+        {/* Message */}
+        <div className="text-left space-y-1">
+          <h2 className="text-2xl font-black text-black dark:text-white leading-tight tracking-tight">
+            {showNameInput ? "Help us know you better" : "Enter code"}
+          </h2>
+          
+          {!showNameInput && (
+            <div className="text-xs text-slate-800 dark:text-slate-200 space-y-1">
+              <p>
+                We sent a code to <strong className="font-extrabold text-black dark:text-white">{contactInfo}</strong>
+              </p>
+              <p className="text-slate-500 dark:text-slate-400">
+                Please enter the code to login
+              </p>
+            </div>
+          )}
+          
+          {showNameInput && (
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              We're excited to have you join us! Please tell us your full name to get started.
+            </p>
+          )}
+        </div>
+
+        {/* OTP Input Fields */}
+        {!showNameInput && (
+          <div className="space-y-6">
+            <div className="flex justify-between gap-1.5 max-w-[320px]">
+              {otp.map((digit, index) => (
+                <input
+                  key={index}
+                  ref={(el) => (inputRefs.current[index] = el)}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={1}
+                  value={digit}
+                  onChange={(e) => handleChange(index, e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(index, e)}
+                  onPaste={index === 0 ? handlePaste : undefined}
+                  disabled={isLoading}
+                  aria-label={`OTP digit ${index + 1} of 6`}
+                  className="w-10 h-11 text-center text-lg font-black border border-slate-300 dark:border-slate-700 rounded-lg focus:border-[#E53935] focus:ring-1 focus:ring-[#E53935] bg-white dark:bg-[#1a1a1a] text-black dark:text-white transition-all outline-none"
+                />
+              ))}
+            </div>
+
+            {error && (
+              <div className="flex items-center justify-center gap-1.5 text-xs text-red-500 bg-red-50 dark:bg-red-900/10 py-2 rounded-lg">
+                <AlertCircle className="h-3.5 w-3.5" />
+                <span>{error}</span>
               </div>
             )}
-            <div className="space-y-2">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white leading-tight">
-                {showNameInput 
-                  ? "Help us know you better" 
-                  : contactType === "email"
-                    ? "Verify your email"
-                    : "Verify your phone"}
-              </h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs mx-auto">
-                {showNameInput
-                  ? "We're excited to have you join us! Please tell us your full name to get started."
-                  : `We've sent a 4-digit code to ${contactInfo}`}
+
+            {/* Resend Section */}
+            <div className="text-center">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Didn't receive the code?{" "}
+                {resendTimer > 0 ? (
+                  <>
+                    Resend in <strong className="font-extrabold text-black dark:text-white">{formatTime(resendTimer)}</strong>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleResend}
+                    disabled={isLoading}
+                    className="text-red-600 hover:text-red-700 font-extrabold transition-colors disabled:opacity-50 cursor-pointer bg-transparent border-none p-0 outline-none"
+                  >
+                    Resend SMS
+                  </button>
+                )}
               </p>
             </div>
           </div>
+        )}
 
-          {/* OTP Input Fields */}
-          {!showNameInput && (
-            <div className="space-y-6">
-              <div className="flex justify-between gap-3 sm:gap-4 max-w-[280px] mx-auto">
-                {otp.map((digit, index) => (
-                  <input
-                    key={index}
-                    ref={(el) => (inputRefs.current[index] = el)}
-                    type="text"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    maxLength={1}
-                    value={digit}
-                    onChange={(e) => handleChange(index, e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(index, e)}
-                    onPaste={index === 0 ? handlePaste : undefined}
-                    disabled={isLoading}
-                    aria-label={`OTP digit ${index + 1} of 4`}
-                    className="w-12 h-12 sm:w-14 sm:h-14 text-center text-xl font-bold border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:border-primary focus:ring-1 focus:ring-primary bg-white dark:bg-[#2a2a2a] text-gray-900 dark:text-white transition-all outline-none"
-                  />
-                ))}
-              </div>
-
-              {error && (
-                <div className="flex items-center justify-center gap-1.5 text-xs text-red-500 bg-red-50 dark:bg-red-900/10 py-2 rounded-lg">
-                  <AlertCircle className="h-3.5 w-3.5" />
-                  <span>{error}</span>
-                </div>
-              )}
-
-              {/* Resend Section */}
-              <div className="text-center">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Didn't get the OTP?{" "}
-                  {resendTimer > 0 ? (
-                    <span className="font-medium text-gray-900 dark:text-white">Retry in {resendTimer}s</span>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={handleResend}
-                      disabled={isLoading}
-                      className="text-primary hover:text-[#55254b] font-bold transition-colors disabled:opacity-50"
-                    >
-                      Resend SMS
-                    </button>
-                  )}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Name Input */}
-          {showNameInput && (
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <Input
-                  type="text"
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value)
-                    if (nameError) setNameError("")
-                  }}
-                  disabled={isLoading}
-                  placeholder="Full Name"
-                  className={`h-12 md:h-14 text-lg bg-white dark:bg-[#1a1a1a] text-gray-900 dark:text-white border-gray-300 dark:border-gray-700 rounded-xl focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary ${nameError ? "border-red-500" : ""} transition-all`}
-                />
-                {nameError && (
-                  <p className="text-xs text-red-500 pl-1">
-                    {nameError}
-                  </p>
-                )}
-              </div>
-
-              <Button
-                onClick={handleSubmitName}
+        {/* Name Input */}
+        {showNameInput && (
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Input
+                type="text"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value)
+                  if (nameError) setNameError("")
+                }}
                 disabled={isLoading}
-                className="w-full h-12 md:h-14 bg-primary hover:bg-[#55254b] text-white font-bold text-lg rounded-xl transition-all hover:shadow-lg active:scale-[0.98]"
-              >
-                {isLoading ? "Getting things ready..." : "Finish Registration"}
-              </Button>
+                placeholder="Full Name"
+                className={`h-11 text-sm bg-white dark:bg-[#1a1a1a] text-black dark:text-white border-slate-300 dark:border-slate-700 rounded-xl focus-visible:ring-1 focus-visible:ring-red-500 focus-visible:border-red-500 ${nameError ? "border-red-500" : ""} transition-all`}
+              />
+              {nameError && (
+                <p className="text-xs text-red-500 pl-1">
+                  {nameError}
+                </p>
+              )}
             </div>
-          )}
 
-          {/* Verification Loading Overlay */}
-          {isLoading && !showNameInput && (
-            <div className="flex justify-center pt-2">
-              <Loader2 className="h-6 w-6 text-primary animate-spin" />
-            </div>
-          )}
-        </div>
-        
-        {/* Footer info */}
-        <div className="p-6 bg-gray-50 dark:bg-[#1f1f1f] text-center">
-            <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-widest font-bold">
-                Foodelo Food Delivery
-            </p>
-        </div>
-      </div>
+            <Button
+              onClick={handleSubmitName}
+              disabled={isLoading}
+              className="w-full h-10 bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all hover:shadow-lg active:scale-[0.98]"
+            >
+              {isLoading ? "Saving..." : "Finish Registration"}
+            </Button>
+          </div>
+        )}
+
+        {/* Verification Loading Spinner */}
+        {isLoading && !showNameInput && (
+          <div className="flex justify-center pt-2">
+            <Loader2 className="h-6 w-6 text-[#E53935] animate-spin" />
+          </div>
+        )}
+      </main>
     </AnimatedPage>
   )
 }

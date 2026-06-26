@@ -39,6 +39,7 @@ const RedirectToFood = () => {
 // const MasterLandingPage = lazy(() => import('./MasterLandingPage'))
 const FranchiseAdminRouter = lazy(() => import('../modules/Food/pages/franchise-admin/routes/FranchiseAdminRouter'))
 const SuperAdminRouter = lazy(() => import('../modules/Food/pages/superadmin/routes/SuperAdminRouter'))
+const StoreManagerRouter = lazy(() => import('../modules/Food/pages/store-manager/routes/StoreManagerRouter'))
 
 const AppRoutes = () => {
   const location = useLocation()
@@ -75,6 +76,9 @@ const AppRoutes = () => {
       {/* Global Franchise Admin Portal */}
       <Route path="/franchise-admin/*" element={<FranchiseAdminRouter />} />
       <Route path="/admin/*" element={<Navigate to="/franchise-admin/dashboard" replace />} />
+      
+      {/* Unified Store Operations Panel (Role-Based) */}
+      <Route path="/store-operations/*" element={<StoreManagerRouter />} />
 
       {/* Super Admin Portal */}
       <Route path="/superadmin/*" element={<Suspense fallback={<PageLoader />}><SuperAdminRouter /></Suspense>} />

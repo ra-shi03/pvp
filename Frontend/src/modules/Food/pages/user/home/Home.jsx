@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { motion, AnimatePresence } from "framer-motion"
 import DeliveryMapModal from "@food/components/user/DeliveryMapModal"
 import DeliveryOrCollectionModal from "@food/components/user/DeliveryOrCollectionModal"
 import TakeawayMapModal from "@food/components/user/TakeawayMapModal"
@@ -60,6 +61,7 @@ export default function Home() {
 
   // App States
   const [activeService, setActiveService] = useState(localStorage.getItem("activeService") || "delivery")
+  const [hoveredService, setHoveredService] = useState(null)
   const [activeCategory, setActiveCategory] = useState("pizza")
   const [favorites, setFavorites] = useState([])
   const [cart, setCart] = useState(() => {
@@ -235,12 +237,12 @@ export default function Home() {
         .glass-card {
           background: ${isDarkMode ? "rgba(255, 255, 255, 0.05)" : "rgba(255, 255, 255, 0.75)"} !important;
           backdrop-filter: blur(24px) !important;
-          border: 1px solid ${isDarkMode ? "rgba(255, 255, 255, 0.12)" : "rgba(229, 57, 53, 0.08)"} !important;
-          box-shadow: ${isDarkMode ? "none" : "0 10px 30px -4px rgba(229, 57, 53, 0.04), 0 4px 12px -2px rgba(0, 0, 0, 0.01)"} !important;
+          border: 1px solid ${isDarkMode ? "rgba(255, 255, 255, 0.08)" : "rgba(229, 57, 53, 0.06)"} !important;
+          box-shadow: ${isDarkMode ? "none" : "0 8px 24px -4px rgba(229, 57, 53, 0.04), 0 4px 12px -2px rgba(0, 0, 0, 0.01)"} !important;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
         .glass-card:hover {
-          box-shadow: ${isDarkMode ? "0 4px 20px rgba(0,0,0,0.4)" : "0 16px 35px -4px rgba(229, 57, 53, 0.08), 0 8px 16px -2px rgba(0, 0, 0, 0.02)"} !important;
+          box-shadow: ${isDarkMode ? "0 4px 20px rgba(0,0,0,0.3)" : "0 12px 25px -4px rgba(229, 57, 53, 0.06), 0 6px 12px -2px rgba(0, 0, 0, 0.01)"} !important;
         }
         .hide-scrollbar::-webkit-scrollbar { display: none !important; }
         .hide-scrollbar { -ms-overflow-style: none !important; scrollbar-width: none !important; }
@@ -305,7 +307,7 @@ export default function Home() {
           gap: 16px !important;
         }
         .space-y-lg > :not([hidden]) ~ :not([hidden]) {
-          margin-top: 24px !important;
+          margin-top: 18px !important;
         }
         .p-md {
           padding: 16px !important;
@@ -392,6 +394,36 @@ export default function Home() {
         .bg-black\/40 {
           background-color: ${isDarkMode ? "rgba(0, 0, 0, 0.4)" : "rgba(255, 255, 255, 0.5)"} !important;
         }
+        .perspective-1000 {
+          perspective: 1000px !important;
+          -webkit-perspective: 1000px !important;
+        }
+        .preserve-3d {
+          transform-style: preserve-3d !important;
+          -webkit-transform-style: preserve-3d !important;
+        }
+        .backface-hidden {
+          backface-visibility: hidden !important;
+          -webkit-backface-visibility: hidden !important;
+        }
+        .btn-3d-primary {
+          border-bottom: 2px solid #b71c1c !important;
+          transition: all 0.1s ease !important;
+        }
+        .btn-3d-primary:active {
+          border-bottom-width: 0px !important;
+          transform: translateY(2px) !important;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.08) !important;
+        }
+        .hover-glow {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        .hover-glow:hover {
+          box-shadow: ${isDarkMode 
+            ? "0 8px 24px -4px rgba(229, 57, 53, 0.15), 0 4px 10px -2px rgba(229, 57, 53, 0.08)" 
+            : "0 12px 25px -4px rgba(229, 57, 53, 0.08), 0 8px 12px -2px rgba(0, 0, 0, 0.02)"} !important;
+          border-color: ${isDarkMode ? "rgba(229, 57, 53, 0.2)" : "rgba(229, 57, 53, 0.1)"} !important;
+        }
         `
         }} />
 
@@ -403,7 +435,7 @@ export default function Home() {
         )}
 
         {/* TopAppBar */}
-        <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-md z-50 bg-surface/80 backdrop-blur-xl dark:bg-surface/80 border-b border-white/10 shadow-sm h-16 flex items-center justify-between px-margin-mobile">
+        <header className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-md z-50 bg-surface/80 backdrop-blur-xl dark:bg-surface/80 border-b border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_2px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.3)] h-16 flex items-center justify-between px-margin-mobile">
           <div className="w-10"></div>
           <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex items-center justify-center">
             <img
@@ -426,14 +458,19 @@ export default function Home() {
         {/* Main Content */}
         <main className="mt-16 space-y-lg">
           {/* Hero Banner Carousel */}
-          <section className="relative w-full h-[240px] overflow-hidden">
+          <motion.section 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="relative h-[190px] mx-5 overflow-hidden rounded-2xl shadow-lg border border-black/5 dark:border-white/5"
+          >
             <div className="carousel-track flex h-full" style={{ transform: `translateX(-${activeSlide * 100}%)` }}>
               {/* Slide 1: Paneer Volcano */}
               <div className="min-w-full h-full relative group">
                 <img className="w-full h-full object-cover" alt="A macro close-up of a Paneer Volcano pizza" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAJ1H7kfpIOVMST01cGdHOPK9zctqfPYuepo56-9Xt8VrjDotL945EWt6kVO8vNRM6ZK05zTPtpbInlC7BZrM6lBerNPa7UpA5DOzn1haf6-X4-TAanChNFzPI_Z6swWdt8jQnNq15ghwIv45L3x3XQnOvikSqpnRcI0TTf4czhHBPzZ-TfCC56kA2jx9m7t4XshJq08a_j1JyJAAyLP-ZS-8LGBejGgSyxcu3_N-t3KtKJjAOXBRaK9jKvwOU8KYa0JFB0wV1eQk2" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-margin-mobile">
                   <span className="text-secondary font-label-sm uppercase tracking-widest mb-1">New Arrival</span>
-                  <h2 className="font-headline-lg-mobile text-white">Paneer Volcano</h2>
+                  <h2 className="font-headline-lg-mobile text-white text-xl">Paneer Volcano</h2>
                 </div>
               </div>
               {/* Slide 2: BOGO */}
@@ -441,7 +478,7 @@ export default function Home() {
                 <img className="w-full h-full object-cover" alt="Two premium pizzas side-by-side" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhuBxF93NgpKNex48f17LImalRGfdBdZZqdLlNVab_K797rBPt0Qh41WKGhgBUY6BX_bguMlz7KB3zhPf89Rb5oW64QUft3d_e82SxwKnTaFUsozTWPHo6vjRJCZN72RrObT3u1FDquXmxIKDfadJDBh5XbyhXZ_DIZSk9oFll3KyAH08_2eo65-hOmzFFodulfl8DgB-vAiO7mZrjtsLHVOxzjYiVoALoG-MuCzQKaQPFXhiXSdpE_9bap7jwEFN7pqFbEtDXGEui" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-margin-mobile">
                   <span className="text-primary font-label-sm uppercase tracking-widest mb-1">Limited Offer</span>
-                  <h2 className="font-headline-lg-mobile text-white">BOGO: Double Joy</h2>
+                  <h2 className="font-headline-lg-mobile text-white text-xl">BOGO: Double Joy</h2>
                 </div>
               </div>
             </div>
@@ -450,7 +487,7 @@ export default function Home() {
               <div className={`h-1 rounded-full transition-all duration-300 ${activeSlide === 0 ? "w-8 bg-primary" : "w-2 bg-white/30"}`}></div>
               <div className={`h-1 rounded-full transition-all duration-300 ${activeSlide === 1 ? "w-8 bg-primary" : "w-2 bg-white/30"}`}></div>
             </div>
-          </section>
+          </motion.section>
 
           {/* Order Details Flow (Confirmation Bar) */}
           {locationConfirmed && activeService === "delivery" && (
@@ -464,17 +501,23 @@ export default function Home() {
           )}
 
           {/* Delivery/Takeaway Toggle */}
-          <section className="px-margin-mobile grid grid-cols-2 gap-gutter">
+          <section className="px-margin-mobile grid grid-cols-2 gap-4">
             {[
               { id: "delivery", label: "Delivery", icon: "moped" },
               { id: "takeaway", label: "Takeaway", icon: "store" },
               { id: "incar", label: "In-Car", icon: "directions_car" },
               { id: "train", label: "Delivery on Train", icon: "train" }
-            ].map((service) => {
+            ].map((service, index) => {
               const isSelected = activeService === service.id
               return (
-                <div
+                <motion.div
                   key={service.id}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.05 }}
+                  transition={{ duration: 0.6, type: "spring", stiffness: 100, damping: 15 }}
+                  onMouseEnter={() => setHoveredService(service.id)}
+                  onMouseLeave={() => setHoveredService(null)}
                   onClick={() => {
                     if (service.id === "delivery") {
                       setShowMapModal(true)
@@ -490,38 +533,81 @@ export default function Home() {
                       triggerToast(`Switched to ${service.label}`)
                     }
                   }}
-                  className={`glass-card rounded-2xl p-md flex flex-col items-center justify-center gap-xs active:scale-95 transition-all duration-300 cursor-pointer border ${isSelected
-                    ? "border-[#E53935]/40 shadow-lg shadow-[#E53935]/8 scale-[1.03]"
-                    : "border-black/5 dark:border-white/5 hover:border-primary/20 dark:hover:border-white/10"
-                    }`}
+                  className="w-full h-[96px] perspective-1000 cursor-pointer select-none"
                 >
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors duration-300 ${isSelected
-                    ? "bg-[#E53935] text-white shadow-md shadow-[#E53935]/20"
-                    : "bg-[#131313]/5 dark:bg-white/5 text-on-surface-variant"
-                    }`}>
-                    <span className="material-symbols-outlined text-[32px]">{service.icon}</span>
-                  </div>
-                  <span className={`font-label-sm uppercase tracking-wider text-xs ${isSelected ? "text-[#E53935] font-extrabold" : "opacity-70 font-semibold"
-                    }`}>{service.label}</span>
-                  {service.id === "delivery" && (
-                    <span className={`text-[10px] opacity-60 line-clamp-1 max-w-[120px] text-center mt-0.5 font-medium ${isSelected ? "text-primary/95" : ""}`}>
-                      {locationConfirmed ? (deliveryAddress || "Let us know your location") : "Let us know your location"}
-                    </span>
-                  )}
-                  {service.id === "takeaway" && takeawayHut && (
-                    <span className={`text-[10px] opacity-60 line-clamp-1 max-w-[120px] text-center mt-0.5 font-medium ${isSelected ? "text-primary/95" : ""}`}>{takeawayHut}</span>
-                  )}
-                  {service.id === "incar" && carNumber && (
-                    <span className={`text-[10px] opacity-60 line-clamp-1 max-w-[120px] text-center mt-0.5 font-medium ${isSelected ? "text-primary/95" : ""}`}>{carNumber}</span>
-                  )}
-                </div>
+                  <motion.div
+                    className="w-full h-full relative preserve-3d"
+                    animate={{ rotateY: hoveredService === service.id ? 180 : 0 }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    style={{ transformStyle: "preserve-3d" }}
+                  >
+                    {/* Front Side */}
+                    <div
+                      className={`absolute inset-0 backface-hidden rounded-xl p-2.5 flex flex-col items-center justify-center gap-1 border transition-all duration-300 ${
+                        isSelected
+                          ? "border-[#E53935]/40 shadow-lg shadow-[#E53935]/5"
+                          : "border-black/5 dark:border-white/5"
+                      } glass-card`}
+                      style={{ backfaceVisibility: "hidden" }}
+                    >
+                      <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors duration-300 ${
+                        isSelected
+                          ? "bg-[#E53935] text-white shadow-md shadow-[#E53935]/20"
+                          : "bg-[#131313]/5 dark:bg-white/5 text-on-surface-variant"
+                      }`}>
+                        <span className="material-symbols-outlined text-[20px]">{service.icon}</span>
+                      </div>
+                      <span className={`font-label-sm uppercase tracking-wider text-[9px] ${
+                        isSelected ? "text-[#E53935] font-extrabold" : "opacity-75 font-semibold"
+                      }`}>
+                        {service.label}
+                      </span>
+                    </div>
+
+                    {/* Back Side (Flipped) */}
+                    <div
+                      className={`absolute inset-0 backface-hidden rounded-xl p-2 flex flex-col items-center justify-center gap-1 border text-center transition-all duration-300 ${
+                        isSelected
+                          ? "bg-[#E53935] border-transparent text-white"
+                          : isDarkMode
+                          ? "bg-zinc-800 border-zinc-700 text-white"
+                          : "bg-gray-100 border-gray-200 text-gray-800"
+                      }`}
+                      style={{
+                        backfaceVisibility: "hidden",
+                        transform: "rotateY(180deg)",
+                      }}
+                    >
+                      <span className={`text-[8px] font-black uppercase tracking-widest ${
+                        isSelected ? "text-white" : "text-[#E53935]"
+                      }`}>
+                        {isSelected ? "Active" : "Select"}
+                      </span>
+                      <span className="text-[9px] opacity-90 line-clamp-2 max-w-[125px] font-medium leading-tight">
+                        {service.id === "delivery"
+                          ? (locationConfirmed ? (deliveryAddress || "Tap to set") : "Tap to set")
+                          : service.id === "takeaway"
+                          ? (takeawayHut || "Tap to select")
+                          : service.id === "incar"
+                          ? (carNumber || "Tap to enter")
+                          : "Tap to enter"}
+                      </span>
+                    </div>
+                  </motion.div>
+                </motion.div>
               )
             })}
           </section>
 
           {/* Hot Deals Section */}
           <section>
-            <div className="px-margin-mobile flex justify-between items-end mb-md">
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.05 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="px-margin-mobile flex justify-between items-end mb-md"
+            >
               <h3 className={`font-headline-lg-mobile ${isDarkMode ? "text-white" : "text-[#131313]"}`}>Hot Deals</h3>
               <button
                 onClick={() => {
@@ -534,37 +620,60 @@ export default function Home() {
               >
                 View Deals
               </button>
-            </div>
-            <div className="flex overflow-x-auto hide-scrollbar gap-gutter px-margin-mobile">
-              {DEALS.map((deal) => (
-                <div key={deal.id} className="min-w-[240px] glass-card rounded-xl overflow-hidden relative">
-                  <div className={`absolute top-3 left-3 px-2 rounded-full text-[10px] font-bold uppercase z-10 text-white ${deal.badgeColor}`}>
-                    {deal.badge}
-                  </div>
-                  <div className="px-[16px] pb-[16px] pt-[40px] flex flex-col justify-between h-full">
-                    <div className="space-y-1 mb-md">
-                      <h4 className={`font-headline-lg-mobile text-lg leading-tight mb-xs ${isDarkMode ? "text-white" : "text-[#131313]"}`}>{deal.title}</h4>
-                      <p className="text-sm opacity-60 leading-snug">{deal.description}</p>
+            </motion.div>
+            <div className="flex overflow-x-auto hide-scrollbar gap-gutter px-margin-mobile pb-2">
+              {DEALS.map((deal, index) => {
+                const isLeft = index % 2 === 0
+                const badgeColorClass = 
+                  deal.badge === "Bestseller" 
+                    ? "bg-red-500/10 text-red-500 dark:text-red-400 border border-red-500/20"
+                    : deal.badge === "Value"
+                    ? "bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 border border-emerald-500/20"
+                    : "bg-amber-500/10 text-amber-500 dark:text-amber-400 border border-amber-500/20"
+                return (
+                  <motion.div
+                    key={deal.id}
+                    initial={{ opacity: 0, x: isLeft ? -60 : 60 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.05 }}
+                    transition={{ duration: 0.6, type: "spring", stiffness: 100, damping: 15 }}
+                    whileHover={{ scale: 1.03, y: -4 }}
+                    className="min-w-[165px] max-w-[165px] glass-card rounded-xl overflow-hidden hover-glow flex flex-col justify-between h-[160px]"
+                  >
+                    <div className="p-3 pt-3 flex flex-col justify-between flex-1">
+                      <div className="space-y-1 mb-2">
+                        <div className={`inline-block w-fit px-2 py-0.5 rounded-full text-[9px] font-bold uppercase ${badgeColorClass}`}>
+                          {deal.badge}
+                        </div>
+                        <h4 className={`font-sans text-[11px] font-bold leading-tight line-clamp-2 ${isDarkMode ? "text-white" : "text-zinc-900"}`}>{deal.title}</h4>
+                        <p className={`text-[10px] opacity-70 leading-snug line-clamp-2 ${isDarkMode ? "text-zinc-400" : "text-zinc-500"}`}>{deal.description}</p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          checkLocation(() => {
+                            triggerToast("Deal claimed successfully!");
+                          });
+                        }}
+                        className="w-full h-8 bg-primary text-on-primary rounded-lg font-bold text-[9px] tracking-wider uppercase cursor-pointer hover:bg-red-700 transition-colors btn-3d-primary flex items-center justify-center"
+                      >
+                        Claim Deal
+                      </button>
                     </div>
-                    <button
-                      onClick={() => {
-                        checkLocation(() => {
-                          triggerToast("Deal claimed successfully!");
-                        });
-                      }}
-                      className="w-full h-12 bg-primary text-on-primary rounded-lg font-bold text-xs tracking-wider uppercase cursor-pointer hover:bg-red-700 transition-colors"
-                    >
-                      Claim Deal
-                    </button>
-                  </div>
-                </div>
-              ))}
+                  </motion.div>
+                )
+              })}
             </div>
           </section>
 
           {/* Menu Categories */}
           <section>
-            <div className="px-margin-mobile flex justify-between items-end mb-md">
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.05 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="px-margin-mobile flex justify-between items-end mb-md"
+            >
               <h3 className={`font-headline-lg-mobile ${isDarkMode ? "text-white" : "text-[#131313]"}`}>Menus</h3>
               <button
                 onClick={() => {
@@ -575,8 +684,8 @@ export default function Home() {
               >
                 View Menu
               </button>
-            </div>
-            <div className="flex overflow-x-auto hide-scrollbar gap-sm px-margin-mobile">
+            </motion.div>
+            <div className="flex overflow-x-auto hide-scrollbar gap-sm px-margin-mobile pb-2">
               {[
                 { id: "pizza", label: "Pizza", icon: "local_pizza" },
                 { id: "burger", label: "Burger", icon: "lunch_dining" },
@@ -584,25 +693,34 @@ export default function Home() {
                 { id: "pasta", label: "Pasta", icon: "dinner_dining" },
                 { id: "desserts", label: "Desserts", icon: "icecream" },
                 { id: "drinks", label: "Drinks", icon: "local_drink" }
-              ].map((cat) => {
+              ].map((cat, index) => {
                 const isSelected = activeCategory === cat.id
+                const isLeft = index % 2 === 0
                 return (
-                  <div
+                  <motion.div
                     key={cat.id}
+                    initial={{ opacity: 0, x: isLeft ? -40 : 40 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.05 }}
+                    transition={{ duration: 0.5, type: "spring", stiffness: 120, damping: 14 }}
                     onClick={() => {
                       navigate("/user/menu", { state: { category: cat.id } })
                       triggerToast(`Opening Menu - ${cat.label}`)
                     }}
+                    whileHover={{ scale: 1.08 }}
                     className="flex flex-col items-center gap-xs min-w-[70px] cursor-pointer group"
                   >
-                    <div className={`w-16 h-16 rounded-full glass-card flex items-center justify-center transition-all duration-300 ${isSelected
-                      ? "bg-primary text-white shadow-lg shadow-primary/30 scale-105 border-transparent"
-                      : "text-on-surface-variant hover:border-primary/30 hover:scale-105"
-                      }`}>
+                    <motion.div 
+                      whileHover={{ rotate: 5 }}
+                      className={`w-16 h-16 rounded-full glass-card flex items-center justify-center transition-all duration-300 ${isSelected
+                        ? "bg-primary text-white shadow-lg shadow-primary/30 scale-105 border-transparent"
+                        : "text-on-surface-variant hover:border-primary/30 hover:scale-105"
+                      }`}
+                    >
                       <span className="material-symbols-outlined">{cat.icon}</span>
-                    </div>
+                    </motion.div>
                     <span className={`font-label-sm transition-colors duration-300 ${isSelected ? "text-primary font-bold" : "opacity-60 group-hover:text-primary"}`}>{cat.label}</span>
-                  </div>
+                  </motion.div>
                 )
               })}
             </div>
@@ -610,15 +728,30 @@ export default function Home() {
 
           {/* Most Loved Pizzas */}
           <section>
-            <div className="px-margin-mobile mb-md">
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.05 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="px-margin-mobile mb-md"
+            >
               <h3 className={`font-headline-lg-mobile ${isDarkMode ? "text-white" : "text-[#131313]"}`}>Most Loved</h3>
-            </div>
+            </motion.div>
             <div className="flex overflow-x-auto hide-scrollbar gap-gutter px-margin-mobile pb-4">
-              {PRODUCTS.map((product) => {
+              {PRODUCTS.map((product, index) => {
                 const isFav = favorites.includes(product.id)
+                const isLeft = index % 2 === 0
                 return (
-                  <div key={product.id} className="min-w-[280px] glass-card rounded-2xl overflow-hidden group relative">
-                    <div className="relative h-48 overflow-hidden bg-zinc-900">
+                  <motion.div 
+                    key={product.id} 
+                    initial={{ opacity: 0, x: isLeft ? -60 : 60 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.05 }}
+                    transition={{ duration: 0.6, type: "spring", stiffness: 100, damping: 15 }}
+                    whileHover={{ scale: 1.03, y: -4 }}
+                    className="min-w-[195px] max-w-[195px] glass-card rounded-2xl overflow-hidden group relative hover-glow flex flex-col justify-between"
+                  >
+                    <div className="relative h-28 overflow-hidden bg-zinc-900">
                       <img
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                         alt={product.title}
@@ -626,40 +759,48 @@ export default function Home() {
                       />
                       <button
                         onClick={() => toggleFavorite(product.id)}
-                        className="absolute top-4 right-4 bg-black/40 backdrop-blur-md rounded-full p-2 text-primary cursor-pointer active:scale-90 transition-transform"
+                        className="absolute top-2 right-2 bg-black/40 backdrop-blur-md rounded-full p-1.5 text-primary cursor-pointer active:scale-90 transition-transform flex items-center justify-center border-0 outline-none"
                       >
-                        <span className="material-symbols-outlined fill" style={{ fontVariationSettings: ` 'FILL' ${isFav ? 1 : 0} ` }}>
+                        <span className="material-symbols-outlined text-xs fill" style={{ fontVariationSettings: ` 'FILL' ${isFav ? 1 : 0} `, fontSize: "14px" }}>
                           favorite
                         </span>
                       </button>
                     </div>
-                    <div className="p-md">
-                      <div className="flex justify-between items-start mb-xs">
-                        <h4 className={`font-headline-lg-mobile text-xl ${isDarkMode ? "text-white" : "text-[#131313]"}`}>{product.title}</h4>
-                        <div className="flex items-center gap-1 text-secondary">
-                          <span className="material-symbols-outlined text-sm fill" style={{ fontVariationSettings: " 'FILL' 1 " }}>star</span>
-                          <span className="font-label-sm">{product.rating}</span>
+                    <div className="p-3 space-y-1.5 flex flex-col justify-between flex-1">
+                      <div>
+                        <div className="flex justify-between items-start gap-1">
+                          <h4 className={`font-sans text-[11px] font-bold leading-tight line-clamp-1 ${isDarkMode ? "text-white" : "text-zinc-900"}`}>{product.title}</h4>
+                          <div className="flex items-center gap-0.5 text-secondary shrink-0">
+                            <span className="material-symbols-outlined text-[10px] fill" style={{ fontVariationSettings: " 'FILL' 1 " }}>star</span>
+                            <span className="text-[9px] font-bold">{product.rating}</span>
+                          </div>
                         </div>
+                        <p className={`text-[10px] leading-normal line-clamp-1 mt-0.5 ${isDarkMode ? "text-zinc-400" : "text-zinc-500"}`}>{product.description}</p>
                       </div>
-                      <p className="text-sm opacity-60 line-clamp-1 mb-md leading-relaxed">{product.description}</p>
-                      <div className="flex items-center justify-between">
-                        <span className="font-price-xl text-primary">₹{product.price}</span>
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-sm font-bold text-primary">₹{product.price}</span>
                         <button
                           onClick={() => checkLocation(() => addToCart(product.id))}
-                          className="h-10 px-6 bg-primary text-on-primary rounded-full font-bold active:scale-95 hover:bg-red-700 transition-all cursor-pointer"
+                          className="h-7 px-3.5 bg-primary text-on-primary rounded-full font-bold active:scale-95 hover:bg-red-700 transition-all cursor-pointer btn-3d-primary text-[10px] uppercase tracking-wide flex items-center justify-center"
                         >
                           Add
                         </button>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 )
               })}
             </div>
           </section>
 
           {/* Fresh Ingredients */}
-          <section className="px-margin-mobile">
+          <motion.section 
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.05 }}
+            transition={{ duration: 0.6, type: "spring", stiffness: 90, damping: 15 }}
+            className="px-margin-mobile"
+          >
             <div className={`rounded-3xl p-lg flex items-center justify-between overflow-hidden relative border ${isDarkMode
               ? "glass-card"
               : "bg-gradient-to-br from-[#FFF5F4] to-[#FFF0EF] border-[#E53935]/15 shadow-md shadow-[#E53935]/4"
@@ -674,7 +815,7 @@ export default function Home() {
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1OEevU-AMD-LJYtmmUO8f5cPZOOwP27nnnprt609tr-eBMiasAVzva-eAXdhfwQY7tK7Xgg5R0BHy0w-eGZW9kVqF3dGZDXkS_2vyUl8J6qH8acyu16XScqO6ZrPCmGXSfO6c_8ekCjNHuv7n4dGgaCqasfj8IGqDCofCk882RgeDO5By7o4YueW5s1bJXaOjmYQ9JscQ9bIlNkTfdR0xZz2KfAENhcrnWxlgDy9acrKF6ZMgVxRZJqeZOUz2NJRDxMhXqdJ7nJOk"
               />
             </div>
-          </section>
+          </motion.section>
         </main>
 
         {/* Floating Action Button */}
@@ -696,7 +837,7 @@ export default function Home() {
         )}
 
         {/* BottomNavBar */}
-        <nav className="fixed -bottom-[2px] left-1/2 -translate-x-1/2 w-full max-w-md z-50 rounded-t-xl bg-surface/80 backdrop-blur-xl dark:bg-surface/80 border-t border-white/10 shadow-lg flex justify-around items-center h-[82px] pb-[2px] m-0">
+        <nav className="fixed -bottom-[2px] left-1/2 -translate-x-1/2 w-full max-w-md z-50 rounded-t-xl bg-surface/80 backdrop-blur-xl dark:bg-surface/80 border-t border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_-2px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.3)] flex justify-around items-center h-[82px] pb-[2px] m-0">
           <button
             onClick={() => {
               if (window.location.pathname === "/user" || window.location.pathname === "/user/") {

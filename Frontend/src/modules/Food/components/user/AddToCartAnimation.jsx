@@ -1,13 +1,11 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useAnimationControls } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCart } from "@food/context/CartContext";
 import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
+
 const debugLog = (...args) => {}
 const debugWarn = (...args) => {}
 const debugError = (...args) => {}
-
-
 
 /**
  * AddToCartAnimation Component
@@ -32,11 +30,10 @@ export default function AddToCartAnimation({
   const location = useLocation();
   const navigate = useNavigate();
   const linkRef = useRef(null);
-  const [removedProduct, setRemovedProduct] = useState(null);
-  const [flyingProduct, setFlyingProduct] = useState(null);
-  const removedThumbnailRef = useRef(null);
-  const flyingThumbnailRef = useRef(null);
-  const prevItemsRef = useRef(items);
+  
+  const [removedAnim, setRemovedAnim] = useState(null);
+  const [flyingAnim, setFlyingAnim] = useState(null);
+  const buttonControls = useAnimationControls();
 
   // Hide pill on cart pages, order pages, and account page (if enabled)
   const iscartPage = location.pathname === '/cart' ||
@@ -56,20 +53,15 @@ export default function AddToCartAnimation({
       const savedSourcePosition = { ...sourcePosition };
       const savedProduct = { ...product };
 
-      setRemovedProduct({ product: savedProduct, targetPos: savedSourcePosition });
-
       // Wait a bit to ensure pill is rendered
       setTimeout(() => {
-        if (removedThumbnailRef.current && linkRef.current) {
-          const thumbnail = removedThumbnailRef.current;
-          // Get fresh position of the pill (viewport-relative)
+        if (linkRef.current) {
           const pillRect = linkRef.current.getBoundingClientRect();
           // Start position: center of the pill (where thumbnails are)
           const startX = pillRect.left + 16; // Approximate position of first thumbnail
           const startY = pillRect.top + pillRect.height / 2; // Vertical center of pill
 
           // Calculate current viewport position accounting for scroll changes
-          // Check multiple sources to get accurate scroll position
           const getScrollX = () => {
             if (window.scrollX !== undefined) return window.scrollX
             if (window.pageXOffset !== undefined) return window.pageXOffset
@@ -97,90 +89,34 @@ export default function AddToCartAnimation({
           const currentScrollX = getScrollX()
           const currentScrollY = getScrollY()
 
-          // Determine target position (support both new format with viewportX/Y and old format with x/y)
+          // Determine target position
           let targetX, targetY
 
           if (savedSourcePosition.viewportX !== undefined && savedSourcePosition.viewportY !== undefined) {
-            // New format: stored viewport position + scroll at capture time
-            // Adjust for scroll changes since capture
             const scrollDeltaX = currentScrollX - (savedSourcePosition.scrollX || 0)
             const scrollDeltaY = currentScrollY - (savedSourcePosition.scrollY || 0)
-            // If page scrolled right/down, button moved left/up in viewport
             targetX = savedSourcePosition.viewportX - scrollDeltaX
             targetY = savedSourcePosition.viewportY - scrollDeltaY
           } else {
-            // Old format: document-relative position (backward compatibility)
             targetX = savedSourcePosition.x - currentScrollX
             targetY = savedSourcePosition.y - currentScrollY
           }
 
           // Calculate thumbnail center offset (16px = half of 32px thumbnail)
           const thumbnailCenterOffset = 16;
-
-          // Position at pill location initially (viewport-relative)
-          gsap.set(thumbnail, {
-            position: 'fixed',
-            left: startX - thumbnailCenterOffset,
-            top: startY - thumbnailCenterOffset,
-            zIndex: 1000,
-            scale: 1,
-            rotation: 0,
-            opacity: 1,
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
-            x: 0,
-            y: 0,
-          });
-
-          // Calculate relative movement from pill to source position
-          // Both positions are now viewport-relative
+          const left = startX - thumbnailCenterOffset;
+          const top = startY - thumbnailCenterOffset;
           const deltaX = targetX - startX;
           const deltaY = targetY - startY;
 
-          // Fly back to source animation
-          const tl = gsap.timeline({
-            onComplete: () => {
-              setRemovedProduct(null);
-            },
+          setRemovedAnim({
+            product: savedProduct,
+            left,
+            top,
+            deltaX,
+            deltaY,
+            id: Date.now()
           });
-
-          // Step 1: Pop out from pill (scale up slightly)
-          tl.to(thumbnail, {
-            scale: 1.3,
-            duration: 0.15,
-            ease: 'power2.out',
-          })
-            // Step 2: Fly towards source with rotation
-            .to(thumbnail, {
-              x: deltaX * 0.98, // Slight overshoot for bounce
-              y: deltaY,
-              rotation: -360,
-              scale: 1.1,
-              duration: 0.4,
-              ease: 'power2.inOut',
-            })
-            // Step 3: Bounce back slightly
-            .to(thumbnail, {
-              x: deltaX,
-              y: deltaY,
-              scale: 0.9,
-              duration: 0.15,
-              ease: 'power2.out',
-            })
-            // Step 4: Final bounce into position
-            .to(thumbnail, {
-              scale: 0.85,
-              duration: 0.1,
-              ease: 'power2.in',
-            })
-            // Step 5: Fade out smoothly
-            .to(thumbnail, {
-              scale: 0.7,
-              opacity: 0,
-              duration: 0.15,
-              ease: 'power2.in',
-            });
         }
       }, 10);
     }
@@ -195,20 +131,15 @@ export default function AddToCartAnimation({
       const savedSourcePosition = { ...sourcePosition };
       const savedProduct = { ...product };
 
-      setFlyingProduct({ product: savedProduct, startPos: savedSourcePosition });
-
       // Wait a bit longer to ensure pill is fully rendered and in position
       setTimeout(() => {
-        if (flyingThumbnailRef.current && linkRef.current) {
-          const thumbnail = flyingThumbnailRef.current;
-          // Get fresh position after pill animation completes
+        if (linkRef.current) {
           const pillRect = linkRef.current.getBoundingClientRect();
           // Target position: center of the pill (viewport-relative)
           const endX = pillRect.left + pillRect.width / 2; // Horizontal center of pill
           const endY = pillRect.top + pillRect.height / 2; // Vertical center of pill
 
           // Calculate current viewport position accounting for scroll changes
-          // Check multiple sources to get accurate scroll position
           const getScrollX = () => {
             if (window.scrollX !== undefined) return window.scrollX
             if (window.pageXOffset !== undefined) return window.pageXOffset
@@ -236,137 +167,61 @@ export default function AddToCartAnimation({
           const currentScrollX = getScrollX()
           const currentScrollY = getScrollY()
 
-          // Determine source position (support both new format with viewportX/Y and old format with x/y)
+          // Determine source position
           let sourceX, sourceY
 
           if (savedSourcePosition.viewportX !== undefined && savedSourcePosition.viewportY !== undefined) {
-            // New format: stored viewport position + scroll at capture time
-            // Adjust for scroll changes since capture
             const scrollDeltaX = currentScrollX - (savedSourcePosition.scrollX || 0)
             const scrollDeltaY = currentScrollY - (savedSourcePosition.scrollY || 0)
-            // If page scrolled right/down, button moved left/up in viewport
             sourceX = savedSourcePosition.viewportX - scrollDeltaX
             sourceY = savedSourcePosition.viewportY - scrollDeltaY
           } else {
-            // Old format: document-relative position (backward compatibility)
             sourceX = savedSourcePosition.x - currentScrollX
             sourceY = savedSourcePosition.y - currentScrollY
           }
 
           // Calculate thumbnail center offset (16px = half of 32px thumbnail)
           const thumbnailCenterOffset = 16;
-
-          // Position at source (center of button) - use viewport-relative position
-          // Set initial position so the center of thumbnail is at sourcePosition
-          gsap.set(thumbnail, {
-            position: 'fixed',
-            left: sourceX - thumbnailCenterOffset,
-            top: sourceY - thumbnailCenterOffset,
-            zIndex: 1000,
-            scale: 1,
-            rotation: 0,
-            opacity: 1,
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%', // Ensure circular
-            x: 0,
-            y: 0,
-          });
-
-          // Fly to cart animation with bounce
-          const tl = gsap.timeline({
-            onComplete: () => {
-              setFlyingProduct(null);
-            },
-          });
-
-          // Calculate relative movement from source center to target center
-          // Both positions are now viewport-relative, so delta is direct
+          const left = sourceX - thumbnailCenterOffset;
+          const top = sourceY - thumbnailCenterOffset;
           const deltaX = endX - sourceX;
           const deltaY = endY - sourceY;
 
-          // Step 1: Pop out from button (scale up slightly)
-          tl.to(thumbnail, {
-            scale: 1.3,
-            duration: 0.15,
-            ease: 'power2.out',
-          })
-            // Step 2: Fly towards cart with rotation (no Y overshoot to prevent going below)
-            .to(thumbnail, {
-              x: deltaX * 0.98, // Slight X overshoot for bounce
-              y: deltaY, // No overshoot on Y to prevent going below pill
-              rotation: 360,
-              scale: 1.1,
-              duration: 0.4,
-              ease: 'power2.inOut',
-            })
-            // Step 3: Bounce back slightly on X only (overshoot correction)
-            .to(thumbnail, {
-              x: deltaX,
-              y: deltaY, // Keep Y at exact target
-              scale: 0.9,
-              duration: 0.15,
-              ease: 'power2.out',
-            })
-            // Step 4: Final bounce into position
-            .to(thumbnail, {
-              scale: 0.85,
-              duration: 0.1,
-              ease: 'power2.in',
-            })
-            // Step 5: Fade out smoothly
-            .to(thumbnail, {
-              scale: 0.7,
-              opacity: 0,
-              duration: 0.15,
-              ease: 'power2.in',
-            });
+          setFlyingAnim({
+            product: savedProduct,
+            left,
+            top,
+            deltaX,
+            deltaY,
+            id: Date.now()
+          });
         }
       }, 150); // Increased delay to ensure pill animation completes
     }
   }, [lastAddEvent]);
 
-  // Enhanced GSAP pulse animation when cart changes (but not on removal or fly-to-cart)
+  // Pulse animation when cart changes (but not on removal or fly-to-cart)
   useEffect(() => {
-    if (itemCount > 0 && linkRef.current && !removedProduct && !flyingProduct && !lastRemoveEvent) {
-      // Kill any existing animations first
-      gsap.killTweensOf(linkRef.current);
-
-      // Enhanced pulse animation with glow effect
-      const tl = gsap.timeline();
-
-      // Step 1: Scale up with glow
-      tl.to(linkRef.current, {
-        scale: 1.08,
-        boxShadow: '0 10px 25px rgba(126, 56, 102, 0.4)',
-        duration: 0.15,
-        ease: 'power2.out',
-        transformOrigin: 'center center',
-        force3D: true,
-      })
-        // Step 2: Bounce back
-        .to(linkRef.current, {
-          scale: 1.0,
-          boxShadow: '0 4px 12px rgba(126, 56, 102, 0.3)',
-          duration: 0.2,
-          ease: 'power2.inOut',
-        })
-        // Step 3: Subtle second pulse
-        .to(linkRef.current, {
-          scale: 1.04,
-          duration: 0.1,
-          ease: 'power1.out',
-        })
-        .to(linkRef.current, {
-          scale: 1.0,
-          duration: 0.15,
-          ease: 'power1.in',
-        });
+    if (itemCount > 0 && !removedAnim && !flyingAnim && !lastRemoveEvent) {
+      buttonControls.start({
+        scale: [1, 1.08, 1.0, 1.04, 1.0],
+        boxShadow: [
+          '0 4px 12px rgba(126, 56, 102, 0.3)',
+          '0 10px 25px rgba(126, 56, 102, 0.4)',
+          '0 4px 12px rgba(126, 56, 102, 0.3)',
+          '0 6px 16px rgba(126, 56, 102, 0.35)',
+          '0 4px 12px rgba(126, 56, 102, 0.3)'
+        ],
+        transition: {
+          duration: 0.6,
+          times: [0, 0.25, 0.58, 0.75, 1],
+          ease: 'easeInOut'
+        }
+      });
     }
-  }, [itemCount, total, removedProduct, flyingProduct, lastRemoveEvent]);
+  }, [itemCount, total, removedAnim, flyingAnim, lastRemoveEvent, buttonControls]);
 
   // Get up to 3 most recently added items for thumbnails
-  // Since items are added to the end of the array, we take the last 3
   const safeItems = Array.isArray(items) ? items : [];
   const thumbnailItems = safeItems
     .slice(-3)
@@ -376,51 +231,91 @@ export default function AddToCartAnimation({
   return (
     <>
       {/* Removed product thumbnail - flying back to source */}
-      {removedProduct && (
-        <div
-          ref={removedThumbnailRef}
+      {removedAnim && (
+        <motion.div
+          key={`remove-${removedAnim.id}`}
           className="w-8 h-8 rounded-full border-2 border-white overflow-hidden bg-white flex-shrink-0 shadow-lg"
           style={{
+            position: 'fixed',
+            left: removedAnim.left,
+            top: removedAnim.top,
+            zIndex: 1000,
             borderRadius: '50%',
             objectFit: 'cover',
           }}
+          initial={{ x: 0, y: 0, scale: 1, rotate: 0, opacity: 1 }}
+          animate={{
+            x: removedAnim.deltaX,
+            y: removedAnim.deltaY,
+            scale: [1, 1.3, 1.1, 0.9, 0.85, 0.7, 0],
+            rotate: -360,
+            opacity: [1, 1, 1, 1, 0.85, 0.7, 0],
+          }}
+          transition={{
+            x: { type: 'spring', stiffness: 120, damping: 14, mass: 0.8 },
+            y: { type: 'spring', stiffness: 120, damping: 14, mass: 0.8 },
+            scale: { duration: 0.8, times: [0, 0.15, 0.55, 0.7, 0.8, 0.9, 1] },
+            rotate: { duration: 0.6, ease: 'easeInOut' },
+            opacity: { duration: 0.8, times: [0, 0.15, 0.55, 0.7, 0.8, 0.9, 1] },
+          }}
+          onAnimationComplete={() => setRemovedAnim(null)}
         >
-          {removedProduct.product?.imageUrl ? (
+          {removedAnim.product?.imageUrl ? (
             <img
-              src={removedProduct.product.imageUrl}
-              alt={removedProduct.product.name}
+              src={removedAnim.product.imageUrl}
+              alt={removedAnim.product.name}
               className="w-full h-full object-cover rounded-full"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-neutral-200 text-neutral-400 text-xs font-semibold rounded-full">
-              {removedProduct.product?.name?.charAt(0).toUpperCase() || '?'}
+              {removedAnim.product?.name?.charAt(0).toUpperCase() || '?'}
             </div>
           )}
-        </div>
+        </motion.div>
       )}
 
       {/* Flying product thumbnail - going to cart */}
-      {flyingProduct && (
-        <div
-          ref={flyingThumbnailRef}
+      {flyingAnim && (
+        <motion.div
+          key={`fly-${flyingAnim.id}`}
           className="w-8 h-8 rounded-full border-2 border-white overflow-hidden bg-white flex-shrink-0 shadow-lg"
           style={{
+            position: 'fixed',
+            left: flyingAnim.left,
+            top: flyingAnim.top,
+            zIndex: 1000,
             borderRadius: '50%',
             objectFit: 'cover',
           }}
+          initial={{ x: 0, y: 0, scale: 1, rotate: 0, opacity: 1 }}
+          animate={{
+            x: flyingAnim.deltaX,
+            y: flyingAnim.deltaY,
+            scale: [1, 1.3, 1.1, 0.9, 0.85, 0.7, 0],
+            rotate: 360,
+            opacity: [1, 1, 1, 1, 0.85, 0.7, 0],
+          }}
+          transition={{
+            x: { type: 'spring', stiffness: 120, damping: 14, mass: 0.8 },
+            y: { type: 'spring', stiffness: 120, damping: 14, mass: 0.8 },
+            scale: { duration: 0.8, times: [0, 0.15, 0.55, 0.7, 0.8, 0.9, 1] },
+            rotate: { duration: 0.6, ease: 'easeInOut' },
+            opacity: { duration: 0.8, times: [0, 0.15, 0.55, 0.7, 0.8, 0.9, 1] },
+          }}
+          onAnimationComplete={() => setFlyingAnim(null)}
         >
-          {flyingProduct?.product?.imageUrl ? (
+          {flyingAnim.product?.imageUrl ? (
             <img
-              src={flyingProduct.product.imageUrl}
-              alt={flyingProduct?.product?.name || 'Item'}
+              src={flyingAnim.product.imageUrl}
+              alt={flyingAnim.product.name}
               className="w-full h-full object-cover rounded-full"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-neutral-200 text-neutral-400 text-xs font-semibold rounded-full">
-              {flyingProduct?.product?.name?.charAt(0)?.toUpperCase() || '?'}
+              {flyingAnim.product?.name?.charAt(0).toUpperCase() || '?'}
             </div>
           )}
-        </div>
+        </motion.div>
       )}
 
       <AnimatePresence>
@@ -446,8 +341,10 @@ export default function AddToCartAnimation({
             }}
             className={`left-0 right-0 z-[9999] flex justify-center px-4 pb-4 md:pb-6 transition-all duration-300 ease-in-out bg-transparent ${dynamicBottom || ''}`}
           >
-            <button
+            <motion.button
               ref={linkRef}
+              animate={buttonControls}
+              initial={{ scale: 1, boxShadow: '0 4px 12px rgba(126, 56, 102, 0.3)' }}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -524,7 +421,7 @@ export default function AddToCartAnimation({
                   />
                 </svg>
               </motion.div>
-            </button>
+            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>

@@ -84,12 +84,12 @@ export function verifyUserOtp(
   }
   const otpStr = String(otp ?? "")
     .replace(/\D/g, "")
-    .slice(0, 4);
+    .slice(0, 6);
   if (!otpStr) {
     return Promise.reject(new Error("OTP is required"));
   }
-  if (otpStr.length !== 4) {
-    return Promise.reject(new Error("OTP must be exactly 4 digits"));
+  if (otpStr.length !== 6 && otpStr.length !== 4) {
+    return Promise.reject(new Error("OTP must be exactly 6 digits"));
   }
   const refValue = typeof ref === "string" ? ref.trim() : "";
   return userClient.post(AUTH.USER_VERIFY_OTP, {

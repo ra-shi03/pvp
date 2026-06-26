@@ -1,6 +1,6 @@
 import { Suspense, lazy, useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import ProtectedRoute from "@food/components/admin/ProtectedRoute";
+import ProtectedRoute from "@food/components/ProtectedRoute";
 import FranchiseAdminLayout from "../layout/FranchiseAdminLayout";
 import Loader from "@food/components/Loader";
 
@@ -18,7 +18,6 @@ const StaffReports = lazy(() => import("@food/pages/franchise-admin/reports/Staf
 const InventoryReports = lazy(() => import("@food/pages/franchise-admin/reports/InventoryReports"));
 const RefundRequests = lazy(() => import("@food/pages/franchise-admin/orders/RefundRequests"));
 const OrderIssues = lazy(() => import("@food/pages/franchise-admin/orders/OrderIssues"));
-const OrdersPage = lazy(() => import("@food/pages/franchise-admin/orders/OrdersPage"));
 const LiveOrders = lazy(() => import("@food/pages/franchise-admin/orders/LiveOrders"));
 const CompletedOrders = lazy(() => import("@food/pages/franchise-admin/orders/CompletedOrders"));
 const CancelledOrder = lazy(() => import("@food/pages/franchise-admin/orders/CancelledOrder"));
@@ -98,7 +97,7 @@ export default function FranchiseAdminRouter() {
         {/* Protected Routes - With Layout */}
         <Route
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole="admin" loginPath="/franchise-admin/login">
               <FranchiseAdminLayout />
             </ProtectedRoute>
           }
@@ -153,17 +152,17 @@ export default function FranchiseAdminRouter() {
             
             {/* ORDER MANAGEMENT */}
             <Route path="orders/all" element={<Navigate to="/franchise-admin/live-orders" replace />} />
-            <Route path="orders/scheduled" element={<OrdersPage statusKey="scheduled" />} />
-            <Route path="orders/pending" element={<OrdersPage statusKey="pending" />} />
-            <Route path="orders/accepted" element={<OrdersPage statusKey="accepted" />} />
-            <Route path="orders/processing" element={<OrdersPage statusKey="processing" />} />
-            <Route path="orders/food-on-the-way" element={<OrdersPage statusKey="food-on-the-way" />} />
+            <Route path="orders/scheduled" element={<Navigate to="/franchise-admin/live-orders" replace />} />
+            <Route path="orders/pending" element={<Navigate to="/franchise-admin/live-orders" replace />} />
+            <Route path="orders/accepted" element={<Navigate to="/franchise-admin/live-orders" replace />} />
+            <Route path="orders/processing" element={<Navigate to="/franchise-admin/live-orders" replace />} />
+            <Route path="orders/food-on-the-way" element={<Navigate to="/franchise-admin/live-orders" replace />} />
             <Route path="orders/delivered" element={<Navigate to="/franchise-admin/completed-orders" replace />} />
             <Route path="orders/canceled" element={<Navigate to="/franchise-admin/cancelled-orders" replace />} />
-            <Route path="orders/restaurant-cancelled" element={<OrdersPage statusKey="restaurant-cancelled" />} />
-            <Route path="orders/payment-failed" element={<OrdersPage statusKey="payment-failed" />} />
-            <Route path="orders/refunded" element={<OrdersPage statusKey="refunded" />} />
-            <Route path="orders/offline-payments" element={<OrdersPage statusKey="offline-payments" />} />
+            <Route path="orders/restaurant-cancelled" element={<Navigate to="/franchise-admin/live-orders" replace />} />
+            <Route path="orders/payment-failed" element={<Navigate to="/franchise-admin/live-orders" replace />} />
+            <Route path="orders/refunded" element={<Navigate to="/franchise-admin/live-orders" replace />} />
+            <Route path="orders/offline-payments" element={<Navigate to="/franchise-admin/live-orders" replace />} />
             <Route path="order-detect-delivery" element={<Navigate to="/franchise-admin/dashboard" replace />} />
             <Route path="order-refunds/new" element={<Navigate to="/franchise-admin/refund-requests" replace />} />
 

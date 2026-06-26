@@ -4,7 +4,6 @@ import { StrictMode } from 'react'
 import { Provider as ReduxProvider } from 'react-redux'
 import { store } from './store'
 import { UserNotificationProvider } from '../modules/Food/context/UserNotificationContext'
-import { RestaurantNotificationProvider } from '../modules/Food/context/RestaurantNotificationContext'
 import { DeliveryNotificationProvider } from '../modules/Food/context/DeliveryNotificationContext'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
@@ -41,12 +40,10 @@ export function AppProviders({ children }) {
         <ReduxProvider store={store}>
           <Router>
             <UserNotificationProvider>
-              <RestaurantNotificationProvider>
-                <DeliveryNotificationProvider>
-                  {children}
-                  <Toaster position="top-center" richColors offset="80px" expand={true} />
-                </DeliveryNotificationProvider>
-              </RestaurantNotificationProvider>
+              <DeliveryNotificationProvider>
+                {children}
+                <Toaster position="top-center" richColors offset="80px" expand={true} />
+              </DeliveryNotificationProvider>
             </UserNotificationProvider>
           </Router>
         </ReduxProvider>
